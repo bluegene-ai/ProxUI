@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{ config.name or ('Container' if vm_type == 'lxc' else 'VM') }} ({{ vmid }}) - Proxmox Manager{% endblock %}
+{% block title %}{{ config.name or ('容器' if vm_type == 'lxc' else '虚拟机') }} ({{ vmid }}) - Proxmox 管理器{% endblock %}
 
 {% block content %}
 <div class="mb-3"><a href="{{ url_for('vms') }}" class="back-link"><i class="bi bi-arrow-left"></i> 虚拟机与容器</a></div>
@@ -42,33 +42,33 @@
         <a href="{{ url_for('vm_clone', node=node, vmid=vmid) }}"
            class="btn-x primary {{ 'd-none' if status.lock else '' }}"
            :class="{ 'd-none': busy }" style="text-decoration:none">
-            <i class="bi bi-files"></i> Clone
+            <i class="bi bi-files"></i> 克隆
         </a>
         {% endif %}
 {% else %}
         <form method="POST" action="{{ url_for('vm_action', node=node, vmid=vmid, action='start') }}"
               class="d-inline {{ '' if (status.status == 'stopped' and not status.lock) else 'd-none' }}"
               :class="{ 'd-none': !isStopped || busy }">
-            <button type="submit" class="btn-x primary"><i class="bi bi-play-fill"></i> Start</button>
+            <button type="submit" class="btn-x primary"><i class="bi bi-play-fill"></i> 启动</button>
         </form>
 {% endif %}
         <form method="POST" action="{{ url_for('vm_action', node=node, vmid=vmid, action='shutdown') }}"
               class="d-inline {{ 'd-none' if (status.status == 'stopped' or status.lock) else '' }}"
               :class="{ 'd-none': isStopped || busy }">
-            <button type="submit" class="btn-x"><i class="bi bi-power"></i> Shutdown</button>
+            <button type="submit" class="btn-x"><i class="bi bi-power"></i> 关机</button>
         </form>
         <form method="POST" action="{{ url_for('vm_action', node=node, vmid=vmid, action='stop') }}"
               class="d-inline {{ 'd-none' if (status.status == 'stopped' or status.lock) else '' }}"
               :class="{ 'd-none': isStopped || busy }">
             <button type="submit" class="btn-x" onclick="return confirm('Force stop {{ 'container' if vm_type == 'lxc' else 'VM' }}?')">
-                <i class="bi bi-stop-fill"></i> Stop
+                <i class="bi bi-stop-fill"></i> 停止
             </button>
         </form>
         <form method="POST" action="{{ url_for('vm_action', node=node, vmid=vmid, action='reset') }}"
               class="d-inline {{ 'd-none' if (status.status == 'stopped' or status.lock) else '' }}"
               :class="{ 'd-none': isStopped || busy }">
             <button type="submit" class="btn-x" onclick="return confirm('Reset {{ 'container' if vm_type == 'lxc' else 'VM' }}?')">
-                <i class="bi bi-arrow-clockwise"></i> Reset
+                <i class="bi bi-arrow-clockwise"></i> 重置
             </button>
         </form>
 
@@ -83,7 +83,7 @@
                :tabindex="(isRunning && !busy) ? null : '-1'"
                :title="isRunning ? '' : 'Container must be running'"
                style="text-decoration:none">
-                <i class="bi bi-terminal"></i> Console
+                <i class="bi bi-terminal"></i> 控制台
             </a>
             <button type="button"
                     class="btn-x pri dropdown-toggle dropdown-toggle-split"
@@ -115,7 +115,7 @@
            :tabindex="(isRunning && !busy) ? null : '-1'"
            :title="isRunning ? '' : 'VM must be running'"
            style="text-decoration:none">
-            <i class="bi bi-display"></i> Console
+            <i class="bi bi-display"></i> 控制台
         </a>
 
         {% set has_serial = config.serial0 or config.serial1 or config.serial2 or config.serial3 %}
@@ -141,22 +141,22 @@
         <button type="button" class="btn-x {{ 'disabled' if migration_info else '' }}"
                 data-bs-toggle="modal" data-bs-target="#migrateModal"
                 {% if migration_info %}disabled title="正在迁移"{% endif %}>
-            <i class="bi bi-arrows-move"></i> Migrate
+            <i class="bi bi-arrows-move"></i> 迁移
         </button>
 
         <!-- Backup -->
         <button type="button" class="btn-x" @click="openDialog()"
                 :disabled="backupBusy || backupLoading || backupStorages.length === 0"
                 :title="backupStorages.length === 0 ? 'No active backup storage' : 'Back up now'">
-            <i class="bi" :class="backupBusy ? 'bi-hourglass-split' : 'bi-lightning-charge'"></i> Backup
+            <i class="bi" :class="backupBusy ? 'bi-hourglass-split' : 'bi-lightning-charge'"></i> 备份
         </button>
 
         <!-- Edit & Delete -->
         <a href="{{ url_for('vm_edit', node=node, vmid=vmid) }}" class="btn-x" style="text-decoration:none">
-            <i class="bi bi-pencil"></i> Edit
+            <i class="bi bi-pencil"></i> 编辑
         </a>
         <button type="button" class="btn-x danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
-            <i class="bi bi-trash"></i> Delete
+            <i class="bi bi-trash"></i> 删除
         </button>
     </div>
 </div>
@@ -181,7 +181,7 @@
 <!-- Hero status metrics (values come from the vmStatus wrapper above) -->
 <div class="metric-hero mb-3">
     <div class="hero-stat">
-        <div class="k">Status</div>
+        <div class="k">状态</div>
         <div class="v">
             <span class="badge d-inline-flex align-items-center gap-1" :class="statusClass" style="font-size:12.5px">
                 <span class="spinner-border spinner-border-sm" style="width:.7rem;height:.7rem;" :class="busy ? '' : 'd-none'"></span>
@@ -190,7 +190,7 @@
         </div>
     </div>
     <div class="hero-stat">
-        <div class="k">Uptime</div>
+        <div class="k">运行时间</div>
         <div class="v mono" style="font-size:15px" x-text="uptimeText"></div>
     </div>
     <div class="hero-stat">
@@ -199,12 +199,12 @@
         <div class="ubar mt-2"><i :class="cpuPct > 80 ? 'crit' : cpuPct > 60 ? 'hot' : 'okc'" :style="'width:' + cpuPct + '%'"></i></div>
     </div>
     <div class="hero-stat">
-        <div class="k">Memory</div>
+        <div class="k">内存</div>
         <div class="v" style="font-size:15px" x-text="memText"></div>
         <div class="ubar mt-2"><i :class="memPct > 80 ? 'crit' : memPct > 60 ? 'hot' : 'okc'" :style="'width:' + memPct + '%'"></i></div>
     </div>
     <div class="hero-stat">
-        <div class="k">Backup</div>
+        <div class="k">备份</div>
         <div class="v" style="font-size:15px"
              :style="!backupLoading && !backupError && backupCount === 0 ? 'color:var(--warn)' : ''"
              x-text="backupLoading ? '…' : (backupCount ? fmtAgo(backupLatest) : 'Never')"></div>
@@ -214,7 +214,7 @@
         {% for disk in guest_disk_info %}
             {% if disk.mountpoint == '/' %}
     <div class="hero-stat">
-        <div class="k">Disk</div>
+        <div class="k">磁盘</div>
         <div class="v" style="font-size:15px">{{ "%.1f"|format(disk.used_gb) }} / {{ "%.1f"|format(disk.total_gb) }}GB</div>
         <div class="ubar mt-2"><i class="{{ 'crit' if disk.used_percent > 80 else 'hot' if disk.used_percent > 60 else 'okc' }}" style="width:{{ disk.used_percent }}%"></i></div>
     </div>
@@ -241,26 +241,26 @@
                     </select>
                 </div>
                 <div class="field">
-                    <label>Mode</label>
+                    <label>模式</label>
                     <select class="inp" x-model="backupForm.mode">
                         <option value="snapshot">快照（无需停机）</option>
-                        <option value="suspend">Suspend</option>
-                        <option value="stop">Stop</option>
+                        <option value="suspend">挂起</option>
+                        <option value="stop">停止</option>
                     </select>
                 </div>
                 <div class="field">
-                    <label>Compression</label>
+                    <label>压缩</label>
                     <select class="inp" x-model="backupForm.compress">
                         <option value="zstd">ZSTD（快速，推荐）</option>
                         <option value="lzo">LZO</option>
                         <option value="gzip">GZIP</option>
-                        <option value="0">None</option>
+                        <option value="0">无</option>
                     </select>
                     <div class="hint">Proxmox Backup Server 目标会忽略此项并使用自己的格式。</div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn-x" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn-x" data-bs-dismiss="modal">取消</button>
                 <button type="button" class="btn-x primary" @click="submit()" :disabled="!backupForm.storage">
                     <i class="bi bi-lightning-charge"></i> 开始备份
                 </button>
@@ -412,14 +412,14 @@
     <!-- Configuration Details -->
     <div class="col-12 col-xl-8">
         <div class="card-x h-100">
-            <div class="cx-head"><i class="bi bi-sliders" style="color:var(--accent)"></i><span class="cx-title">Configuration</span></div>
+            <div class="cx-head"><i class="bi bi-sliders" style="color:var(--accent)"></i><span class="cx-title">配置</span></div>
             <div class="cx-body" style="max-height: 620px; overflow-y: auto;">
                 <div class="cfg-grid">
 
                 <!-- CPU Configuration -->
                 {% if parsed_config.cpu %}
                 <div class="cfg-box">
-                    <h6><i class="bi bi-cpu"></i> Processor</h6>
+                    <h6><i class="bi bi-cpu"></i> 处理器</h6>
                     {% for key, value in parsed_config.cpu.items() %}
                     <div class="kv"><span class="k">{{ key|title }}</span><span class="v">{{ value }}</span></div>
                     {% endfor %}
@@ -429,7 +429,7 @@
                 <!-- Memory Configuration -->
                 {% if parsed_config.memory %}
                 <div class="cfg-box">
-                    <h6><i class="bi bi-memory"></i> Memory</h6>
+                    <h6><i class="bi bi-memory"></i> 内存</h6>
                     {% for key, value in parsed_config.memory.items() %}
                     <div class="kv">
                         <span class="k">{{ key|title }}</span>
@@ -449,7 +449,7 @@
                 <!-- Network Configuration -->
                 {% if parsed_config.network %}
                 <div class="cfg-box">
-                    <h6><i class="bi bi-ethernet"></i> Network</h6>
+                    <h6><i class="bi bi-ethernet"></i> 网络</h6>
                     {% for net in parsed_config.network %}
                     <div class="{{ 'mb-2' if not loop.last else '' }}">
                         <div class="kv" style="border-bottom:0;padding-bottom:2px"><span class="k" style="font-weight:700;color:var(--text)">{{ net.interface }}</span><span></span></div>
@@ -565,7 +565,7 @@
                 <!-- General Settings -->
                 {% if parsed_config.general %}
                 <div class="cfg-box">
-                    <h6><i class="bi bi-gear"></i> General</h6>
+                    <h6><i class="bi bi-gear"></i> 常规</h6>
                     {% for key, value in parsed_config.general.items() %}
                     <div class="kv"><span class="k">{{ key|title }}</span><span class="v">{{ value }}</span></div>
                     {% endfor %}
@@ -591,7 +591,7 @@
 <!-- Snapshots -->
 <div class="card-x mt-3" x-data="vmSnapshots('{{ node }}', '{{ vmid }}', '{{ vm_type }}')" x-cloak>
     <div class="cx-head">
-        <i class="bi bi-camera" style="color:var(--accent)"></i><span class="cx-title">Snapshots</span>
+        <i class="bi bi-camera" style="color:var(--accent)"></i><span class="cx-title">快照</span>
         <button class="icon-btn ms-auto" style="width:28px;height:28px;font-size:13px" @click="load()" :disabled="loading" title="刷新快照">
             <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i>
         </button>
@@ -613,11 +613,11 @@
             <table class="tbl">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Created</th>
-                        <th>Parent</th>
-                        <th style="text-align:right">Actions</th>
+                        <th>名称</th>
+                        <th>描述</th>
+                        <th>创建时间</th>
+                        <th>父级</th>
+                        <th style="text-align:right">操作</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -634,7 +634,7 @@
                             <td class="text-faint mono" style="font-size:11.5px" x-text="s.parent || '—'"></td>
                             <td style="text-align:right;white-space:nowrap">
                                 <button class="btn-x sm" @click="ask('rollback', s)" :disabled="busy" title="回滚到此快照">
-                                    <i class="bi bi-arrow-counterclockwise"></i> Rollback
+                                    <i class="bi bi-arrow-counterclockwise"></i> 回滚
                                 </button>
                                 <button class="btn-x sm danger" @click="ask('delete', s)" :disabled="busy" title="删除此快照">
                                     <i class="bi bi-trash"></i>
@@ -666,14 +666,14 @@
                 </div>
                 <div class="modal-body">
                     <div class="field">
-                        <label>Name</label>
+                        <label>名称</label>
                         <input type="text" class="inp" x-model="createForm.name" maxlength="40"
                                :class="nameError && 'is-invalid'" placeholder="before-upgrade">
                         <div class="hint" x-show="nameError" x-text="nameError" style="color:var(--danger)"></div>
                         <div class="hint" x-show="!nameError">2–40 个字符，以字母开头。</div>
                     </div>
                     <div class="field">
-                        <label>Description <span class="text-faint">（可选）</span></label>
+                        <label>描述 <span class="text-faint">（可选）</span></label>
                         <textarea class="inp" rows="2" x-model="createForm.description"></textarea>
                     </div>
                     {% if vm_type == 'qemu' %}
@@ -686,7 +686,7 @@
                     {% endif %}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn-x" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn-x" data-bs-dismiss="modal">取消</button>
                     <button type="button" class="btn-x primary" @click="submitCreate()" :disabled="!canCreate">
                         <i class="bi bi-camera"></i> 创建快照
                     </button>
@@ -725,7 +725,7 @@
                     </template>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn-x" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn-x" data-bs-dismiss="modal">取消</button>
                     <button type="button" class="btn-x primary" style="background:var(--danger);border-color:var(--danger)"
                             @click="runPending()" :disabled="busy">
                         <span x-text="pending.action === 'rollback' ? 'Roll back' : 'Delete'"></span>
@@ -754,7 +754,7 @@
                     {% if vm_type == 'lxc' %}
                     <div class="callout info mb-3">
                         <i class="bi bi-info-circle"></i>
-                        <div><div class="t">Note</div><div class="b">LXC 容器不支持在线迁移。迁移过程中容器将重启。</div></div>
+                        <div><div class="t">备注</div><div class="b">LXC 容器不支持在线迁移。迁移过程中容器将重启。</div></div>
                     </div>
                     {% endif %}
 
@@ -780,9 +780,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn-x" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn-x" data-bs-dismiss="modal">取消</button>
                     <button type="submit" class="btn-x primary">
-                        <i class="bi bi-arrow-right-circle"></i> Migrate
+                        <i class="bi bi-arrow-right-circle"></i> 迁移
                     </button>
                 </div>
             </form>
@@ -828,7 +828,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn-x" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn-x" data-bs-dismiss="modal">取消</button>
                 <button type="button" class="btn-x" style="background:var(--danger);border-color:var(--danger);color:#fff" @click="run()"
                         :disabled="deleting || !canDelete">
                     <span x-show="deleting" class="spinner-border spinner-border-sm me-1" role="status"></span>
@@ -845,7 +845,7 @@
     <div class="cx-head">
         <i class="bi bi-sliders" style="color:var(--accent)"></i><span class="cx-title">高级 / 直通</span>
         <a href="{{ url_for('vm_edit', node=node, vmid=vmid) }}" class="btn-x sm ms-auto" style="text-decoration:none">
-            <i class="bi bi-pencil-square"></i> Configure
+            <i class="bi bi-pencil-square"></i> 配置
         </a>
     </div>
     <div class="cx-body">
@@ -853,13 +853,13 @@
             <div class="text-muted small"><div class="spinner-border spinner-border-sm me-1" role="status"></div> 加载中…</div>
         </template>
         <template x-if="!loading && !hasAny">
-            <div class="empty-hint">没有高级配置。 <a href="{{ url_for('vm_edit', node=node, vmid=vmid) }}">Configure</a></div>
+            <div class="empty-hint">没有高级配置。 <a href="{{ url_for('vm_edit', node=node, vmid=vmid) }}">配置</a></div>
         </template>
         <template x-if="!loading && hasAny">
             <div class="vstack gap-2">
                 <template x-if="enabledFlags.length > 0">
                     <div>
-                        <span class="text-faint" style="font-size:11px" class="me-2">Flags</span>
+                        <span class="text-faint" style="font-size:11px" class="me-2">标志</span>
                         <template x-for="f in enabledFlags" :key="f">
                             <span class="tag me-1" x-text="f"></span>
                         </template>
@@ -867,7 +867,7 @@
                 </template>
                 <template x-if="devices.length > 0">
                     <div>
-                        <span class="text-faint" style="font-size:11px" class="me-2">Devices</span>
+                        <span class="text-faint" style="font-size:11px" class="me-2">设备</span>
                         <template x-for="d in devices" :key="d.key">
                             <span class="tag me-1" x-text="d.path.split('/').pop()"></span>
                         </template>
@@ -875,7 +875,7 @@
                 </template>
                 <template x-if="mounts.length > 0">
                     <div>
-                        <span class="text-faint" style="font-size:11px" class="me-2">Mounts</span>
+                        <span class="text-faint" style="font-size:11px" class="me-2">挂载</span>
                         <template x-for="m in mounts" :key="m.key">
                             <span class="tag me-1" x-text="m.mp"></span>
                         </template>
@@ -1225,7 +1225,7 @@ function vmStatus() {
     get isStopped() { return this.status === 'stopped'; },
     get statusLabel() {
       if (this.busy) return lockLabel(this.lock);
-      return this.isRunning ? 'Running' : this.isStopped ? 'Stopped' : (this.status || 'unknown');
+      return this.isRunning ? '运行中' : this.isStopped ? '已停止' : (this.status || 'unknown');
     },
     get statusClass() {
       if (this.busy) return 'bg-info text-dark';
@@ -1282,5 +1282,5 @@ function register() {
 }
 if (window.Alpine) register();
 else document.addEventListener('alpine:init', register);
-</script>scriptscriptscript
+</script>
 {% endblock %}

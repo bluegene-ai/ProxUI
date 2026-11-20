@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Tasks - Proxmox Manager{% endblock %}
+{% block title %}任务 - Proxmox 管理器{% endblock %}
 
 {% block content %}
 <div x-data="tasksPage()">
@@ -10,17 +10,17 @@
             <div class="sec-sub">集群内的 Proxmox 任务与 ProxUI 作业</div>
         </div>
         <button class="btn-x" @click="refresh()" :disabled="loading">
-            <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i> Refresh
+            <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i> 刷新
         </button>
     </div>
 
     <div class="card-x">
         <div class="cx-head flex-wrap gap-2">
             <div class="seg">
-                <button :class="{on:filter==='all'}" @click="filter='all'">All</button>
-                <button :class="{on:filter==='running'}" @click="filter='running'">Running</button>
-                <button :class="{on:filter==='ok'}" @click="filter='ok'">Completed</button>
-                <button :class="{on:filter==='error'}" @click="filter='error'">Failed</button>
+                <button :class="{on:filter==='all'}" @click="filter='all'">全部</button>
+                <button :class="{on:filter==='running'}" @click="filter='running'">运行中</button>
+                <button :class="{on:filter==='ok'}" @click="filter='ok'">已完成</button>
+                <button :class="{on:filter==='error'}" @click="filter='error'">失败</button>
             </div>
             <div class="seg">
                 <button :class="{on:source==='all'}" @click="source='all'">全部来源</button>
@@ -47,7 +47,7 @@
                 </div>
             </template>
             <table class="tbl" x-show="filteredTasks.length > 0">
-                <thead><tr><th>Status</th><th>Task</th><th>Node</th><th>User</th><th>开始时间</th><th class="num">Duration</th></tr></thead>
+                <thead><tr><th>状态</th><th>任务</th><th>节点</th><th>用户</th><th>开始时间</th><th class="num">时长</th></tr></thead>
                 <tbody>
                     <template x-for="task in filteredTasks" :key="task.id">
                         <tr>
@@ -154,5 +154,5 @@
   }
   if (window.Alpine) register();
   else document.addEventListener('alpine:init', register);
-</script>scriptscriptscript
+</script>
 {% endblock %}

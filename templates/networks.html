@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}Networks - Proxmox Manager{% endblock %}
+{% block title %}网络 - Proxmox 管理器{% endblock %}
 
 {% block content %}
 <div class="mb-3">
-    <div class="sec-title">Networks</div>
+    <div class="sec-title">网络</div>
     <div class="sec-sub">集群内的网桥、Bond 与 VLAN</div>
 </div>
 
@@ -22,7 +22,7 @@
             <span class="d"></span><span x-text="pendingNodes.length"></span> 个有待生效变更的节点
         </span>
         <button class="btn-x sm ms-auto" @click="reload()" :disabled="loading">
-            <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i> Refresh
+            <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i> 刷新
         </button>
     </div>
 
@@ -38,7 +38,7 @@
                         <i class="bi bi-file-diff"></i> 检查并应用
                     </button>
                     <button class="btn-x sm danger" @click="revert(n)" :disabled="busy === n.node || !n.online" x-show="n.pending">
-                        <i class="bi bi-arrow-counterclockwise"></i> Revert
+                        <i class="bi bi-arrow-counterclockwise"></i> 回退
                     </button>
                     <button class="btn-x sm primary" @click="newInterface(n)" :disabled="!n.online">
                         <i class="bi bi-plus-lg"></i> 添加接口
@@ -70,8 +70,8 @@
                 <div class="cx-body flush tbl-scroll">
                     <table class="tbl">
                         <thead><tr>
-                            <th>Interface</th><th>Type</th><th>Active</th><th>Autostart</th>
-                            <th>CIDR</th><th>Gateway</th><th>端口 / 从属接口</th><th>Comment</th><th></th>
+                            <th>接口</th><th>类型</th><th>活动</th><th>自动启动</th>
+                            <th>CIDR</th><th>网关</th><th>端口 / 从属接口</th><th>备注</th><th></th>
                         </tr></thead>
                         <tbody>
                             <template x-for="i in visible(n)" :key="i.iface">
@@ -79,7 +79,7 @@
                                     <td>
                                         <span class="nm mono" x-text="i.iface"></span>
                                         <span class="pill info ms-1" x-show="i.iface === n.management" title="填写 ProxUI 连接此节点所用的地址">
-                                            <span class="d"></span>Management
+                                            <span class="d"></span>管理
                                         </span>
                                     </td>
                                     <td><span class="type-chip" x-text="i.type"></span></td>
@@ -95,7 +95,7 @@
                                     <td class="text-faint" style="font-size:12px" x-text="(i.comments || '—').trim()"></td>
                                     <td>
                                         <div class="act-row">
-                                            <button class="act-btn pri" @click="editInterface(n, i)" title="Edit">
+                                            <button class="act-btn pri" @click="editInterface(n, i)" title="编辑">
                                                 <i class="bi bi-pencil"></i>
                                             </button>
                                             <span class="act-why" :title="deleteHint(n, i)">
@@ -159,7 +159,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn-x sm" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn-x sm" data-bs-dismiss="modal">关闭</button>
                     <button type="button" class="btn-x sm danger" @click="revert(diffNode)"
                             :disabled="!diffNode || busy === diffNode.node">
                         <i class="bi bi-arrow-counterclockwise"></i> 放弃更改
@@ -188,7 +188,7 @@
                     <div class="row g-3">
                         <div class="col-12 col-md-6" x-show="creating">
                             <div class="field">
-                                <label>Type</label>
+                                <label>类型</label>
                                 <select class="inp" x-model="form.type" @change="onTypeChange()">
                                     <option value="bridge">Linux 网桥</option>
                                     <option value="bond">Linux Bond</option>
@@ -198,7 +198,7 @@
                         </div>
                         <div class="col-12 col-md-6" x-show="creating">
                             <div class="field">
-                                <label>Name</label>
+                                <label>名称</label>
                                 <input type="text" class="inp mono" x-model="form.iface" @input="nameTouched = true"
                                        :placeholder="form.type === 'bridge' ? 'vmbr1' : (form.type === 'bond' ? 'bond0' : 'eno1.100')">
                                 <div class="hint" x-show="form.type === 'bridge'">网桥的惯例命名为 <span class="mono">vmbrN</span>.</div>
@@ -257,7 +257,7 @@
                                 <div class="row g-3">
                                     <div class="col-12 col-md-6">
                                         <div class="field">
-                                            <label>Slaves</label>
+                                            <label>从属接口</label>
                                             <input type="text" class="inp mono" x-model="form.slaves" placeholder="eno1 eno2">
                                             <div class="nic-pick">
                                                 <template x-for="c in candidates('slaves')" :key="c">
@@ -277,7 +277,7 @@
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="field">
-                                            <label>Mode</label>
+                                            <label>模式</label>
                                             <select class="inp" x-model="form.bond_mode">
                                                 <template x-for="m in bondModes" :key="m"><option :value="m" x-text="m"></option></template>
                                             </select>
@@ -285,7 +285,7 @@
                                     </div>
                                     <div class="col-12 col-md-6" x-show="form.bond_mode === 'active-backup'">
                                         <div class="field">
-                                            <label>Primary</label>
+                                            <label>主</label>
                                             <input type="text" class="inp mono" list="nic-primary" x-model="form['bond-primary']" placeholder="eno1">
                                             <datalist id="nic-primary">
                                                 <template x-for="c in primaryCandidates()" :key="c"><option :value="c"></option></template>
@@ -297,7 +297,7 @@
                                         <div class="field">
                                             <label>哈希策略</label>
                                             <select class="inp" x-model="form.bond_xmit_hash_policy">
-                                                <option value="">Default</option>
+                                                <option value="">默认</option>
                                                 <option value="layer2">layer2</option>
                                                 <option value="layer2+3">layer2+3</option>
                                                 <option value="layer3+4">layer3+4</option>
@@ -370,7 +370,7 @@
                         </div>
                         <div class="col-12 col-md-3">
                             <div class="field">
-                                <label>Autostart</label>
+                                <label>自动启动</label>
                                 <label class="d-flex align-items-center gap-2" style="font-size:12.5px">
                                     <input type="checkbox" x-model="form.autostart"> 开机自启
                                 </label>
@@ -378,7 +378,7 @@
                         </div>
                         <div class="col-12 col-md-6">
                             <div class="field">
-                                <label>Comment</label>
+                                <label>备注</label>
                                 <input type="text" class="inp" x-model="form.comments">
                             </div>
                         </div>
@@ -386,12 +386,12 @@
 
                     <div class="alert alert-warning mt-3 mb-0" style="font-size:12px">
                         <i class="bi bi-info-circle me-1"></i>
-                        更改会写入待生效配置。请使用 <strong>Apply</strong> 在节点上执行以激活。
+                        更改会写入待生效配置。请使用 <strong>应用</strong> 在节点上执行以激活。
                     </div>
                     <div class="alert alert-danger mt-3 mb-0" style="font-size:12px" x-show="formError" x-text="formError"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn-x" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn-x" data-bs-dismiss="modal">取消</button>
                     <button type="button" class="btn-x primary" @click="submit()" :disabled="saving">
                         <i class="bi" :class="saving ? 'bi-hourglass-split' : 'bi-check-lg'"></i>
                         <span x-text="creating ? 'Create interface' : 'Save changes'"></span>
@@ -409,5 +409,5 @@
   function register() { window.Alpine.data('networksApp', networksApp); }
   if (window.Alpine) register();
   else document.addEventListener('alpine:init', register);
-</script>scriptscriptscript
+</script>
 {% endblock %}

@@ -1,6 +1,6 @@
 import * as ProxUtils from "./utils.js";
 
-const MODE_LABELS = { snapshot: "Snapshot", suspend: "Suspend", stop: "Stop" };
+const MODE_LABELS = { snapshot: "快照", suspend: "挂起", stop: "停止" };
 
 function emptyJob() {
   return {
@@ -233,7 +233,7 @@ export function backupsApp(initial) {
     async runJob(j) {
       const what = this.selectionLabel(j);
       if (!confirm(`Run backup job ${j.id} now?\n\nGuests: ${what}\nStorage: ${j.storage}` +
-                   `\nMode: ${MODE_LABELS[j.mode] || j.mode || "Snapshot"}` +
+                   `\nMode: ${MODE_LABELS[j.mode] || j.mode || "快照"}` +
                    `\n\nProgress is shown on the Tasks page.`)) return;
       this.busyJob = j.id;
       try {

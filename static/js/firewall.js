@@ -200,7 +200,7 @@ export function firewallPanel(scope, node, vmid, group = '') {
         title: '删除防火墙规则',
         body: `删除规则 #${r.pos}（${r.type} ${r.action} ${what}）？`,
         warn: '',
-        label: 'Delete',
+        label: '删除',
         danger: true,
         run: () => this._run(() => U.apiJson(
           `${base}/rules/${r.pos}?digest=${encodeURIComponent(r.digest || '')}`, { method: 'DELETE' })),

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Firewall - Proxmox Manager{% endblock %}
+{% block title %}防火墙 - Proxmox 管理器{% endblock %}
 
 {% macro confirm_modal() %}
     <div class="modal fade" tabindex="-1" x-ref="confirmModal">
@@ -12,8 +12,8 @@
                 </div>
                 <div class="modal-body"><p class="mb-0" x-text="confirm.body"></p></div>
                 <div class="modal-footer">
-                    <button type="button" class="btn-x" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn-x danger" @click="runConfirm()" :disabled="busy">Delete</button>
+                    <button type="button" class="btn-x" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn-x danger" @click="runConfirm()" :disabled="busy">删除</button>
                 </div>
             </div>
         </div>
@@ -31,16 +31,16 @@
 
 {% block content %}
 <div class="mb-3">
-    <div class="sec-title">Firewall</div>
+    <div class="sec-title">防火墙</div>
     <div class="sec-sub">{{ current_cluster.name }} 的数据中心级防火墙 · 节点与客户机规则位于各自详情页</div>
 </div>
 
 <div x-data="{ tab: ['rules', 'groups', 'aliases', 'ipsets'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'rules',
                show(t) { this.tab = t; history.replaceState(null, '', '#' + t); } }">
     <ul class="nav nav-tabs">
-        <li class="nav-item"><a class="nav-link" :class="{active: tab === 'rules'}" href="#rules" @click.prevent="show('rules')"><i class="bi bi-list-check"></i> Rules</a></li>
+        <li class="nav-item"><a class="nav-link" :class="{active: tab === 'rules'}" href="#rules" @click.prevent="show('rules')"><i class="bi bi-list-check"></i> 规则</a></li>
         <li class="nav-item"><a class="nav-link" :class="{active: tab === 'groups'}" href="#groups" @click.prevent="show('groups')"><i class="bi bi-collection"></i> 安全组</a></li>
-        <li class="nav-item"><a class="nav-link" :class="{active: tab === 'aliases'}" href="#aliases" @click.prevent="show('aliases')"><i class="bi bi-tag"></i> Aliases</a></li>
+        <li class="nav-item"><a class="nav-link" :class="{active: tab === 'aliases'}" href="#aliases" @click.prevent="show('aliases')"><i class="bi bi-tag"></i> 别名</a></li>
         <li class="nav-item"><a class="nav-link" :class="{active: tab === 'ipsets'}" href="#ipsets" @click.prevent="show('ipsets')"><i class="bi bi-hdd-network"></i> IP 集</a></li>
     </ul>
 
@@ -55,7 +55,7 @@
             <div class="cx-head">
                 <i class="bi bi-collection" style="color:var(--accent)"></i><span class="cx-title">安全组</span>
                 <span class="text-faint ms-2" style="font-size:12px">可复用的规则集；在数据中心、节点或客户机上添加一条方向为“group”的规则即可引用。</span>
-                <button class="icon-btn ms-auto" style="width:28px;height:28px;font-size:13px" @click="load()" :disabled="loading" title="Refresh">
+                <button class="icon-btn ms-auto" style="width:28px;height:28px;font-size:13px" @click="load()" :disabled="loading" title="刷新">
                     <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i>
                 </button>
                 <button class="btn-x sm primary" @click="open(null)" :disabled="busy"><i class="bi bi-plus-lg"></i> 新建组</button>
@@ -66,14 +66,14 @@
                     <div class="empty-hint"><i class="bi bi-collection"></i><p class="mb-0">没有安全组</p></div>
                 </template>
                 <table class="tbl" x-show="groups.length">
-                    <thead><tr><th>Name</th><th>Comment</th><th style="text-align:right">Actions</th></tr></thead>
+                    <thead><tr><th>名称</th><th>备注</th><th style="text-align:right">操作</th></tr></thead>
                     <tbody>
                         <template x-for="g in groups" :key="g.group">
                             <tr :style="selected === g.group ? 'background:var(--panel-hover)' : ''">
                                 <td><a href="#" class="nm mono" @click.prevent="selected = g.group" x-text="g.group"></a></td>
                                 <td class="text-faint" style="font-size:12px" x-text="g.comment || ''"></td>
                                 <td style="text-align:right;white-space:nowrap">
-                                    <button class="btn-x sm" @click="selected = g.group" title="显示规则"><i class="bi bi-list-check"></i> Rules</button>
+                                    <button class="btn-x sm" @click="selected = g.group" title="显示规则"><i class="bi bi-list-check"></i> 规则</button>
                                     <button class="btn-x sm" @click="open(g)" :disabled="busy" title="重命名 / 编辑备注"><i class="bi bi-pencil"></i></button>
                                     <button class="btn-x sm danger" @click="remove(g)" :disabled="busy" title="删除组"><i class="bi bi-trash"></i></button>
                                 </td>
@@ -97,13 +97,13 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="field"><label>Name</label><input type="text" class="inp mono" x-model="form.group" maxlength="18" placeholder="webservers"></div>
-                        <div class="field mb-0"><label>Comment</label><input type="text" class="inp" x-model="form.comment"></div>
+                        <div class="field"><label>名称</label><input type="text" class="inp mono" x-model="form.group" maxlength="18" placeholder="webservers"></div>
+                        <div class="field mb-0"><label>备注</label><input type="text" class="inp" x-model="form.comment"></div>
                         <div class="text-danger small mt-2" x-show="formError" x-text="formError"></div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn-x" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn-x primary" @click="save()" :disabled="busy"><i class="bi bi-check-lg"></i> Save</button>
+                        <button type="button" class="btn-x" data-bs-dismiss="modal">取消</button>
+                        <button type="button" class="btn-x primary" @click="save()" :disabled="busy"><i class="bi bi-check-lg"></i> 保存</button>
                     </div>
                 </div>
             </div>
@@ -115,9 +115,9 @@
     <div x-show="tab === 'aliases'" x-data="fwAliases()" x-cloak>
         <div class="card-x mt-3">
             <div class="cx-head">
-                <i class="bi bi-tag" style="color:var(--accent)"></i><span class="cx-title">Aliases</span>
+                <i class="bi bi-tag" style="color:var(--accent)"></i><span class="cx-title">别名</span>
                 <span class="text-faint ms-2" style="font-size:12px">带名称的地址；可将名称用作规则的源或目标。</span>
-                <button class="icon-btn ms-auto" style="width:28px;height:28px;font-size:13px" @click="load()" :disabled="loading" title="Refresh">
+                <button class="icon-btn ms-auto" style="width:28px;height:28px;font-size:13px" @click="load()" :disabled="loading" title="刷新">
                     <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i>
                 </button>
                 <button class="btn-x sm primary" @click="open(null)" :disabled="busy"><i class="bi bi-plus-lg"></i> 新建别名</button>
@@ -128,7 +128,7 @@
                     <div class="empty-hint"><i class="bi bi-tag"></i><p class="mb-0">没有别名</p></div>
                 </template>
                 <table class="tbl" x-show="aliases.length">
-                    <thead><tr><th>Name</th><th>IP / CIDR</th><th>Comment</th><th style="text-align:right">Actions</th></tr></thead>
+                    <thead><tr><th>名称</th><th>IP / CIDR</th><th>备注</th><th style="text-align:right">操作</th></tr></thead>
                     <tbody>
                         <template x-for="a in aliases" :key="a.name">
                             <tr>
@@ -154,14 +154,14 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="field"><label>Name</label><input type="text" class="inp mono" x-model="form.name" maxlength="64" placeholder="office-lan"></div>
+                        <div class="field"><label>名称</label><input type="text" class="inp mono" x-model="form.name" maxlength="64" placeholder="office-lan"></div>
                         <div class="field"><label>IP / CIDR</label><input type="text" class="inp mono" x-model="form.cidr" placeholder="192.168.10.0/24"></div>
-                        <div class="field mb-0"><label>Comment</label><input type="text" class="inp" x-model="form.comment"></div>
+                        <div class="field mb-0"><label>备注</label><input type="text" class="inp" x-model="form.comment"></div>
                         <div class="text-danger small mt-2" x-show="formError" x-text="formError"></div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn-x" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn-x primary" @click="save()" :disabled="busy"><i class="bi bi-check-lg"></i> Save</button>
+                        <button type="button" class="btn-x" data-bs-dismiss="modal">取消</button>
+                        <button type="button" class="btn-x primary" @click="save()" :disabled="busy"><i class="bi bi-check-lg"></i> 保存</button>
                     </div>
                 </div>
             </div>
@@ -175,7 +175,7 @@
             <div class="cx-head">
                 <i class="bi bi-hdd-network" style="color:var(--accent)"></i><span class="cx-title">IP 集</span>
                 <span class="text-faint ms-2" style="font-size:12px">地址组；请使用 <code>+name</code> 作为规则的源或目标。</span>
-                <button class="icon-btn ms-auto" style="width:28px;height:28px;font-size:13px" @click="load()" :disabled="loading" title="Refresh">
+                <button class="icon-btn ms-auto" style="width:28px;height:28px;font-size:13px" @click="load()" :disabled="loading" title="刷新">
                     <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i>
                 </button>
                 <button class="btn-x sm primary" @click="open(null)" :disabled="busy"><i class="bi bi-plus-lg"></i> 新建 IP 集</button>
@@ -186,7 +186,7 @@
                     <div class="empty-hint"><i class="bi bi-hdd-network"></i><p class="mb-0">没有 IP 集</p></div>
                 </template>
                 <table class="tbl" x-show="ipsets.length">
-                    <thead><tr><th>Name</th><th>Entries</th><th>Comment</th><th style="text-align:right">Actions</th></tr></thead>
+                    <thead><tr><th>名称</th><th>条目</th><th>备注</th><th style="text-align:right">操作</th></tr></thead>
                     <tbody>
                         <template x-for="s in ipsets" :key="s.name">
                             <tr :style="selected === s.name ? 'background:var(--panel-hover)' : ''">
@@ -194,7 +194,7 @@
                                 <td class="mono text-faint" style="font-size:12px" x-text="(s.entries || []).length"></td>
                                 <td class="text-faint" style="font-size:12px" x-text="s.comment || ''"></td>
                                 <td style="text-align:right;white-space:nowrap">
-                                    <button class="btn-x sm" @click="selected = s.name" title="显示条目"><i class="bi bi-list-ul"></i> Entries</button>
+                                    <button class="btn-x sm" @click="selected = s.name" title="显示条目"><i class="bi bi-list-ul"></i> 条目</button>
                                     <button class="btn-x sm" @click="open(s)" :disabled="busy" title="重命名 / 编辑备注"><i class="bi bi-pencil"></i></button>
                                     <button class="btn-x sm danger" @click="remove(s)" :disabled="busy" title="删除 IP 集"><i class="bi bi-trash"></i></button>
                                 </td>
@@ -215,7 +215,7 @@
                     <div class="d-flex flex-wrap gap-2 align-items-end px-3 pt-3">
                         <div class="field mb-2"><label>IP / CIDR / 别名</label>
                             <input type="text" class="inp mono" style="min-width:200px" x-model="entry.cidr" placeholder="10.0.0.0/24" @keydown.enter="addEntry()"></div>
-                        <div class="field mb-2"><label>Comment</label>
+                        <div class="field mb-2"><label>备注</label>
                             <input type="text" class="inp" style="min-width:220px" x-model="entry.comment" @keydown.enter="addEntry()"></div>
                         <label class="d-flex align-items-center gap-2 mb-3" style="cursor:pointer;font-size:13px"
                                title="从集合中排除此地址">
@@ -227,7 +227,7 @@
                         <div class="empty-hint"><i class="bi bi-list-ul"></i><p class="mb-0">没有条目</p></div>
                     </template>
                     <table class="tbl" x-show="current.entries.length">
-                        <thead><tr><th>IP / CIDR</th><th>nomatch</th><th>Comment</th><th style="text-align:right">Actions</th></tr></thead>
+                        <thead><tr><th>IP / CIDR</th><th>nomatch</th><th>备注</th><th style="text-align:right">操作</th></tr></thead>
                         <tbody>
                             <template x-for="e in current.entries" :key="e.cidr">
                                 <tr>
@@ -254,13 +254,13 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="field"><label>Name</label><input type="text" class="inp mono" x-model="form.name" maxlength="64" placeholder="admins"></div>
-                        <div class="field mb-0"><label>Comment</label><input type="text" class="inp" x-model="form.comment"></div>
+                        <div class="field"><label>名称</label><input type="text" class="inp mono" x-model="form.name" maxlength="64" placeholder="admins"></div>
+                        <div class="field mb-0"><label>备注</label><input type="text" class="inp" x-model="form.comment"></div>
                         <div class="text-danger small mt-2" x-show="formError" x-text="formError"></div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn-x" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn-x primary" @click="save()" :disabled="busy"><i class="bi bi-check-lg"></i> Save</button>
+                        <button type="button" class="btn-x" data-bs-dismiss="modal">取消</button>
+                        <button type="button" class="btn-x primary" @click="save()" :disabled="busy"><i class="bi bi-check-lg"></i> 保存</button>
                     </div>
                 </div>
             </div>
@@ -269,19 +269,19 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title"><i class="bi bi-pencil"></i> Edit <span class="mono" x-text="entryEdit.cidr"></span></h5>
+                        <h5 class="modal-title"><i class="bi bi-pencil"></i> 编辑 <span class="mono" x-text="entryEdit.cidr"></span></h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="field"><label>Comment</label><input type="text" class="inp" x-model="entryEdit.comment"></div>
+                        <div class="field"><label>备注</label><input type="text" class="inp" x-model="entryEdit.comment"></div>
                         <label class="d-flex align-items-center gap-2" style="cursor:pointer">
                             <input type="checkbox" x-model="entryEdit.nomatch"> nomatch（排除此地址）
                         </label>
                         <div class="text-danger small mt-2" x-show="formError" x-text="formError"></div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn-x" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn-x primary" @click="saveEntry()" :disabled="busy"><i class="bi bi-check-lg"></i> Save</button>
+                        <button type="button" class="btn-x" data-bs-dismiss="modal">取消</button>
+                        <button type="button" class="btn-x primary" @click="saveEntry()" :disabled="busy"><i class="bi bi-check-lg"></i> 保存</button>
                     </div>
                 </div>
             </div>
@@ -304,5 +304,5 @@ function register() {
 }
 if (window.Alpine) register();
 else document.addEventListener('alpine:init', register);
-</script>scriptscriptscript
+</script>
 {% endblock %}

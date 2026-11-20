@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}{{ node }} - Proxmox Manager{% endblock %}
+{% block title %}{{ node }} - Proxmox 管理器{% endblock %}
 
 {% block content %}
-<div class="mb-3"><a href="{{ url_for('cluster') }}" class="back-link"><i class="bi bi-arrow-left"></i> Cluster</a></div>
+<div class="mb-3"><a href="{{ url_for('cluster') }}" class="back-link"><i class="bi bi-arrow-left"></i> 集群</a></div>
 
 {% if not online %}
 <div class="d-flex align-items-center gap-3 mb-3">
     <span class="job-ico err" style="width:46px;height:46px;font-size:22px"><i class="bi bi-server"></i></span>
     <div>
         <div class="sec-title" style="font-size:20px">{{ node }}</div>
-        <div class="sec-sub">Node</div>
+        <div class="sec-sub">节点</div>
     </div>
 </div>
 <div class="callout danger">
@@ -25,7 +25,7 @@
             <span class="job-ico ok" style="width:46px;height:46px;font-size:22px"><i class="bi bi-server"></i></span>
             <div>
                 <div class="sec-title" style="font-size:20px">{{ node }}</div>
-                <div class="sec-sub">Node <span class="pill ok ms-1"><span class="d"></span>Online</span></div>
+                <div class="sec-sub">节点 <span class="pill ok ms-1"><span class="d"></span>在线</span></div>
             </div>
         </div>
         <a href="{{ url_for('node_shell', node=node) }}" class="btn-x" style="text-decoration:none">
@@ -35,9 +35,9 @@
 
     <!-- Hero stats -->
     <div class="metric-hero mb-4">
-        <div class="hero-stat"><div class="k">Uptime</div><div class="v mono">{{ status.uptime|humanize_uptime }}</div></div>
+        <div class="hero-stat"><div class="k">运行时间</div><div class="v mono">{{ status.uptime|humanize_uptime }}</div></div>
         <div class="hero-stat"><div class="k">CPU</div><div class="v">{{ (status.cpu * 100)|round(1) }}%</div></div>
-        <div class="hero-stat"><div class="k">Memory</div><div class="v">{{ (status.memory.used / status.memory.total * 100)|round(1) if status.memory.total else 0 }}%</div></div>
+        <div class="hero-stat"><div class="k">内存</div><div class="v">{{ (status.memory.used / status.memory.total * 100)|round(1) if status.memory.total else 0 }}%</div></div>
         <div class="hero-stat"><div class="k">平均负载</div><div class="v mono">{{ status.loadavg[0] if status.loadavg else 'N/A' }}</div></div>
         <div class="hero-stat"><div class="k">CPU 核心数</div><div class="v">{{ status.cpuinfo.cpus|default('N/A') }}</div></div>
     </div>
@@ -48,7 +48,7 @@
             <div style="font-size:12px;font-weight:600">{{ status.cpuinfo.model|default('N/A') }}</div>
         </div>
         <div>
-            <div class="text-faint" style="font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;font-weight:700">Kernel</div>
+            <div class="text-faint" style="font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;font-weight:700">内核</div>
             <div class="mono" style="font-size:11.5px;font-weight:600">{{ status.kversion.split(' ')[:2]|join(' ') if status.kversion else 'N/A' }}</div>
         </div>
         <div>
@@ -70,7 +70,7 @@
                     <option value="year">最近一年</option>
                 </select>
                 <span class="text-faint" style="font-size:12px" x-text="lastUpdate"></span>
-                <button class="icon-btn" style="width:32px;height:32px;font-size:15px" @click="refresh()" :disabled="loading" title="Refresh">
+                <button class="icon-btn" style="width:32px;height:32px;font-size:15px" @click="refresh()" :disabled="loading" title="刷新">
                     <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i>
                 </button>
             </div>
@@ -100,10 +100,10 @@
 
 <!-- Storage -->
 <div class="card-x mb-4">
-    <div class="cx-head"><i class="bi bi-hdd" style="color:var(--accent)"></i><span class="cx-title">Storage</span></div>
+    <div class="cx-head"><i class="bi bi-hdd" style="color:var(--accent)"></i><span class="cx-title">存储</span></div>
     <div class="cx-body flush tbl-scroll">
         <table class="tbl">
-            <thead><tr><th>Storage</th><th>Type</th><th>Shared</th><th>Status</th><th style="width:230px">Usage</th></tr></thead>
+            <thead><tr><th>存储</th><th>类型</th><th>共享</th><th>状态</th><th style="width:230px">使用率</th></tr></thead>
             <tbody>
                 {% for storage in storages %}
                 <tr>
@@ -121,9 +121,9 @@
                     </td>
                     <td>
                         {% if storage.active %}
-                        <span class="pill ok"><span class="d"></span>Active</span>
+                        <span class="pill ok"><span class="d"></span>活动</span>
                         {% else %}
-                        <span class="pill err"><span class="d"></span>Inactive</span>
+                        <span class="pill err"><span class="d"></span>未激活</span>
                         {% endif %}
                     </td>
                     <td>
@@ -151,7 +151,7 @@
 <div class="card-x mb-4" x-data="nodeDisks('{{ node }}')">
     <div class="cx-head d-flex justify-content-between align-items-center">
         <span class="cx-title"><i class="bi bi-device-hdd" style="color:var(--accent)"></i> 本地磁盘</span>
-        <button class="icon-btn" style="width:32px;height:32px;font-size:15px" @click="load()" :disabled="loading" title="Refresh">
+        <button class="icon-btn" style="width:32px;height:32px;font-size:15px" @click="load()" :disabled="loading" title="刷新">
             <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i>
         </button>
     </div>
@@ -166,7 +166,7 @@
             <div class="empty-hint">无可用磁盘信息。</div>
         </template>
         <table class="tbl" x-show="disks.length > 0">
-            <thead><tr><th>Device</th><th>Model</th><th>Serial</th><th>Type</th><th class="num">Size</th><th>被以下对象使用</th><th>SMART</th><th class="num">Wearout</th></tr></thead>
+            <thead><tr><th>设备</th><th>型号</th><th>串口</th><th>类型</th><th class="num">大小</th><th>被以下对象使用</th><th>SMART</th><th class="num">磨损</th></tr></thead>
             <tbody>
                 <template x-for="d in disks" :key="d.devpath">
                     <tr>
@@ -191,7 +191,7 @@
 <div class="card-x mb-4" x-data="nodeZfs('{{ node }}')">
     <div class="cx-head d-flex justify-content-between align-items-center">
         <span class="cx-title"><i class="bi bi-stack" style="color:var(--accent)"></i> ZFS 池</span>
-        <button class="icon-btn" style="width:32px;height:32px;font-size:15px" @click="load()" :disabled="loading" title="Refresh">
+        <button class="icon-btn" style="width:32px;height:32px;font-size:15px" @click="load()" :disabled="loading" title="刷新">
             <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i>
         </button>
     </div>
@@ -203,7 +203,7 @@
             <div class="empty-hint"><i class="bi bi-info-circle"></i> 此节点上没有 ZFS 池。</div>
         </template>
         <table class="tbl" x-show="pools.length > 0">
-            <thead><tr><th>Pool</th><th>Health</th><th style="width:230px">Usage</th><th class="num">Fragmentation</th></tr></thead>
+            <thead><tr><th>池</th><th>健康</th><th style="width:230px">使用率</th><th class="num">碎片率</th></tr></thead>
             <tbody>
                 <template x-for="p in pools" :key="p.name">
                     <tr>
@@ -231,12 +231,12 @@
         <table class="tbl">
             <thead>
                 <tr>
-                    <th>Status</th>
-                    <th><a href="#" @click.prevent="setSort('name')">Name <i class="bi" :class="sortIcon('name')"></i></a></th>
-                    <th><a href="#" @click.prevent="setSort('type')">Type <i class="bi" :class="sortIcon('type')"></i></a></th>
+                    <th>状态</th>
+                    <th><a href="#" @click.prevent="setSort('name')">名称 <i class="bi" :class="sortIcon('name')"></i></a></th>
+                    <th><a href="#" @click.prevent="setSort('type')">类型 <i class="bi" :class="sortIcon('type')"></i></a></th>
                     <th style="width:150px"><a href="#" @click.prevent="setSort('cpu')">CPU <i class="bi" :class="sortIcon('cpu')"></i></a></th>
-                    <th style="width:170px"><a href="#" @click.prevent="setSort('memory')">Memory <i class="bi" :class="sortIcon('memory')"></i></a></th>
-                    <th class="num">Actions</th>
+                    <th style="width:170px"><a href="#" @click.prevent="setSort('memory')">内存 <i class="bi" :class="sortIcon('memory')"></i></a></th>
+                    <th class="num">操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -268,7 +268,7 @@
                         </td>
                         <td>
                             <div class="act-row">
-                                <a :href="'/vm/' + g.node + '/' + g.vmid" class="act-btn" title="Details"><i class="bi bi-info-circle"></i></a>
+                                <a :href="'/vm/' + g.node + '/' + g.vmid" class="act-btn" title="详情"><i class="bi bi-info-circle"></i></a>
                             </div>
                         </td>
                     </tr>
@@ -470,5 +470,5 @@
   }
   if (window.Alpine) register();
   else document.addEventListener('alpine:init', register);
-</script>scriptscriptscript
+</script>
 {% endblock %}

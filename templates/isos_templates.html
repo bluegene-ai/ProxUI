@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}ISOs & Templates - Proxmox Manager{% endblock %}
+{% block title %}ISO 与模板 - Proxmox 管理器{% endblock %}
 
 {% block content %}
 <div x-data="isosManager()">
@@ -75,7 +75,7 @@
                      class="tbl-scroll">
                   <table class="tbl">
                     <thead>
-                      <tr><th>Name</th><th>Storage</th><th>Size</th><th>Format</th><th class="num">Actions</th></tr>
+                      <tr><th>名称</th><th>存储</th><th>大小</th><th>格式</th><th class="num">操作</th></tr>
                     </thead>
                     <tbody>
                       <template x-for="iso in (perNode[node.name] ? perNode[node.name].isos : [])" :key="iso.volid">
@@ -129,7 +129,7 @@
                      class="tbl-scroll">
                   <table class="tbl">
                     <thead>
-                      <tr><th>ID</th><th>Name</th><th>Memory</th><th>CPU</th><th>Status</th><th class="num">Actions</th></tr>
+                      <tr><th>ID</th><th>名称</th><th>内存</th><th>CPU</th><th>状态</th><th class="num">操作</th></tr>
                     </thead>
                     <tbody>
                       <template x-for="vm in (perNode[node.name] ? perNode[node.name].vmTemplates : [])" :key="vm.vmid">
@@ -138,11 +138,11 @@
                           <td x-text="vm.name || 'Unnamed'"></td>
                           <td x-text="vmMemGB(vm) + ' GB'"></td>
                           <td x-text="vmCpuInfo(vm)"></td>
-                          <td><span class="pill tmpl"><span class="d"></span>Template</span></td>
+                          <td><span class="pill tmpl"><span class="d"></span>模板</span></td>
                           <td>
                             <div class="act-row">
                               <a :href="'/vm/' + node.name + '/' + vm.vmid + '/clone'"
-                                 class="act-btn pri" title="Clone">
+                                 class="act-btn pri" title="克隆">
                                 <i class="bi bi-files"></i>
                               </a>
                               <button class="act-btn stopc"
@@ -183,7 +183,7 @@
                      class="tbl-scroll">
                   <table class="tbl">
                     <thead>
-                      <tr><th>Template</th><th>Storage</th><th>Size</th><th>Filename</th><th class="num">Actions</th></tr>
+                      <tr><th>模板</th><th>存储</th><th>大小</th><th>文件名</th><th class="num">操作</th></tr>
                     </thead>
                     <tbody>
                       <template x-for="t in (perNode[node.name] ? perNode[node.name].lxcTemplates : [])" :key="t.volid">
@@ -238,13 +238,13 @@
             <div class="hint">输入用于下载 ISO 镜像的直接 URL</div>
           </div>
           <div class="field">
-            <label>Filename</label>
+            <label>文件名</label>
             <input type="text" class="inp" x-model="dl.filename"
                    placeholder="从 URL 自动检测">
             <div class="hint">留空则从 URL 自动检测</div>
           </div>
           <div class="field">
-            <label>Storage <span class="text-danger">*</span></label>
+            <label>存储 <span class="text-danger">*</span></label>
             <div x-show="dl.loadingStorages" class="text-muted">
               <span class="spinner-border spinner-border-sm"></span> 正在加载存储...
             </div>
@@ -282,7 +282,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn-x" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn-x" data-bs-dismiss="modal">取消</button>
           <button type="button" class="btn-x primary" @click="startDownload()" :disabled="dl.busy">
             <span x-show="dl.busy" class="spinner-border spinner-border-sm"></span>
             <span x-show="!dl.busy"><i class="bi bi-download"></i></span>
@@ -382,7 +382,7 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="field">
-                  <label>Storage <span class="text-danger">*</span></label>
+                  <label>存储 <span class="text-danger">*</span></label>
                   <select class="inp" x-model="cloud.storage">
                     <option value="">选择存储...</option>
                     <template x-for="s in cloud.storages" :key="s.storage">
@@ -443,8 +443,8 @@
               </div>
               <div class="col-md-6">
                 <div class="field">
-                  <label>Password</label>
-                  <input type="password" class="inp" x-model="cloud.ciPassword" placeholder="Optional">
+                  <label>密码</label>
+                  <input type="password" class="inp" x-model="cloud.ciPassword" placeholder="可选">
                 </div>
               </div>
             </div>
@@ -486,14 +486,14 @@
             <template x-if="cloud.result && !cloud.result.success">
               <div class="callout danger">
                 <i class="bi bi-exclamation-triangle"></i>
-                <div><div class="t">Error</div><div class="b" x-text="cloud.result.error || 'Unknown error'"></div></div>
+                <div><div class="t">错误</div><div class="b" x-text="cloud.result.error || 'Unknown error'"></div></div>
               </div>
             </template>
           </div>
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn-x" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn-x" data-bs-dismiss="modal">取消</button>
           <button type="button" class="btn-x primary" @click="createCloudTemplate()" :disabled="cloud.busy">
             <span x-show="cloud.busy" class="spinner-border spinner-border-sm"></span>
             <span x-show="!cloud.busy"><i class="bi bi-plus-circle"></i></span>
@@ -545,7 +545,7 @@
             <!-- Proxmox Templates tab -->
             <div class="tab-pane fade show active" id="proxmox-source" role="tabpanel">
               <div class="field">
-                <label>Storage <span class="text-danger">*</span></label>
+                <label>存储 <span class="text-danger">*</span></label>
                 <select class="inp" x-model="lxc.lxcStorage">
                   <option value="">选择存储...</option>
                   <template x-for="s in lxc.storages" :key="s.storage">
@@ -555,7 +555,7 @@
                 <div class="hint">选择支持容器模板的存储</div>
               </div>
               <div class="field">
-                <label>Category</label>
+                <label>类别</label>
                 <select class="inp" x-model="lxc.filterSection">
                   <option value="">全部分类</option>
                   <template x-for="sec in lxcSections" :key="sec.value">
@@ -564,7 +564,7 @@
                 </select>
               </div>
               <div class="field">
-                <label>Template <span class="text-danger">*</span></label>
+                <label>模板 <span class="text-danger">*</span></label>
                 <select class="inp" x-model="lxc.selectedTemplate" @change="onLxcTemplateChange()">
                   <option value="">选择模板...</option>
                   <template x-for="group in lxcTemplateGroups" :key="group.label">
@@ -594,7 +594,7 @@
             <!-- URL tab -->
             <div class="tab-pane fade" id="url-source" role="tabpanel">
               <div class="field">
-                <label>Storage <span class="text-danger">*</span></label>
+                <label>存储 <span class="text-danger">*</span></label>
                 <select class="inp" x-model="lxc.lxcUrlStorage">
                   <option value="">选择存储...</option>
                   <template x-for="s in lxc.storages" :key="s.storage">
@@ -610,7 +610,7 @@
                 <div class="hint">容器模板的直接下载 URL（.tar.xz、.tar.gz 或 .tar.zst）</div>
               </div>
               <div class="field">
-                <label>Filename</label>
+                <label>文件名</label>
                 <input type="text" class="inp" x-model="lxc.lxcUrlFilename" placeholder="从 URL 自动检测">
                 <div class="hint">留空则从 URL 自动检测</div>
               </div>
@@ -619,7 +619,7 @@
             <!-- OCI tab -->
             <div class="tab-pane fade" id="oci-source" role="tabpanel">
               <div class="field">
-                <label>Storage <span class="text-danger">*</span></label>
+                <label>存储 <span class="text-danger">*</span></label>
                 <select class="inp" x-model="lxc.lxcOciStorage">
                   <option value="">选择存储...</option>
                   <template x-for="s in lxc.storages" :key="s.storage">
@@ -635,7 +635,7 @@
               </div>
               <div class="callout info">
                 <i class="bi bi-info-circle"></i>
-                <div><div class="t">Note</div><div class="b">OCI 仓库支持需要 Proxmox VE 8.0+。镜像将被转换为 LXC 模板。</div></div>
+                <div><div class="t">备注</div><div class="b">OCI 仓库支持需要 Proxmox VE 8.0+。镜像将被转换为 LXC 模板。</div></div>
               </div>
             </div>
 
@@ -683,14 +683,14 @@
             <template x-if="lxc.result && !lxc.result.success && !lxc.result.manual_command">
               <div class="callout danger">
                 <i class="bi bi-exclamation-triangle"></i>
-                <div><div class="t">Error</div><div class="b" x-text="lxc.result.error || 'Unknown error'"></div></div>
+                <div><div class="t">错误</div><div class="b" x-text="lxc.result.error || 'Unknown error'"></div></div>
               </div>
             </template>
           </div>
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn-x" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn-x" data-bs-dismiss="modal">取消</button>
           <button type="button" class="btn-x primary" @click="importLxcTemplate()" :disabled="lxc.busy">
             <span x-show="lxc.busy" class="spinner-border spinner-border-sm"></span>
             <span x-show="!lxc.busy"><i class="bi bi-download"></i></span>
@@ -743,7 +743,7 @@
             </div>
             <div class="col-md-6">
               <div class="field">
-                <label>Hostname <span class="text-danger">*</span></label>
+                <label>主机名 <span class="text-danger">*</span></label>
                 <input type="text" class="inp" x-model="ct.hostname"
                        pattern="[a-zA-Z0-9\-]+" placeholder="my-container" required>
               </div>
@@ -826,7 +826,7 @@
             </div>
             <div class="col-md-6">
               <div class="field">
-                <label>Gateway</label>
+                <label>网关</label>
                 <input type="text" class="inp" x-model="ct.gateway" placeholder="192.168.1.1">
               </div>
             </div>
@@ -890,14 +890,14 @@
             <template x-if="ct.result && !ct.result.success">
               <div class="callout danger">
                 <i class="bi bi-exclamation-triangle"></i>
-                <div><div class="t">Error</div><div class="b" x-text="ct.result.error || 'Unknown error'"></div></div>
+                <div><div class="t">错误</div><div class="b" x-text="ct.result.error || 'Unknown error'"></div></div>
               </div>
             </template>
           </div>
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn-x" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn-x" data-bs-dismiss="modal">取消</button>
           <button type="button" class="btn-x primary" @click="createContainer()" :disabled="ct.busy">
             <span x-show="ct.busy" class="spinner-border spinner-border-sm"></span>
             <span x-show="!ct.busy"><i class="bi bi-plus-circle"></i></span>
@@ -917,5 +917,5 @@
   function register() { window.Alpine.data('isosManager', isosManager); }
   if (window.Alpine) register();
   else document.addEventListener('alpine:init', register);
-</script>scriptscriptscript
+</script>
 {% endblock %}

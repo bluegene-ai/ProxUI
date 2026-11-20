@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Create - Proxmox Manager{% endblock %}
+{% block title %}新建 - Proxmox 管理器{% endblock %}
 
 {% block content %}
 <div class="mb-4">
@@ -16,7 +16,7 @@
 
                     <!-- Type Selection -->
                     <div class="field">
-                        <label for="type">Type</label>
+                        <label for="type">类型</label>
                         <select class="inp" id="type" name="type" required
                                 x-model="vmType" @change="onTypeChange()">
                             <option value="qemu">虚拟机（KVM）</option>
@@ -26,7 +26,7 @@
 
                     <!-- Node Selection -->
                     <div class="field">
-                        <label for="node">Node</label>
+                        <label for="node">节点</label>
                         <select class="inp" id="node" name="node" required
                                 x-model="node" @change="onNodeChange()">
                             <option value="">选择节点...</option>
@@ -48,7 +48,7 @@
 
                     <!-- Template Selection -->
                     <div class="field" x-show="creationMethod === 'template'">
-                        <label for="template">Template</label>
+                        <label for="template">模板</label>
                         <select class="inp" id="template" name="template" x-model="selectedTemplate">
                             <option value="">选择模板...</option>
                             <template x-for="t in templates" :key="t.value">
@@ -69,7 +69,7 @@
                     </div>
 
                     <div class="field">
-                        <label for="name">Name</label>
+                        <label for="name">名称</label>
                         <input type="text" class="inp" id="name" name="name"
                                required placeholder="例如 my-server">
                     </div>
@@ -103,7 +103,7 @@
 
                     <!-- Storage -->
                     <div class="field">
-                        <label for="storage">Storage</label>
+                        <label for="storage">存储</label>
                         <select class="inp" id="storage" name="storage" required
                                 x-model="selectedStorage">
                             <option value="">选择存储...</option>
@@ -186,8 +186,8 @@
 
                     <div class="divider my-4"></div>
                     <div class="d-flex gap-2 justify-content-end">
-                        <a href="{{ url_for('vms') }}" class="btn-x ghost">Cancel</a>
-                        <button type="submit" class="btn-x primary"><i class="bi bi-plus-lg"></i> Create</button>
+                        <a href="{{ url_for('vms') }}" class="btn-x ghost">取消</a>
+                        <button type="submit" class="btn-x primary"><i class="bi bi-plus-lg"></i> 新建</button>
                     </div>
                 </form>
             </div>
@@ -196,16 +196,16 @@
 
     <div class="col-12 col-xl-4" x-cloak>
         <div class="card-x">
-            <div class="cx-head"><i class="bi bi-clipboard-check" style="color:var(--accent)"></i><span class="cx-title">Configuration</span></div>
+            <div class="cx-head"><i class="bi bi-clipboard-check" style="color:var(--accent)"></i><span class="cx-title">配置</span></div>
             <div class="cx-body">
-                <div class="summary-row"><span class="k">Type</span><span class="v" x-text="vmType === 'qemu' ? 'VM (KVM)' : 'Container (LXC)'"></span></div>
-                <div class="summary-row"><span class="k">Node</span><span class="v" x-text="node || '—'"></span></div>
+                <div class="summary-row"><span class="k">类型</span><span class="v" x-text="vmType === 'qemu' ? 'VM (KVM)' : 'Container (LXC)'"></span></div>
+                <div class="summary-row"><span class="k">节点</span><span class="v" x-text="node || '—'"></span></div>
                 <div class="summary-row"><span class="k">虚拟机 ID</span><span class="v mono" x-text="vmid || '—'"></span></div>
-                <div class="summary-row"><span class="k">Storage</span><span class="v" x-text="selectedStorage || '—'"></span></div>
-                <div class="summary-row" x-show="vmType === 'qemu'"><span class="k">Bridge</span><span class="v" x-text="selectedBridge || '—'"></span></div>
+                <div class="summary-row"><span class="k">存储</span><span class="v" x-text="selectedStorage || '—'"></span></div>
+                <div class="summary-row" x-show="vmType === 'qemu'"><span class="k">网桥</span><span class="v" x-text="selectedBridge || '—'"></span></div>
                 <div class="summary-row" x-show="vmType === 'qemu' && creationMethod !== 'template'"><span class="k">ISO</span><span class="v" x-text="selectedIso || 'None'"></span></div>
                 <div class="summary-row" x-show="vmType === 'qemu' && creationMethod !== 'template'"><span class="k">BIOS</span><span class="v" x-text="bios === 'ovmf' ? 'OVMF (UEFI)' : 'SeaBIOS'"></span></div>
-                <div class="summary-row" x-show="vmType === 'qemu' && creationMethod !== 'template'"><span class="k">Machine</span><span class="v" x-text="bios === 'ovmf' ? 'q35' : 'i440fx'"></span></div>
+                <div class="summary-row" x-show="vmType === 'qemu' && creationMethod !== 'template'"><span class="k">机型</span><span class="v" x-text="bios === 'ovmf' ? 'q35' : 'i440fx'"></span></div>
                 <div class="summary-row" x-show="vmType === 'lxc'"><span class="k">系统模板</span><span class="v" x-text="selectedOsTemplate || '—'"></span></div>
             </div>
         </div>
@@ -218,5 +218,5 @@
     import { createVmForm } from "{{ url_for('static', filename='js/create-vm.js') }}";
     function register() { window.Alpine.data('createVmForm', createVmForm); }
     if (window.Alpine) register(); else document.addEventListener('alpine:init', register);
-</script>scriptscriptscript
+</script>
 {% endblock %}

@@ -65,11 +65,11 @@ export function activityIsActive(item) {
 }
 
 const ACTIVITY_STATUS = {
-  running: { label: 'Running', pill: 'info', color: 'primary', icon: 'bi-arrow-repeat spin' },
+  running: { label: '运行中', pill: 'info', color: 'primary', icon: 'bi-arrow-repeat spin' },
   queued:  { label: 'Queued',  pill: 'info', color: 'secondary', icon: 'bi-clock' },
   ok:      { label: 'OK',      pill: 'ok',   color: 'success', icon: 'bi-check-circle' },
   warning: { label: 'Warnings', pill: 'maint', color: 'warning', icon: 'bi-exclamation-triangle' },
-  failed:  { label: 'Failed',  pill: 'err',  color: 'danger', icon: 'bi-x-circle' },
+  failed:  { label: '失败',  pill: 'err',  color: 'danger', icon: 'bi-x-circle' },
 };
 const ACTIVITY_STATUS_UNKNOWN = { label: 'Unknown', pill: 'info', color: 'secondary', icon: 'bi-dash-circle' };
 

@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}Backups - Proxmox Manager{% endblock %}
+{% block title %}备份 - Proxmox 管理器{% endblock %}
 
 {% block content %}
 <div class="mb-4">
-    <div class="sec-title">Backups</div>
+    <div class="sec-title">备份</div>
     <div class="sec-sub">{{ current_cluster.name }} 的计划作业与已存储备份</div>
 </div>
 
@@ -81,7 +81,7 @@
     <div class="d-flex align-items-center gap-2 mb-2">
         <div class="sec-title" style="font-size:14px"><i class="bi bi-hdd-stack me-1" style="color:var(--accent)"></i>备份存储</div>
         <button class="btn-x sm ms-auto" @click="reload()" :disabled="loading">
-            <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i> Refresh
+            <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i> 刷新
         </button>
     </div>
     <div class="row g-3 mb-4">
@@ -92,8 +92,8 @@
                         <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
                             <span class="cx-title" x-text="s.storage"></span>
                             <span class="type-chip" x-text="(s.type || '').toUpperCase()"></span>
-                            <span class="pill ok" x-show="s.shared"><span class="d"></span>Shared</span>
-                            <span class="pill err ms-auto" x-show="s.error"><span class="d"></span>Error</span>
+                            <span class="pill ok" x-show="s.shared"><span class="d"></span>共享</span>
+                            <span class="pill err ms-auto" x-show="s.error"><span class="d"></span>错误</span>
                         </div>
                         <template x-if="s.error">
                             <div class="text-danger" style="font-size:12px" x-text="s.error"></div>
@@ -146,14 +146,14 @@
             <table class="tbl">
                 <thead>
                     <tr>
-                        <th>Status</th>
-                        <th>Schedule</th>
+                        <th>状态</th>
+                        <th>计划</th>
                         <th>下次运行</th>
-                        <th>Storage</th>
-                        <th>Selection</th>
-                        <th>Mode</th>
-                        <th>Retention</th>
-                        <th class="num">Actions</th>
+                        <th>存储</th>
+                        <th>选择</th>
+                        <th>模式</th>
+                        <th>保留策略</th>
+                        <th class="num">操作</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -236,13 +236,13 @@
                 <thead>
                     <tr>
                         <th style="width:34px"></th>
-                        <th>Guest</th>
-                        <th>Type</th>
-                        <th>Node</th>
-                        <th class="num">Backups</th>
-                        <th class="num">Size</th>
-                        <th>Latest</th>
-                        <th class="num">Actions</th>
+                        <th>客户机</th>
+                        <th>类型</th>
+                        <th>节点</th>
+                        <th class="num">备份</th>
+                        <th class="num">大小</th>
+                        <th>最新</th>
+                        <th class="num">操作</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -279,7 +279,7 @@
                                     <div class="d-flex align-items-center gap-1 flex-wrap">
                                         <span class="type-chip" :class="row.guest.type === 'qemu' ? 'vm' : 'lxc'"
                                               x-text="row.guest.type === 'qemu' ? 'VM' : 'LXC'"></span>
-                                        <span class="pill err" x-show="row.guest.orphan" title="该客户机已不在集群中"><span class="d"></span>Orphan</span>
+                                        <span class="pill err" x-show="row.guest.orphan" title="该客户机已不在集群中"><span class="d"></span>孤儿</span>
                                         <span class="type-chip" x-show="row.guest.template">TMPL</span>
                                     </div>
                                 </template>
@@ -289,13 +289,13 @@
                             </td>
                             <td class="text-muted-2">
                                 <span x-show="row.kind === 'guest'" x-text="row.guest.node || '—'"></span>
-                                <span class="pill ok" x-show="row.kind === 'backup' && row.backup.protected"><span class="d"></span>Protected</span>
+                                <span class="pill ok" x-show="row.kind === 'backup' && row.backup.protected"><span class="d"></span>受保护</span>
                             </td>
                             <td class="num">
                                 <template x-if="row.kind === 'guest'">
                                     <div>
                                         <span x-show="row.guest.count > 0" x-text="row.guest.count"></span>
-                                        <span class="pill maint" x-show="row.guest.count === 0 && !row.guest.template"><span class="d"></span>None</span>
+                                        <span class="pill maint" x-show="row.guest.count === 0 && !row.guest.template"><span class="d"></span>无</span>
                                         <span class="text-faint" x-show="row.guest.count === 0 && row.guest.template">—</span>
                                     </div>
                                 </template>
@@ -373,27 +373,27 @@
                         </select>
                     </div>
                     <div class="field">
-                        <label>Mode</label>
+                        <label>模式</label>
                         <select class="inp" x-model="form.mode">
                             <option value="snapshot">快照（无需停机）</option>
-                            <option value="suspend">Suspend</option>
-                            <option value="stop">Stop</option>
+                            <option value="suspend">挂起</option>
+                            <option value="stop">停止</option>
                         </select>
                         <div class="hint">快照方式可保持客户机运行；停机方式可得到最一致的备份。</div>
                     </div>
                     <div class="field">
-                        <label>Compression</label>
+                        <label>压缩</label>
                         <select class="inp" x-model="form.compress">
                             <option value="zstd">ZSTD（快速，推荐）</option>
                             <option value="lzo">LZO</option>
                             <option value="gzip">GZIP</option>
-                            <option value="0">None</option>
+                            <option value="0">无</option>
                         </select>
                         <div class="hint">Proxmox Backup Server 目标会忽略此项并使用自己的格式。</div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn-x" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn-x" data-bs-dismiss="modal">取消</button>
                     <button type="button" class="btn-x primary" @click="submitBackup()" :disabled="!form.storage">
                         <i class="bi bi-lightning-charge"></i> 开始备份
                     </button>
@@ -409,13 +409,13 @@
                 <div class="modal-header">
                     <h5 class="modal-title">
                         <i class="bi bi-arrow-counterclockwise"></i>
-                        Restore <span x-text="restore.type === 'lxc' ? 'container' : 'VM'"></span>
+                        恢复 <span x-text="restore.type === 'lxc' ? 'container' : 'VM'"></span>
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <div class="field">
-                        <label>Archive</label>
+                        <label>归档</label>
                         <div class="mono text-muted-2" style="font-size:12px; word-break:break-all"
                              x-text="restore.volid"></div>
                     </div>
@@ -492,7 +492,7 @@
                             <span>覆盖 VMID <span x-text="restore.vmid"></span></span>
                         </label>
                         <div class="field mt-2 mb-0" x-cloak x-show="restore.force">
-                            <label>Type <strong x-text="restore.vmid"></strong> 以确认</label>
+                            <label>类型 <strong x-text="restore.vmid"></strong> 以确认</label>
                             <input type="text" class="inp" x-model="restore.confirm"
                                    :placeholder="restore.vmid">
                         </div>
@@ -502,7 +502,7 @@
                          x-cloak x-show="restoreError" x-text="restoreError"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn-x" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn-x" data-bs-dismiss="modal">取消</button>
                     <button type="button" class="btn-x primary" @click="submitRestore()"
                             :disabled="!canRestore">
                         <i class="bi" :class="restoreBusy ? 'bi-hourglass-split' : 'bi-arrow-counterclockwise'"></i>
@@ -528,7 +528,7 @@
                     <div class="row g-3">
                         <div class="col-12 col-md-6">
                             <div class="field">
-                                <label>Schedule</label>
+                                <label>计划</label>
                                 <input type="text" class="inp" x-model="jobForm.schedule" placeholder="sun 01:00">
                                 <div class="hint">systemd 日历事件，例如 <span class="mono">sun 01:00</span>,
                                     <span class="mono">mon..fri 02:30</span> or <span class="mono">*-*-* 04:00</span>.</div>
@@ -567,7 +567,7 @@
                         </div>
                         <div class="col-12" x-show="jobForm.selection === 'pool'">
                             <div class="field">
-                                <label>Pool</label>
+                                <label>池</label>
                                 <select class="inp" x-model="jobForm.pool">
                                     <option value="">选择资源池…</option>
                                     <template x-for="p in pools" :key="p">
@@ -589,22 +589,22 @@
                         </div>
                         <div class="col-12 col-md-4">
                             <div class="field">
-                                <label>Mode</label>
+                                <label>模式</label>
                                 <select class="inp" x-model="jobForm.mode">
-                                    <option value="snapshot">Snapshot</option>
-                                    <option value="suspend">Suspend</option>
-                                    <option value="stop">Stop</option>
+                                    <option value="snapshot">快照</option>
+                                    <option value="suspend">挂起</option>
+                                    <option value="stop">停止</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-12 col-md-4">
                             <div class="field">
-                                <label>Compression</label>
+                                <label>压缩</label>
                                 <select class="inp" x-model="jobForm.compress">
                                     <option value="zstd">ZSTD</option>
                                     <option value="lzo">LZO</option>
                                     <option value="gzip">GZIP</option>
-                                    <option value="0">None</option>
+                                    <option value="0">无</option>
                                 </select>
                             </div>
                         </div>
@@ -632,7 +632,7 @@
                     <div class="alert alert-danger mt-3 mb-0" style="font-size:12px" x-show="jobError" x-text="jobError"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn-x" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn-x" data-bs-dismiss="modal">取消</button>
                     <button type="button" class="btn-x primary" @click="submitJob()" :disabled="jobSaving">
                         <i class="bi" :class="jobSaving ? 'bi-hourglass-split' : 'bi-check-lg'"></i>
                         <span x-text="jobForm.id ? 'Save job' : 'Create job'"></span>
@@ -659,7 +659,7 @@
                     <pre class="cfg-dump" x-show="!configLoading && !configError" x-text="configText"></pre>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn-x" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn-x" data-bs-dismiss="modal">关闭</button>
                 </div>
             </div>
         </div>
@@ -673,5 +673,5 @@
   function register() { window.Alpine.data('backupsApp', backupsApp); }
   if (window.Alpine) register();
   else document.addEventListener('alpine:init', register);
-</script>scriptscriptscript
+</script>
 {% endblock %}

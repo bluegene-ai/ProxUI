@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Cluster Management - Proxmox Manager{% endblock %}
+{% block title %}集群管理 - Proxmox 管理器{% endblock %}
 
 {% block content %}
 <div x-data="connectPage()">
@@ -21,7 +21,7 @@
                                 <div>
                                     <span class="nm">{{ cluster.name }}</span>
                                     {% if cluster.id == current_cluster.id %}
-                                    <span class="tag ms-1">Active</span>
+                                    <span class="tag ms-1">活动</span>
                                     {% endif %}
                                 </div>
                                 <div class="dropdown">
@@ -35,11 +35,11 @@
                                         {% endif %}
                                         <li><a class="dropdown-item" href="#"
                                                @click.prevent="openEdit('{{ cluster.id }}')">
-                                            <i class="bi bi-pencil"></i> Edit
+                                            <i class="bi bi-pencil"></i> 编辑
                                         </a></li>
                                         <li><a class="dropdown-item text-danger" href="#"
                                                @click.prevent="deleteCluster('{{ cluster.id }}', '{{ cluster.name }}')">
-                                            <i class="bi bi-trash"></i> Delete
+                                            <i class="bi bi-trash"></i> 删除
                                         </a></li>
                                     </ul>
                                 </div>
@@ -57,10 +57,10 @@
                                                 .catch(() => { this.status = 'error'; });
                                         }
                                     }">
-                                    <span x-show="status === 'checking'" class="pill" style="background:var(--panel-2);color:var(--text-muted)"><span class="d" style="background:var(--text-faint)"></span><i class="bi bi-arrow-clockwise spin"></i> Checking</span>
-                                    <span x-show="status === 'online'" class="pill ok"><span class="d"></span>Online</span>
-                                    <span x-show="status === 'offline'" class="pill err"><span class="d"></span>Offline</span>
-                                    <span x-show="status === 'error'" class="pill maint"><span class="d"></span>Error</span>
+                                    <span x-show="status === 'checking'" class="pill" style="background:var(--panel-2);color:var(--text-muted)"><span class="d" style="background:var(--text-faint)"></span><i class="bi bi-arrow-clockwise spin"></i> 检查中</span>
+                                    <span x-show="status === 'online'" class="pill ok"><span class="d"></span>在线</span>
+                                    <span x-show="status === 'offline'" class="pill err"><span class="d"></span>离线</span>
+                                    <span x-show="status === 'error'" class="pill maint"><span class="d"></span>错误</span>
                                 </div>
                             </div>
                             <div class="mt-2">
@@ -131,7 +131,7 @@
                     </div>
 
                     <div class="field">
-                        <label for="node_user">Username</label>
+                        <label for="node_user">用户名</label>
                         <input type="text" class="inp" id="node_user" name="node_user"
                                value="root@pam" required>
                         <div class="hint">通常为 root@pam（使用 API 令牌时填 user@realm 格式，不带令牌后缀）</div>
@@ -144,7 +144,7 @@
                             <input type="radio" class="btn-check" name="auth_type" id="auth_password"
                                    value="password" x-model="authType">
                             <label class="btn btn-outline-primary" for="auth_password">
-                                <i class="bi bi-key"></i> Password
+                                <i class="bi bi-key"></i> 密码
                             </label>
                             <input type="radio" class="btn-check" name="auth_type" id="auth_token"
                                    value="token" x-model="authType">
@@ -156,7 +156,7 @@
 
                     <!-- Password Fields -->
                     <div class="field" x-show="authType === 'password'">
-                        <label for="node_password">Password</label>
+                        <label for="node_password">密码</label>
                         <input type="password" class="inp" id="node_password" name="node_password"
                                :required="authType === 'password'">
                         <div class="hint">Proxmox 的 root 密码</div>
@@ -201,7 +201,7 @@
 
                     <div class="callout mb-0">
                         <i class="bi bi-info-circle"></i>
-                        <div><div class="t">Note</div><div class="b">部分功能（将自定义 cloud-init 片段写入节点存储）需要对节点的文件系统访问。当 ProxUI 远程运行时，它通过以下方式访问节点 <strong>SSH</strong> （端口 22）或该节点 <strong>Shell/termproxy</strong>
+                        <div><div class="t">备注</div><div class="b">部分功能（将自定义 cloud-init 片段写入节点存储）需要对节点的文件系统访问。当 ProxUI 远程运行时，它通过以下方式访问节点 <strong>SSH</strong> （端口 22）或该节点 <strong>Shell/termproxy</strong>
                         （走 API 端口）。需要时会在 Cloud-Init 标签页引导你使用 root 密码安装 ProxUI 的 SSH 密钥——仅需一次。基础的 cloud-init（用户、密码、SSH 密钥、IP/DNS）仅通过 API 即可完成。</div></div>
                     </div>
                 </div>
@@ -278,7 +278,7 @@
                     <h5 class="modal-title" id="editClusterModalLabel">
                         <i class="bi bi-pencil" style="color:var(--accent)"></i> 编辑集群
                     </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button>
                 </div>
                 <div class="modal-body">
                     <!-- Cluster Information -->
@@ -307,7 +307,7 @@
                             <input type="text" class="inp" x-model="editHost" required>
                         </div>
                         <div class="field">
-                            <label>Username</label>
+                            <label>用户名</label>
                             <input type="text" class="inp" x-model="editUser" required>
                         </div>
 
@@ -318,7 +318,7 @@
                                 <input type="radio" class="btn-check" name="edit_auth_type"
                                        id="edit_auth_password" value="password" x-model="editAuthType">
                                 <label class="btn btn-outline-primary" for="edit_auth_password">
-                                    <i class="bi bi-key"></i> Password
+                                    <i class="bi bi-key"></i> 密码
                                 </label>
                                 <input type="radio" class="btn-check" name="edit_auth_type"
                                        id="edit_auth_token" value="token" x-model="editAuthType">
@@ -330,7 +330,7 @@
 
                         <!-- Password Fields -->
                         <div class="field" x-show="editAuthType === 'password'">
-                            <label>Password</label>
+                            <label>密码</label>
                             <input type="password" class="inp" x-model="editPassword"
                                    placeholder="留空则保留现有值">
                             <div class="hint">留空则保留现有密码</div>
@@ -367,7 +367,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn-x" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn-x" data-bs-dismiss="modal">取消</button>
                     <button type="button" class="btn-x primary" @click="saveEdit()" :disabled="saving">
                         <i class="bi bi-check-lg" x-show="!saving"></i>
                         <span class="spinner-border spinner-border-sm" x-show="saving"></span>
@@ -386,5 +386,5 @@
     import { connectPage } from "{{ url_for('static', filename='js/connect.js') }}";
     function register() { window.Alpine.data('connectPage', connectPage); }
     if (window.Alpine) register(); else document.addEventListener('alpine:init', register);
-</script>scriptscriptscript
+</script>
 {% endblock %}

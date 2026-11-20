@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}编辑{{ '容器' if vm_type == 'lxc' else '虚拟机' }} {{ vm.name }} - Proxmox Manager{% endblock %}
+{% block title %}编辑{{ '容器' if vm_type == 'lxc' else '虚拟机' }} {{ vm.name }} - Proxmox 管理器{% endblock %}
 
 {% block extra_head %}
 <style>
@@ -122,7 +122,7 @@
 .boot-device-item.reordered {
     animation: reorder 0.3s ease;
 }
-</style>stylestylestyle
+</style>
 {% endblock %}
 
 {% block content %}
@@ -139,7 +139,7 @@
 {% if vm.status == 'running' %}
 <div class="callout warn mb-3">
     <i class="bi bi-exclamation-triangle"></i>
-    <div><div class="t">Warning</div><div class="b">部分配置更改需要先关闭{{ '容器' if vm_type == 'lxc' else '虚拟机' }}才能生效。
+    <div><div class="t">警告</div><div class="b">部分配置更改需要先关闭{{ '容器' if vm_type == 'lxc' else '虚拟机' }}才能生效。
     内存与 CPU 的更改可应用于运行中的{{ '容器' if vm_type == 'lxc' else '虚拟机' }}，但可能需要重启才能达到最佳性能。</div></div>
 </div>
 {% endif %}
@@ -158,7 +158,7 @@
                         <div class="sub-h" style="margin-top:0"><i class="bi bi-gear"></i> 常规设置</div>
 
                         <div class="field">
-                            <label for="hostname">Hostname</label>
+                            <label for="hostname">主机名</label>
                             <input type="text" class="inp" id="hostname" name="hostname"
                                    value="{{ config.hostname or '' }}" pattern="[a-zA-Z0-9\-]+">
                             <div class="hint">容器主机名（仅限字母、数字和连字符）</div>
@@ -186,14 +186,14 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="field">
-                                    <label for="sockets">Sockets</label>
+                                    <label for="sockets">插槽</label>
                                     <input type="number" class="inp" id="sockets" name="sockets"
                                            min="1" max="4" value="{{ config.sockets or 1 }}">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="field">
-                                    <label for="cores">Cores</label>
+                                    <label for="cores">核心</label>
                                     <input type="number" class="inp" id="cores" name="cores"
                                            min="1" max="128" value="{{ config.cores or 1 }}">
                                 </div>
@@ -357,10 +357,10 @@
                     <div class="divider my-4"></div>
                     <div class="d-flex gap-2 justify-content-end flex-wrap">
                         <button type="button" class="btn-x" onclick="window.history.back()">
-                            <i class="bi bi-x-circle"></i> Cancel
+                            <i class="bi bi-x-circle"></i> 取消
                         </button>
                         <button type="button" class="btn-x primary" id="saveBtn">
-                            <i class="bi bi-check-circle"></i> Save
+                            <i class="bi bi-check-circle"></i> 保存
                         </button>
                         <button type="button" class="btn-x primary" id="saveCloseBtn">
                             <i class="bi bi-check2-square"></i> 保存并关闭
@@ -493,8 +493,8 @@
                                id="agentToggle" x-model="enabled" :disabled="busy"
                                style="width: 3em; height: 1.5em; cursor: pointer;">
                         <label class="form-check-label ms-2" for="agentToggle" style="cursor: pointer;">
-                            <span x-show="enabled" class="fw-semibold" style="color:var(--ok)">Enabled</span>
-                            <span x-show="!enabled" class="text-muted-2">Disabled</span>
+                            <span x-show="enabled" class="fw-semibold" style="color:var(--ok)">已启用</span>
+                            <span x-show="!enabled" class="text-muted-2">已禁用</span>
                         </label>
                     </div>
                     <span x-show="busy" class="spinner-border spinner-border-sm text-secondary"></span>
@@ -628,7 +628,7 @@
                     <button type="button" class="btn-x primary" @click="save()"
                             :disabled="busy || !stopped || !dirty || (needsStorage && !storage)">
                         <span x-show="busy" class="spinner-border spinner-border-sm me-1"></span>
-                        Apply
+                        应用
                     </button>
                     <span x-show="!stopped" class="text-muted-2 small">请先关闭虚拟机再更改 BIOS 或机型。</span>
                 </div>
@@ -697,7 +697,7 @@
                                    placeholder="例如 ubuntu">
                         </div>
                         <div class="col-sm-6">
-                            <label class="form-label small fw-semibold">Nameserver</label>
+                            <label class="form-label small fw-semibold">DNS 服务器</label>
                             <input type="text" class="form-control form-control-sm" x-model="nameserver"
                                    placeholder="8.8.8.8 1.1.1.1">
                         </div>
@@ -739,13 +739,13 @@
                             <i class="bi bi-paperclip"></i>
                             <span><strong>已挂载：</strong> <code x-text="cicustom"></code></span>
                             <button class="btn btn-sm btn-outline-danger py-0 ms-auto"
-                                    @click="detachSnippet()" :disabled="snippetBusy">Detach</button>
+                                    @click="detachSnippet()" :disabled="snippetBusy">卸载</button>
                         </div>
                     </template>
 
                     <div class="row g-2 mb-3">
                         <div class="col-sm-4">
-                            <label class="form-label small fw-semibold">Template</label>
+                            <label class="form-label small fw-semibold">模板</label>
                             <select class="form-select form-select-sm" x-model="template"
                                     @change="applyTemplate()">
                                 <option value="">— 空白 —</option>
@@ -756,7 +756,7 @@
                             </select>
                         </div>
                         <div class="col-sm-4">
-                            <label class="form-label small fw-semibold">Storage</label>
+                            <label class="form-label small fw-semibold">存储</label>
                             <select class="form-select form-select-sm" x-model="snippetStorage"
                                     @change="recomputeSelectedStorage()">
                                 <option value="">— 选择存储 —</option>
@@ -766,7 +766,7 @@
                             </select>
                         </div>
                         <div class="col-sm-4">
-                            <label class="form-label small fw-semibold">Filename</label>
+                            <label class="form-label small fw-semibold">文件名</label>
                             <input type="text" class="form-control form-control-sm font-monospace"
                                    x-model="snippetFilename">
                         </div>
@@ -788,7 +788,7 @@
                              override the inline `display:none` x-show sets. -->
                         <div x-show="selectedStorage && !selectedStorage.snippets_enabled">
                             <div class="alert alert-info py-2 small mb-2 d-flex align-items-center gap-2">
-                                <span>Storage <code x-text="selectedStorage && selectedStorage.storage"></code>
+                                <span>存储 <code x-text="selectedStorage && selectedStorage.storage"></code>
                                     尚不允许使用片段存储。</span>
                                 <button class="btn btn-sm btn-outline-primary py-0 ms-auto"
                                         @click="enableSnippets()" :disabled="setupBusy">启用片段存储</button>
@@ -907,7 +907,7 @@
                                 @click="validateSnippet()"
                                 :disabled="validating || !snippetContent.trim()">
                             <span x-show="validating" class="spinner-border spinner-border-sm me-1"></span>
-                            <i x-show="!validating" class="bi bi-check2-square"></i> Validate
+                            <i x-show="!validating" class="bi bi-check2-square"></i> 校验
                         </button>
                         <button class="btn btn-sm btn-primary"
                                 @click="saveSnippet()"
@@ -938,9 +938,9 @@
                     <small class="text-faint fst-italic" x-show="hasBackup" x-text="'Snapshot: ' + backupTimestamp"></small>
                     <button class="btn-x sm" x-show="hasBackup"
                             @click="restore()" title="回退到写入前的快照">
-                        <i class="bi bi-arrow-counterclockwise"></i> Restore
+                        <i class="bi bi-arrow-counterclockwise"></i> 恢复
                     </button>
-                    <button class="icon-btn" style="width:32px;height:32px;font-size:15px" @click="refresh()" title="Refresh">
+                    <button class="icon-btn" style="width:32px;height:32px;font-size:15px" @click="refresh()" title="刷新">
                         <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i>
                     </button>
                 </div>
@@ -1078,7 +1078,7 @@
         <div class="card-x">
             <div class="cx-head d-flex justify-content-between align-items-center">
                 <span class="cx-title"><i class="bi bi-collection"></i> 应用配置方案</span>
-                <button class="icon-btn" style="width:32px;height:32px;font-size:15px" @click="loadProfiles()" title="Refresh">
+                <button class="icon-btn" style="width:32px;height:32px;font-size:15px" @click="loadProfiles()" title="刷新">
                     <i class="bi bi-arrow-clockwise"></i>
                 </button>
             </div>
@@ -1170,7 +1170,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-primary" @click="applyProfile()"
                         :disabled="profileApplyDisabled || busy.applyProfile">
                     <span x-show="busy.applyProfile" class="spinner-border spinner-border-sm me-1"></span>
@@ -1198,10 +1198,10 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-primary" @click="applyFeatures()" :disabled="busy.applyFeatures">
                     <span x-show="busy.applyFeatures" class="spinner-border spinner-border-sm me-1"></span>
-                    <i x-show="!busy.applyFeatures" class="bi bi-check2-circle"></i> Apply
+                    <i x-show="!busy.applyFeatures" class="bi bi-check2-circle"></i> 应用
                 </button>
             </div>
         </div>
@@ -1253,7 +1253,7 @@
                 <div x-show="modalError" class="alert alert-danger py-2 small mt-2 mb-0" x-text="modalError"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-primary" @click="addDevice()" :disabled="busy.addDevice">
                     <span x-show="busy.addDevice" class="spinner-border spinner-border-sm me-1"></span>
                     <i x-show="!busy.addDevice" class="bi bi-plus-circle"></i> Add
@@ -1283,7 +1283,7 @@
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Type</label>
+                    <label class="form-label">类型</label>
                     <div class="d-flex gap-3">
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="idmapType" id="idmapTypeU" value="u" x-model="idmap.type">
@@ -1305,7 +1305,7 @@
                         <input type="number" class="form-control" x-model.number="idmap.host_id" min="0">
                     </div>
                     <div class="col-4">
-                        <label class="form-label">Count</label>
+                        <label class="form-label">数量</label>
                         <input type="number" class="form-control" x-model.number="idmap.count" min="1">
                     </div>
                 </div>
@@ -1317,7 +1317,7 @@
                 <div x-show="modalError" class="alert alert-danger py-2 small mt-2 mb-0" x-text="modalError"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-primary" @click="addIdmap()" :disabled="busy.addIdmap">
                     <span x-show="busy.addIdmap" class="spinner-border spinner-border-sm me-1"></span>
                     <i x-show="!busy.addIdmap" class="bi bi-plus-circle"></i> Add
@@ -1365,7 +1365,7 @@
                 <div x-show="modalError" class="alert alert-danger py-2 small mt-2 mb-0" x-text="modalError"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-primary" @click="addMount()" :disabled="busy.addMount">
                     <span x-show="busy.addMount" class="spinner-border spinner-border-sm me-1"></span>
                     <i x-show="!busy.addMount" class="bi bi-plus-circle"></i> Add
@@ -1380,7 +1380,7 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='vendor/sortablejs@1.15.0/Sortable.min.js') }}"></script>scriptscriptscript
+<script src="{{ url_for('static', filename='vendor/sortablejs@1.15.0/Sortable.min.js') }}"></script>
 <script>
 const node = '{{ node }}';
 const vmid = '{{ vm.vmid }}';
@@ -3272,7 +3272,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
 });
-</script>scriptscriptscript
+</script>
 {% if vm_type != 'lxc' %}
 <script type="module">
 import * as ProxUtils from "{{ url_for('static', filename='js/utils.js') }}";
@@ -3655,7 +3655,7 @@ function cloudInit(node, vmid) {
 
 (function(){ function reg(){ window.Alpine.data('cloudInit', cloudInit); }
   if(window.Alpine) reg(); else document.addEventListener('alpine:init', reg); })();
-</script>scriptscriptscript
+</script>
 {% endif %}
 
 {% if vm_type == 'lxc' %}
@@ -3663,6 +3663,6 @@ function cloudInit(node, vmid) {
   import { lxcAdvanced } from "{{ url_for('static', filename='js/lxc-advanced.js') }}";
   (function(){ function reg(){ window.Alpine.data('lxcAdvanced', lxcAdvanced); }
     if(window.Alpine) reg(); else document.addEventListener('alpine:init', reg); })();
-</script>scriptscriptscript
+</script>
 {% endif %}
 {% endblock %}

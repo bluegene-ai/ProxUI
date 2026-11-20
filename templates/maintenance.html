@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}Maintenance - Proxmox Manager{% endblock %}
+{% block title %}维护 - Proxmox 管理器{% endblock %}
 
 {% block content %}
 <div class="mb-4">
-    <div class="sec-title">Maintenance</div>
+    <div class="sec-title">维护</div>
     <div class="sec-sub">{{ current_cluster.name }} 的节点更新</div>
 </div>
 
@@ -28,7 +28,7 @@
                               :class="!n.online ? 'err' : (n.updates.length === 0 ? 'ok' : 'maint')"
                               x-text="!n.online ? 'Offline' : (n.updates.length === 0 ? 'Up to date' : n.updates.length + ' pending')"></span>
                         <span class="pill err" x-show="n.rebootRequired"><span class="d"></span>需要重启</span>
-                        <button class="icon-btn ms-auto" style="width:30px;height:30px;font-size:14px" @click="refresh(n)" :disabled="n.refreshing" title="Refresh">
+                        <button class="icon-btn ms-auto" style="width:30px;height:30px;font-size:14px" @click="refresh(n)" :disabled="n.refreshing" title="刷新">
                             <i class="bi bi-arrow-clockwise" :class="n.refreshing && 'spin'"></i>
                         </button>
                     </div>
@@ -45,7 +45,7 @@
                             <div>
                                 <div class="d-flex gap-4 mb-2" x-show="n.updates.length > 0">
                                     <div>
-                                        <div class="text-faint" style="font-size:10.5px;text-transform:uppercase;font-weight:700">Packages</div>
+                                        <div class="text-faint" style="font-size:10.5px;text-transform:uppercase;font-weight:700">软件包</div>
                                         <div style="font-size:18px;font-weight:750" x-text="n.updates.length"></div>
                                     </div>
                                 </div>
@@ -117,5 +117,5 @@
   function register() { window.Alpine.data('maintenanceApp', maintenanceApp); }
   if (window.Alpine) register();
   else document.addEventListener('alpine:init', register);
-</script>scriptscriptscript
+</script>
 {% endblock %}

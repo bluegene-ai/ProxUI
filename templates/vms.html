@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}VMs & Containers - Proxmox Manager{% endblock %}
+{% block title %}虚拟机与容器 - Proxmox 管理器{% endblock %}
 
 {% block content %}
 <div class="d-flex align-items-center flex-wrap gap-3 mb-3">
@@ -8,7 +8,7 @@
         <div class="sec-title">虚拟机与容器</div>
         <div class="sec-sub">{{ resources|length }} 个客户机</div>
     </div>
-    <a href="{{ url_for('create_vm') }}" class="btn-x primary"><i class="bi bi-plus-lg"></i> Create</a>
+    <a href="{{ url_for('create_vm') }}" class="btn-x primary"><i class="bi bi-plus-lg"></i> 新建</a>
 </div>
 
 <div class="card-x" x-data="{ search: '' }">
@@ -26,14 +26,14 @@
         <table class="tbl">
             <thead>
                 <tr>
-                    <th>Status</th>
+                    <th>状态</th>
                     <th>
                         <a href="?sort=name&order={{ 'asc' if request.args.get('sort') == 'name' and request.args.get('order') == 'desc' else 'desc' }}">
-                            Name <i class="bi bi-arrow-down-up"></i>
+                            名称 <i class="bi bi-arrow-down-up"></i>
                         </a>
                     </th>
-                    <th>Type</th>
-                    <th>Node</th>
+                    <th>类型</th>
+                    <th>节点</th>
                     <th style="width:150px">
                         <a href="?sort=cpu&order={{ 'asc' if request.args.get('sort') == 'cpu' and request.args.get('order') == 'desc' else 'desc' }}">
                             CPU <i class="bi bi-arrow-down-up"></i>
@@ -41,10 +41,10 @@
                     </th>
                     <th style="width:170px">
                         <a href="?sort=memory&order={{ 'asc' if request.args.get('sort') == 'memory' and request.args.get('order') == 'desc' else 'desc' }}">
-                            Memory <i class="bi bi-arrow-down-up"></i>
+                            内存 <i class="bi bi-arrow-down-up"></i>
                         </a>
                     </th>
-                    <th class="num">Actions</th>
+                    <th class="num">操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -52,11 +52,11 @@
                 <tr x-show="!search || '{{ (vm.name ~ ' ' ~ vm.vmid ~ ' ' ~ vm.node)|lower }}'.includes(search.toLowerCase())">
                     <td>
                         {% if vm.get('template') == 1 %}
-                        <span class="pill tmpl"><span class="d"></span>Template</span>
+                        <span class="pill tmpl"><span class="d"></span>模板</span>
                         {% elif vm.status == 'running' %}
-                        <span class="pill run"><span class="d"></span>Running</span>
+                        <span class="pill run"><span class="d"></span>运行中</span>
                         {% elif vm.status == 'stopped' %}
-                        <span class="pill stop"><span class="d"></span>Stopped</span>
+                        <span class="pill stop"><span class="d"></span>已停止</span>
                         {% else %}
                         <span class="pill maint"><span class="d"></span>{{ vm.status }}</span>
                         {% endif %}
@@ -89,20 +89,20 @@
                     </td>
                     <td>
                         <div class="act-row">
-                            <a href="{{ url_for('vm_detail', node=vm.node, vmid=vm.vmid) }}" class="act-btn" title="Details"><i class="bi bi-info-circle"></i></a>
+                            <a href="{{ url_for('vm_detail', node=vm.node, vmid=vm.vmid) }}" class="act-btn" title="详情"><i class="bi bi-info-circle"></i></a>
                             {% if vm.get('template') == 1 %}
-                            <a href="{{ url_for('vm_clone', node=vm.node, vmid=vm.vmid) }}" class="act-btn pri" title="Clone"><i class="bi bi-files"></i></a>
+                            <a href="{{ url_for('vm_clone', node=vm.node, vmid=vm.vmid) }}" class="act-btn pri" title="克隆"><i class="bi bi-files"></i></a>
                             {% else %}
                                 {% if vm.type == 'qemu' and vm.status == 'running' %}
-                                <a href="{{ url_for('vm_console', node=vm.node, vmid=vm.vmid) }}" class="act-btn pri" title="Console"><i class="bi bi-terminal"></i></a>
+                                <a href="{{ url_for('vm_console', node=vm.node, vmid=vm.vmid) }}" class="act-btn pri" title="控制台"><i class="bi bi-terminal"></i></a>
                                 {% endif %}
                                 {% if vm.status == 'stopped' %}
                                 <form method="POST" action="{{ url_for('vm_action', node=vm.node, vmid=vm.vmid, action='start') }}" class="d-inline">
-                                    <button type="submit" class="act-btn go" title="Start"><i class="bi bi-play-fill"></i></button>
+                                    <button type="submit" class="act-btn go" title="启动"><i class="bi bi-play-fill"></i></button>
                                 </form>
                                 {% else %}
                                 <form method="POST" action="{{ url_for('vm_action', node=vm.node, vmid=vm.vmid, action='shutdown') }}" class="d-inline">
-                                    <button type="submit" class="act-btn stopc" title="Shutdown"><i class="bi bi-power"></i></button>
+                                    <button type="submit" class="act-btn stopc" title="关机"><i class="bi bi-power"></i></button>
                                 </form>
                                 {% endif %}
                             {% endif %}

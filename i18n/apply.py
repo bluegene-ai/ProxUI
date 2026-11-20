@@ -27,7 +27,11 @@ DICT_DIR = os.path.join(ROOT, "i18n", "dict")
 JS_SKIP = {"alpine.min.js"}
 ATTRS = ("placeholder", "title", "aria-label", "alt")
 
-SCRIPT_RE = re.compile(r"(<(script|style)\b[^>]*>.*?</\2>)", re.S | re.I)
+# NOTE: exactly one capturing group. With two groups re.split() also returns the
+# inner match ("script"/"style"), which then got re-emitted as stray body text.
+SCRIPT_RE = re.compile(
+    r"(<script\b[^>]*>.*?</script>|<style\b[^>]*>.*?</style>)", re.S | re.I
+)
 TEXT_RE = re.compile(r">([^<>]+)<")
 ATTR_RE = re.compile(
     r'(?<![:@\w-])(' + "|".join(ATTRS) + r')\s*=\s*"([^"]*)"', re.I

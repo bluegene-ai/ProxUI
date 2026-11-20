@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}克隆虚拟机 {{ config.name or vmid }} - Proxmox Manager{% endblock %}
+{% block title %}克隆虚拟机 {{ config.name or vmid }} - Proxmox 管理器{% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
@@ -27,9 +27,9 @@
                 <div class="mb-4">
                     <div class="sub-h" style="margin-top:0"><i class="bi bi-pc-display"></i> 源虚拟机</div>
                     <div class="kv"><span class="k">ID</span><span class="v">{{ vmid }}</span></div>
-                    <div class="kv"><span class="k">Name</span><span class="v">{{ config.name or 'Unnamed' }}</span></div>
-                    <div class="kv"><span class="k">Node</span><span class="v">{{ node }}</span></div>
-                    <div class="kv"><span class="k">Memory</span><span class="v">
+                    <div class="kv"><span class="k">名称</span><span class="v">{{ config.name or 'Unnamed' }}</span></div>
+                    <div class="kv"><span class="k">节点</span><span class="v">{{ node }}</span></div>
+                    <div class="kv"><span class="k">内存</span><span class="v">
                         {% if config.memory %}
                             {% if config.memory | string | length > 3 %}
                                 {{ ((config.memory | int) / 1024) | round(1) }} GB
@@ -117,7 +117,7 @@
                         <div class="sub-h" style="margin-top:0"><i class="bi bi-sliders"></i> 高级选项</div>
 
                         <div class="field">
-                            <label for="clone_description">Description</label>
+                            <label for="clone_description">描述</label>
                             <textarea class="inp" id="clone_description" name="clone_description"
                                       rows="3" placeholder="克隆虚拟机的可选描述"
                                       x-model="description"></textarea>
@@ -139,7 +139,7 @@
                     <div class="divider mb-3"></div>
                     <div class="d-flex gap-2 justify-content-end">
                         <button type="button" class="btn-x ghost" @click="window.history.back()">
-                            <i class="bi bi-x-circle"></i> Cancel
+                            <i class="bi bi-x-circle"></i> 取消
                         </button>
                         <button type="submit" class="btn-x primary" :disabled="submitting">
                             <span x-show="submitting" class="spinner-border spinner-border-sm" role="status"></span>
@@ -153,12 +153,12 @@
 
     <div class="col-12 col-xl-4">
         <div class="card-x">
-            <div class="cx-head"><i class="bi bi-clipboard-check" style="color:var(--accent)"></i><span class="cx-title">Summary</span></div>
+            <div class="cx-head"><i class="bi bi-clipboard-check" style="color:var(--accent)"></i><span class="cx-title">摘要</span></div>
             <div class="cx-body">
-                <div class="summary-row"><span class="k">Name</span><span class="v" x-text="cloneName || '—'"></span></div>
+                <div class="summary-row"><span class="k">名称</span><span class="v" x-text="cloneName || '—'"></span></div>
                 <div class="summary-row"><span class="k">虚拟机 ID</span><span class="v mono" x-text="cloneVmid || '—'"></span></div>
                 <div class="summary-row"><span class="k">目标节点</span><span class="v" x-text="targetNode"></span></div>
-                <div class="summary-row"><span class="k">Storage</span><span class="v" x-text="targetStorage || 'Same as source'"></span></div>
+                <div class="summary-row"><span class="k">存储</span><span class="v" x-text="targetStorage || 'Same as source'"></span></div>
                 <div class="summary-row"><span class="k">克隆类型</span><span class="v" x-text="cloneType === 'full' ? 'Full clone' : cloneType"></span></div>
             </div>
         </div>
@@ -320,5 +320,5 @@
   }
   if (window.Alpine) register();
   else document.addEventListener('alpine:init', register);
-</script>scriptscriptscript
+</script>
 {% endblock %}

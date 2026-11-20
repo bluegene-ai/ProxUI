@@ -13,8 +13,8 @@ const TYPE_LABELS = {
 };
 
 const CONTENT_LABELS = {
-  images: "磁盘镜像", rootdir: "容器卷", vztmpl: "Templates",
-  iso: "ISO 镜像", backup: "Backups", snippets: "Snippets",
+  images: "磁盘镜像", rootdir: "容器卷", vztmpl: "模板",
+  iso: "ISO 镜像", backup: "备份", snippets: "Snippets",
 };
 const CONTENT_CHOICES = Object.keys(CONTENT_LABELS);
 

@@ -30,13 +30,15 @@ HAS_LETTER = re.compile(r"[A-Za-z]{2,}")
 BAD = [
     re.compile(r"^https?://"),
     re.compile(r"\.(js|css|html|json|svg|png|jpe?g|woff2?)$", re.I),
-    re.compile(r"^[A-Za-z_$][A-Za-z0-9_$]*$"),
+    # Single-token identifiers. Only *lowercase* single words are treated as
+    # code; a Capitalised single word is a legitimate UI label ("Containers",
+    # "Running", "Stopped", "Nodes") and must not be filtered out.
+    re.compile(r"^[a-z][A-Za-z0-9_$]*$"),
     re.compile(r"^[a-z]+[A-Z][A-Za-z0-9]*$"),
     re.compile(r"^[a-z0-9]+(-[a-z0-9]+)+$"),
-    re.compile(r"^[A-Z0-9_]+$"),
+    re.compile(r"^[A-Z0-9_]{2,}$"),
     re.compile(r"^#?[0-9a-fA-F]{3,8}$"),
     re.compile(r"^[\d\s.,:%/+\-]+$"),
-    re.compile(r"^[a-z-]+$"),
     re.compile(r"^(GET|POST|PUT|DELETE|PATCH|HEAD|OPTIONS)$"),
 ]
 
