@@ -43,7 +43,7 @@ export function maintenanceApp(initialNodes, clusterId) {
         n.refreshing = false;
       }
       // Re-check reboot-required over SSH too, so it doesn't just reflect
-      // whatever the last "Apply updates" job happened to see.
+      // whatever the last "应用更新" job happened to see.
       try {
         const rb = await ProxUtils.apiJson(`/api/node/${n.node}/reboot-status?refresh=1`);
         if (!rb.error) {
@@ -72,7 +72,7 @@ export function maintenanceApp(initialNodes, clusterId) {
         this._pollJob(n);
       } catch (e) {
         n.applying = false;
-        ProxUtils.notify("Failed to start upgrade: " + e.message, "error");
+        ProxUtils.notify("启动升级失败：" + e.message, "error");
       }
     },
 
@@ -89,7 +89,7 @@ export function maintenanceApp(initialNodes, clusterId) {
               n.rebootPackages = job.result.reboot_packages || [];
               await this.refresh(n);
             } else if (job.status === "failed") {
-              ProxUtils.notify(`Update failed on ${n.node}: ${job.error || "unknown error"}`, "error");
+              ProxUtils.notify(`在 ${n.node} 上更新失败：${job.error || "未知错误"}`, "error");
             }
             return;
           }
@@ -106,10 +106,10 @@ export function maintenanceApp(initialNodes, clusterId) {
       n.rebooting = true;
       try {
         const r = await ProxUtils.apiJson(`/api/node/${n.node}/reboot`, { method: "POST" });
-        ProxUtils.notify(r.message || `Reboot sent to ${n.node}`, "success");
+        ProxUtils.notify(r.message || `已向 ${n.node} 发送重启指令`, "success");
         n.rebootRequired = false;
       } catch (e) {
-        ProxUtils.notify("Reboot failed: " + e.message, "error");
+        ProxUtils.notify("重启失败：" + e.message, "error");
       } finally {
         n.rebooting = false;
       }

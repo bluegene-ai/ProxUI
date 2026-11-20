@@ -6,21 +6,21 @@
 <div class="mb-3 d-flex align-items-end justify-content-between flex-wrap gap-2">
     <div>
         <div class="sec-title">Storage</div>
-        <div class="sec-sub">{{ storages|length }} storages across the cluster</div>
+        <div class="sec-sub">集群内共 {{ storages|length }} 个存储</div>
     </div>
 </div>
 
 <div x-data="storagesApp({{ storages|tojson|forceescape }}, {{ node_names|tojson|forceescape }})">
 
     <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-        <input type="text" class="inp" style="max-width:240px" placeholder="Search storages…" x-model="search">
+        <input type="text" class="inp" style="max-width:240px" placeholder="搜索存储…" x-model="search">
         <button class="btn-x sm primary ms-auto" @click="newStorage()">
-            <i class="bi bi-plus-lg"></i> Add storage
+            <i class="bi bi-plus-lg"></i> 添加存储
         </button>
     </div>
 
     <div class="card-x">
-        <div class="cx-head"><i class="bi bi-hdd" style="color:var(--accent)"></i><span class="cx-title">Storage Overview</span></div>
+        <div class="cx-head"><i class="bi bi-hdd" style="color:var(--accent)"></i><span class="cx-title">存储概览</span></div>
         <div class="cx-body flush tbl-scroll">
             <table class="tbl">
                 <thead><tr><th>Storage</th><th>Nodes</th><th>Type</th><th>Shared</th><th>Status</th><th style="width:210px">Usage</th><th style="width:90px"></th></tr></thead>
@@ -73,7 +73,7 @@
                     </template>
                 </tbody>
             </table>
-            <div class="empty-hint" x-show="!storages.length"><i class="bi bi-inbox" style="font-size:26px"></i><div class="mt-2">No storages found.</div></div>
+            <div class="empty-hint" x-show="!storages.length"><i class="bi bi-inbox" style="font-size:26px"></i><div class="mt-2">未找到存储。</div></div>
         </div>
     </div>
 
@@ -100,9 +100,9 @@
                         </div>
                         <div class="col-12 col-md-8" x-show="creating">
                             <div class="field">
-                                <label>Storage ID</label>
+                                <label>存储 ID</label>
                                 <input type="text" class="inp mono" x-model="form.storage" placeholder="my-nas">
-                                <div class="hint">Letters, digits, '_' or '-'; cannot be changed later.</div>
+                                <div class="hint">允许字母、数字、'_' 或 '-'；创建后不可更改。</div>
                             </div>
                         </div>
 
@@ -110,7 +110,7 @@
                             <div class="field">
                                 <label>Location</label>
                                 <div class="mono" style="font-size:12.5px" x-text="formLocation"></div>
-                                <div class="hint">The storage type and location are set at creation and cannot be changed.</div>
+                                <div class="hint">存储类型与位置在创建时确定，之后不可更改。</div>
                             </div>
                         </div>
 
@@ -132,7 +132,7 @@
                                     </div>
                                     <div class="col-12" x-show="creating">
                                         <div class="field">
-                                            <label>Scan for exports</label>
+                                            <label>扫描导出项</label>
                                             <div class="d-flex gap-2">
                                                 <select class="inp" style="max-width:200px" x-model="scanNode">
                                                     <template x-for="n in nodeNames" :key="n"><option :value="n" x-text="n"></option></template>
@@ -154,7 +154,7 @@
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="field">
-                                            <label>Mount options</label>
+                                            <label>挂载选项</label>
                                             <input type="text" class="inp mono" x-model="form.options" placeholder="vers=4">
                                         </div>
                                     </div>
@@ -199,7 +199,7 @@
                                     </div>
                                     <div class="col-12" x-show="creating">
                                         <div class="field">
-                                            <label>Scan for shares</label>
+                                            <label>扫描共享</label>
                                             <div class="d-flex gap-2">
                                                 <select class="inp" style="max-width:200px" x-model="scanNode">
                                                     <template x-for="n in nodeNames" :key="n"><option :value="n" x-text="n"></option></template>
@@ -236,16 +236,16 @@
                                     <div class="col-12 col-md-6">
                                         <div class="field">
                                             <label class="d-flex align-items-center gap-2" style="font-size:12.5px">
-                                                <input type="checkbox" x-model="form.mkdir"> Create the directory if it doesn't exist
+                                                <input type="checkbox" x-model="form.mkdir"> 若目录不存在则创建
                                             </label>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="field">
                                             <label class="d-flex align-items-center gap-2" style="font-size:12.5px">
-                                                <input type="checkbox" x-model="form.is_mountpoint"> Treat as an externally managed mountpoint
+                                                <input type="checkbox" x-model="form.is_mountpoint"> 视为外部管理的挂载点
                                             </label>
-                                            <div class="hint">Storage is considered offline if the path is not mounted.</div>
+                                            <div class="hint">若路径未挂载，存储将被视为离线。</div>
                                         </div>
                                     </div>
                                 </div>
@@ -275,21 +275,21 @@
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="field">
-                                            <label>Password / API token secret</label>
+                                            <label>密码 / API 令牌密钥</label>
                                             <input type="password" class="inp" x-model="form.password" autocomplete="new-password">
-                                            <div class="hint" x-show="!creating">Leave empty to keep the stored one.</div>
+                                            <div class="hint" x-show="!creating">留空则保留已存储的值。</div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-8">
                                         <div class="field">
-                                            <label>Fingerprint (optional)</label>
+                                            <label>指纹（可选）</label>
                                             <input type="text" class="inp mono" x-model="form.fingerprint" placeholder="AA:BB:CC:...">
-                                            <div class="hint">Required when the PBS certificate is self-signed.</div>
+                                            <div class="hint">当 PBS 证书为自签名时必须填写。</div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-4">
                                         <div class="field">
-                                            <label>Namespace (optional)</label>
+                                            <label>命名空间（可选）</label>
                                             <input type="text" class="inp mono" x-model="form.namespace">
                                         </div>
                                     </div>
@@ -302,27 +302,27 @@
                                 <div class="row g-3">
                                     <div class="col-12 col-md-6" x-show="creating">
                                         <div class="field">
-                                            <label>ZFS pool</label>
+                                            <label>ZFS 池</label>
                                             <input type="text" class="inp mono" x-model="form.pool" placeholder="rpool/data">
-                                            <div class="hint">The pool or dataset must already exist on the node.</div>
+                                            <div class="hint">该池或数据集必须已存在于节点上。</div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="field">
-                                            <label>Block size (optional)</label>
+                                            <label>块大小（可选）</label>
                                             <input type="text" class="inp mono" x-model="form.blocksize" placeholder="8k">
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="field">
-                                            <label>Mount point (optional)</label>
+                                            <label>挂载点（可选）</label>
                                             <input type="text" class="inp mono" x-model="form.mountpoint">
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="field">
                                             <label class="d-flex align-items-center gap-2" style="font-size:12.5px">
-                                                <input type="checkbox" x-model="form.sparse"> Use sparse volumes (thin provisioning)
+                                                <input type="checkbox" x-model="form.sparse"> 使用稀疏卷（精简置备）
                                             </label>
                                         </div>
                                     </div>
@@ -335,25 +335,25 @@
                                 <div class="row g-3">
                                     <div class="col-12" x-show="!creating">
                                         <div class="field">
-                                            <div class="hint">The volume group and thin pool are fixed at creation; only the settings below can be changed.</div>
+                                            <div class="hint">卷组与精简池在创建时固定；仅以下设置可以更改。</div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6" x-show="creating">
                                         <div class="field">
-                                            <label>Volume group</label>
+                                            <label>卷组</label>
                                             <input type="text" class="inp mono" x-model="form.vgname" placeholder="pve">
-                                            <div class="hint">The volume group must already exist on the node.</div>
+                                            <div class="hint">该卷组必须已存在于节点上。</div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6" x-show="creating && form.type === 'lvmthin'">
                                         <div class="field">
-                                            <label>Thin pool</label>
+                                            <label>精简池</label>
                                             <input type="text" class="inp mono" x-model="form.thinpool" placeholder="data">
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6" x-show="creating && form.type === 'lvm'">
                                         <div class="field">
-                                            <label>Base volume (optional)</label>
+                                            <label>基础卷（可选）</label>
                                             <input type="text" class="inp mono" x-model="form.base">
                                         </div>
                                     </div>
@@ -365,50 +365,50 @@
                             <div class="col-12">
                                 <div class="row g-3">
                                     <div class="col-12">
-                                        <div class="hint">Leave monitors and keyring empty for a hyperconverged Proxmox Ceph cluster &mdash; the node supplies both. Fill them in only for an external cluster.</div>
+                                        <div class="hint">对于超融合 Proxmox Ceph 集群，monitor 与 keyring 请留空——节点会自动提供。仅在接入外部集群时才需填写。</div>
                                     </div>
                                     <div class="col-12 col-md-6" x-show="creating && form.type === 'rbd'">
                                         <div class="field">
-                                            <label>Ceph pool</label>
+                                            <label>Ceph 池</label>
                                             <input type="text" class="inp mono" x-model="form.pool" placeholder="rbd">
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6" x-show="form.type === 'cephfs'">
                                         <div class="field">
-                                            <label>Ceph filesystem name (optional)</label>
+                                            <label>Ceph 文件系统名称（可选）</label>
                                             <input type="text" class="inp mono" x-model="form['fs-name']" placeholder="cephfs">
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6" x-show="form.type === 'cephfs'">
                                         <div class="field">
-                                            <label>Subdirectory (optional)</label>
+                                            <label>子目录（可选）</label>
                                             <input type="text" class="inp mono" x-model="form.subdir" placeholder="/">
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="field">
-                                            <label>Monitor hosts (optional)</label>
+                                            <label>Monitor 主机（可选）</label>
                                             <input type="text" class="inp mono" x-model="form.monhost" placeholder="10.0.0.1,10.0.0.2">
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="field">
-                                            <label>Ceph user (optional)</label>
+                                            <label>Ceph 用户（可选）</label>
                                             <input type="text" class="inp mono" x-model="form.username" placeholder="admin">
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6" x-show="form.type === 'rbd'">
                                         <div class="field">
                                             <label class="d-flex align-items-center gap-2" style="font-size:12.5px">
-                                                <input type="checkbox" x-model="form.krbd"> Always access through the krbd kernel module
+                                                <input type="checkbox" x-model="form.krbd"> 始终通过 krbd 内核模块访问
                                             </label>
                                         </div>
                                     </div>
                                     <div class="col-12">
                                         <div class="field">
-                                            <label>Keyring (optional)</label>
+                                            <label>密钥环（可选）</label>
                                             <textarea class="inp mono" rows="3" x-model="form.keyring" placeholder="[client.admin]&#10;        key = ..."></textarea>
-                                            <div class="hint">Stored by Proxmox and never shown again. Leave empty to keep the existing one.</div>
+                                            <div class="hint">由 Proxmox 保存且不再显示。留空则保留现有值。</div>
                                         </div>
                                     </div>
                                 </div>
@@ -432,7 +432,7 @@
 
                         <div class="col-12">
                             <div class="field">
-                                <label>Nodes (optional restriction)</label>
+                                <label>节点（可选限制）</label>
                                 <div class="nic-pick">
                                     <template x-for="n in nodeNames" :key="n">
                                         <button type="button" :class="form.nodes.includes(n) && 'on'" @click="toggleNode(n)">
@@ -440,14 +440,14 @@
                                         </button>
                                     </template>
                                 </div>
-                                <div class="hint">Leave empty for all nodes.</div>
+                                <div class="hint">留空表示所有节点。</div>
                             </div>
                         </div>
 
                         <div class="col-12 col-md-6">
                             <div class="field">
                                 <label class="d-flex align-items-center gap-2" style="font-size:12.5px">
-                                    <input type="checkbox" x-model="form.shared"> Shared (same contents on all nodes)
+                                    <input type="checkbox" x-model="form.shared"> 共享（所有节点内容相同）
                                 </label>
                             </div>
                         </div>
@@ -478,19 +478,17 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="bi bi-exclamation-triangle" style="color:var(--danger)"></i> Remove storage</h5>
+                    <h5 class="modal-title"><i class="bi bi-exclamation-triangle" style="color:var(--danger)"></i> 移除存储</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body" x-show="removeTarget">
-                    <p>This removes <strong x-text="removeTarget && removeTarget.storage"></strong> from the cluster's storage
-                        configuration and detaches it from every node.</p>
+                    <p>这将移除 <strong x-text="removeTarget && removeTarget.storage"></strong> 从集群存储配置中移除，并从所有节点上卸载。</p>
                     <div class="alert alert-warning" style="font-size:12px">
                         <i class="bi bi-info-circle me-1"></i>
-                        The underlying data (files on the NFS/CIFS share or directory) is <strong>not</strong> deleted —
-                        only the definition Proxmox uses to reach it.
+                        底层数据（NFS/CIFS 共享或目录中的文件） <strong>not</strong> 已删除——仅移除 Proxmox 用于访问它的定义。
                     </div>
                     <div class="field">
-                        <label>Type <span class="mono" x-text="removeTarget && removeTarget.storage"></span> to confirm</label>
+                        <label>Type <span class="mono" x-text="removeTarget && removeTarget.storage"></span> 以确认</label>
                         <input type="text" class="inp mono" x-model="removeConfirm" @keyup.enter="remove()">
                     </div>
                 </div>
@@ -513,5 +511,5 @@
   function register() { window.Alpine.data('storagesApp', storagesApp); }
   if (window.Alpine) register();
   else document.addEventListener('alpine:init', register);
-</script>
+</script>script
 {% endblock %}

@@ -5,15 +5,15 @@
 {% block content %}
 <div class="mb-4">
     <div class="sec-title">Maintenance</div>
-    <div class="sec-sub">Node updates for {{ current_cluster.name }}</div>
+    <div class="sec-sub">{{ current_cluster.name }} 的节点更新</div>
 </div>
 
 <div x-data="maintenanceApp({{ nodes|tojson|forceescape }}, {{ current_cluster.id|tojson|forceescape }})">
     <div class="d-flex align-items-center gap-2 mb-2">
-        <div class="sec-title" style="font-size:14px"><i class="bi bi-arrow-repeat me-1" style="color:var(--accent)"></i>Node Updates</div>
-        <span class="sec-sub">&middot; <span x-text="totalPending"></span> packages pending across <span x-text="nodesPending"></span> nodes</span>
+        <div class="sec-title" style="font-size:14px"><i class="bi bi-arrow-repeat me-1" style="color:var(--accent)"></i>节点更新</div>
+        <span class="sec-sub">&middot; <span x-text="totalPending"></span> 个待更新软件包，涉及 <span x-text="nodesPending"></span> nodes</span>
         <button class="btn-x sm ms-auto" @click="refreshAll()" :disabled="anyRefreshing">
-            <i class="bi bi-arrow-clockwise" :class="anyRefreshing && 'spin'"></i> Refresh all
+            <i class="bi bi-arrow-clockwise" :class="anyRefreshing && 'spin'"></i> 全部刷新
         </button>
     </div>
 
@@ -27,7 +27,7 @@
                         <span class="pill ms-2"
                               :class="!n.online ? 'err' : (n.updates.length === 0 ? 'ok' : 'maint')"
                               x-text="!n.online ? 'Offline' : (n.updates.length === 0 ? 'Up to date' : n.updates.length + ' pending')"></span>
-                        <span class="pill err" x-show="n.rebootRequired"><span class="d"></span>Reboot required</span>
+                        <span class="pill err" x-show="n.rebootRequired"><span class="d"></span>需要重启</span>
                         <button class="icon-btn ms-auto" style="width:30px;height:30px;font-size:14px" @click="refresh(n)" :disabled="n.refreshing" title="Refresh">
                             <i class="bi bi-arrow-clockwise" :class="n.refreshing && 'spin'"></i>
                         </button>
@@ -63,12 +63,12 @@
                                     </div>
                                 </template>
                                 <div class="text-faint" style="font-size:12.5px" x-show="n.updates.length === 0">
-                                    <i class="bi bi-check-circle me-1" style="color:var(--ok)"></i>All packages current.
+                                    <i class="bi bi-check-circle me-1" style="color:var(--ok)"></i>所有软件包均为最新。
                                 </div>
 
                                 <template x-if="n.rebootRequired">
                                     <div class="text-faint" style="font-size:11px;margin-top:8px">
-                                        Reboot needed for: <span class="mono" x-text="(n.rebootPackages || []).join(', ') || 'kernel/library update'"></span>
+                                        以下项需重启生效： <span class="mono" x-text="(n.rebootPackages || []).join(', ') || 'kernel/library update'"></span>
                                     </div>
                                 </template>
 
@@ -105,7 +105,7 @@
             </div>
         </template>
         <template x-if="nodes.length === 0">
-            <div class="col-12"><div class="empty-hint"><i class="bi bi-inbox" style="font-size:26px"></i><div class="mt-2">No nodes in this cluster.</div></div></div>
+            <div class="col-12"><div class="empty-hint"><i class="bi bi-inbox" style="font-size:26px"></i><div class="mt-2">此集群中没有节点。</div></div></div>
         </template>
     </div>
 </div>
@@ -117,5 +117,5 @@
   function register() { window.Alpine.data('maintenanceApp', maintenanceApp); }
   if (window.Alpine) register();
   else document.addEventListener('alpine:init', register);
-</script>
+</script>script
 {% endblock %}

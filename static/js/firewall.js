@@ -3,7 +3,7 @@
 import * as U from './utils.js';
 
 const LOG_LEVELS = ['emerg', 'alert', 'crit', 'err', 'warning', 'notice', 'info', 'debug', 'nolog'];
-const POLICY_LABELS = { policy_in: 'Input policy', policy_out: 'Output policy', policy_forward: 'Forward policy' };
+const POLICY_LABELS = { policy_in: '入站策略', policy_out: '出站策略', policy_forward: '转发策略' };
 const RULE_TEXT_FIELDS = ['macro', 'proto', 'source', 'dest', 'sport', 'dport', 'iface', 'icmp-type', 'comment', 'log'];
 
 function emptyRule() {
@@ -82,7 +82,7 @@ export function firewallPanel(scope, node, vmid, group = '') {
         this.groups = c.groups || [];
         this.addresses = c.addresses || [];
       } catch (e) {
-        U.notify('Could not load firewall macros: ' + e.message, 'error');
+        U.notify('无法加载防火墙宏：' + e.message, 'error');
       }
     },
 
@@ -93,7 +93,7 @@ export function firewallPanel(scope, node, vmid, group = '') {
         U.notify(okMsg || r.message, 'success');
         return true;
       } catch (e) {
-        U.notify('Firewall: ' + e.message, 'error');
+        U.notify('防火墙：' + e.message, 'error');
         return false;
       } finally {
         this.busy = false;
@@ -114,26 +114,26 @@ export function firewallPanel(scope, node, vmid, group = '') {
 
     askToggle() {
       const turnOn = !this.enabled;
-      const where = this.scope === 'cluster' ? 'the datacenter' : this.scope === 'node' ? `node ${node}` : `guest ${vmid}`;
+      const where = this.scope === 'cluster' ? '数据中心' : this.scope === 'node' ? `节点 ${node}` : `客户机 ${vmid}`;
       let warn = '';
       if (turnOn && this.scope === 'cluster') {
         // With the datacenter firewall on and the default DROP input policy,
         // only the cluster network keeps access to 8006/22 — ProxUI included.
-        warn = 'With the default input policy (DROP), Proxmox only allows the web API (8006) and SSH from the ' +
-          "cluster's local network. If ProxUI or your browser reaches the nodes from another network, " +
-          'add an ACCEPT rule for it first or you will lose access.';
+        warn = '在默认入站策略（DROP）下，Proxmox 仅允许来自以下网络的 Web API（8006）与 SSH 访问：' +
+          "集群的本地网络。如果 ProxUI 或你的浏览器从其他网络访问节点，" +
+          '请先为其添加一条 ACCEPT 规则，否则你将失去访问权限。';
       } else if (turnOn && this.scope === 'guest' && (this.options.policy_in ?? this.defaults.policy_in) !== 'ACCEPT') {
-        warn = 'Incoming traffic not matched by a rule will be dropped.';
+        warn = '未匹配任何规则的入站流量将被丢弃。';
       }
       this._ask({
-        title: turnOn ? 'Enable firewall' : 'Disable firewall',
-        body: `${turnOn ? 'Enable' : 'Disable'} the firewall for ${where}?`,
+        title: turnOn ? '启用防火墙' : '关闭防火墙',
+        body: `确定要${turnOn ? '启用' : '关闭'} ${where} 的防火墙吗？`,
         warn,
         label: turnOn ? 'Enable' : 'Disable',
         danger: !turnOn,
         run: () => this._run(() => U.apiJson(`${base}/options`,
           json('PUT', { enable: turnOn, digest: this.digest })),
-          turnOn ? 'Firewall enabled.' : 'Firewall disabled.'),
+          turnOn ? '防火墙已启用。' : '防火墙已关闭。'),
       });
     },
 
@@ -158,7 +158,7 @@ export function firewallPanel(scope, node, vmid, group = '') {
 
     async saveRule() {
       const f = { ...this.form };
-      if (f.type === 'group' && !f.action) { this.formError = 'Choose a security group.'; return; }
+      if (f.type === 'group' && !f.action) { this.formError = '请选择安全组。'; return; }
       if (f.type !== 'group' && !['ACCEPT', 'DROP', 'REJECT'].includes(f.action)) f.action = 'ACCEPT';
       if (f.type === 'group') {
         for (const k of ['macro', 'proto', 'source', 'dest', 'sport', 'dport', 'icmp-type', 'log']) f[k] = '';
@@ -197,8 +197,8 @@ export function firewallPanel(scope, node, vmid, group = '') {
     askDelete(r) {
       const what = r.macro || r.proto || 'any';
       this._ask({
-        title: 'Delete firewall rule',
-        body: `Delete rule #${r.pos} (${r.type} ${r.action} ${what})?`,
+        title: '删除防火墙规则',
+        body: `删除规则 #${r.pos}（${r.type} ${r.action} ${what}）？`,
         warn: '',
         label: 'Delete',
         danger: true,

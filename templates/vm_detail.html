@@ -3,7 +3,7 @@
 {% block title %}{{ config.name or ('Container' if vm_type == 'lxc' else 'VM') }} ({{ vmid }}) - Proxmox Manager{% endblock %}
 
 {% block content %}
-<div class="mb-3"><a href="{{ url_for('vms') }}" class="back-link"><i class="bi bi-arrow-left"></i> VMs &amp; Containers</a></div>
+<div class="mb-3"><a href="{{ url_for('vms') }}" class="back-link"><i class="bi bi-arrow-left"></i> 虚拟机与容器</a></div>
 
 <!-- vmBackups wraps vmStatus so the backup action and the backup tile share
      one component; its members are prefixed so nothing shadows vmStatus. -->
@@ -90,15 +90,15 @@
                     data-bs-toggle="dropdown" aria-expanded="false"
                     :class="{ 'disabled': !isRunning || busy }"
                     :aria-disabled="!isRunning || busy"
-                    aria-label="More console options"></button>
+                    aria-label="更多控制台选项"></button>
             <ul class="dropdown-menu dropdown-menu-end">
                 <li>
                     <a class="dropdown-item d-flex align-items-center gap-2"
                        href="{{ url_for('vm_console', node=node, vmid=vmid) }}">
                         <i class="bi bi-display"></i>
                         <span>
-                            Graphical console (VNC)
-                            <small class="d-block text-muted-2">Use if the terminal will not connect.</small>
+                            图形控制台（VNC）
+                            <small class="d-block text-muted-2">若终端无法连接时使用。</small>
                         </span>
                     </a>
                 </li>
@@ -127,12 +127,12 @@
            :tabindex="(isRunning && !busy) ? null : '-1'"
            :title="isRunning ? '' : 'VM must be running'"
            style="text-decoration:none">
-            <i class="bi bi-terminal-split"></i> Serial console
+            <i class="bi bi-terminal-split"></i> 串口控制台
         </a>
         {% else %}
         <span class="btn-x disabled" aria-disabled="true" tabindex="-1"
-              title="This VM has no serial port. Add one (e.g. serial0: socket) and configure a getty inside the guest to use the serial console.">
-            <i class="bi bi-terminal-split"></i> Serial console
+              title="此虚拟机没有串口。请添加一个（例如 serial0: socket），并在客户机内配置 getty 以使用串口控制台。">
+            <i class="bi bi-terminal-split"></i> 串口控制台
         </span>
         {% endif %}
 {% endif %}
@@ -140,7 +140,7 @@
         <!-- Migration -->
         <button type="button" class="btn-x {{ 'disabled' if migration_info else '' }}"
                 data-bs-toggle="modal" data-bs-target="#migrateModal"
-                {% if migration_info %}disabled title="Migration in progress"{% endif %}>
+                {% if migration_info %}disabled title="正在迁移"{% endif %}>
             <i class="bi bi-arrows-move"></i> Migrate
         </button>
 
@@ -165,13 +165,13 @@
 <div class="callout info mb-3">
     <i class="bi bi-arrow-left-right"></i>
     <div>
-        <div class="t">Migration in Progress!</div>
+        <div class="t">正在迁移！</div>
         <div class="b">
             This {{ 'VM' if vm_type == 'qemu' else 'container' }} is currently being migrated{% if migration_info.target %} to {{ migration_info.target }}{% endif %}.
             Started at {{ migration_info.start_time }}.
             <div class="mt-2 text-faint" style="font-size:11.5px">
-                Status: <span class="tag">{{ migration_info.status }}</span>
-                {% if migration_info.task_id %} · Task ID: {{ migration_info.task_id }}{% endif %}
+                状态： <span class="tag">{{ migration_info.status }}</span>
+                {% if migration_info.task_id %} · 任务 ID：{{ migration_info.task_id }}{% endif %}
             </div>
         </div>
     </div>
@@ -228,12 +228,12 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><i class="bi bi-lightning-charge"></i> Back up {{ vmid }}</h5>
+                <h5 class="modal-title"><i class="bi bi-lightning-charge"></i> 备份 {{ vmid }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <div class="field">
-                    <label>Target storage</label>
+                    <label>目标存储</label>
                     <select class="inp" x-model="backupForm.storage">
                         <template x-for="s in backupStorages" :key="s.storage">
                             <option :value="s.storage" x-text="s.storage + ' (' + (s.type || '').toUpperCase() + ')'"></option>
@@ -243,7 +243,7 @@
                 <div class="field">
                     <label>Mode</label>
                     <select class="inp" x-model="backupForm.mode">
-                        <option value="snapshot">Snapshot (no downtime)</option>
+                        <option value="snapshot">快照（无需停机）</option>
                         <option value="suspend">Suspend</option>
                         <option value="stop">Stop</option>
                     </select>
@@ -251,18 +251,18 @@
                 <div class="field">
                     <label>Compression</label>
                     <select class="inp" x-model="backupForm.compress">
-                        <option value="zstd">ZSTD (fast, recommended)</option>
+                        <option value="zstd">ZSTD（快速，推荐）</option>
                         <option value="lzo">LZO</option>
                         <option value="gzip">GZIP</option>
                         <option value="0">None</option>
                     </select>
-                    <div class="hint">Proxmox Backup Server targets ignore this and use their own format.</div>
+                    <div class="hint">Proxmox Backup Server 目标会忽略此项并使用自己的格式。</div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn-x" data-bs-dismiss="modal">Cancel</button>
                 <button type="button" class="btn-x primary" @click="submit()" :disabled="!backupForm.storage">
-                    <i class="bi bi-lightning-charge"></i> Start backup
+                    <i class="bi bi-lightning-charge"></i> 开始备份
                 </button>
             </div>
         </div>
@@ -273,35 +273,35 @@
 <!-- Performance Metrics Charts -->
 <div class="card-x mb-3" x-data="vmMetrics('{{ node }}', '{{ vmid }}')">
     <div class="cx-head flex-wrap gap-2">
-        <i class="bi bi-graph-up" style="color:var(--accent)"></i><span class="cx-title">Performance Metrics</span>
+        <i class="bi bi-graph-up" style="color:var(--accent)"></i><span class="cx-title">性能指标</span>
         <select class="inp" x-model="timeframe" style="width:auto" class="ms-auto">
-            <option value="hour">Last Hour</option>
-            <option value="day">Last Day</option>
-            <option value="week">Last Week</option>
-            <option value="month">Last Month</option>
-            <option value="year">Last Year</option>
+            <option value="hour">最近一小时</option>
+            <option value="day">最近一天</option>
+            <option value="week">最近一周</option>
+            <option value="month">最近一个月</option>
+            <option value="year">最近一年</option>
         </select>
-        <small class="text-faint" x-text="lastUpdate">Loading...</small>
-        <button class="icon-btn" style="width:32px;height:32px;font-size:15px" @click="refresh()" :disabled="loading" title="Refresh Metrics">
+        <small class="text-faint" x-text="lastUpdate">加载中...</small>
+        <button class="icon-btn" style="width:32px;height:32px;font-size:15px" @click="refresh()" :disabled="loading" title="刷新指标">
             <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i>
         </button>
     </div>
     <div class="cx-body">
         <div class="row g-4">
             <div class="col-12 col-lg-6">
-                <div class="text-faint" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px"><i class="bi bi-cpu"></i> CPU Usage (%)</div>
+                <div class="text-faint" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px"><i class="bi bi-cpu"></i> CPU 使用率（%）</div>
                 <div class="chart-box tall"><canvas x-ref="cpu"></canvas></div>
             </div>
             <div class="col-12 col-lg-6">
-                <div class="text-faint" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px"><i class="bi bi-memory"></i> Memory Usage (%)</div>
+                <div class="text-faint" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px"><i class="bi bi-memory"></i> 内存使用率（%）</div>
                 <div class="chart-box tall"><canvas x-ref="memory"></canvas></div>
             </div>
             <div class="col-12 col-lg-6">
-                <div class="text-faint" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px"><i class="bi bi-diagram-3"></i> Network I/O (MB)</div>
+                <div class="text-faint" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px"><i class="bi bi-diagram-3"></i> 网络 I/O（MB）</div>
                 <div class="chart-box tall"><canvas x-ref="network"></canvas></div>
             </div>
             <div class="col-12 col-lg-6">
-                <div class="text-faint" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px"><i class="bi bi-hdd"></i> Disk I/O (MB)</div>
+                <div class="text-faint" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px"><i class="bi bi-hdd"></i> 磁盘 I/O（MB）</div>
                 <div class="chart-box tall"><canvas x-ref="disk"></canvas></div>
             </div>
         </div>
@@ -324,8 +324,8 @@
                         </div>
                         <div class="ubar my-2"><i class="{{ 'crit' if disk.used_percent > 80 else 'hot' if disk.used_percent > 60 else 'okc' }}" style="width:{{ disk.used_percent }}%"></i></div>
                         <div class="text-faint mono" style="font-size:11px">
-                            {{ "%.1f"|format(disk.used_gb) }} / {{ "%.1f"|format(disk.total_gb) }} GB used
-                            ({{ "%.1f"|format(disk.free_gb) }} GB free)
+                            已用 {{ "%.1f"|format(disk.used_gb) }} / {{ "%.1f"|format(disk.total_gb) }} GB
+                            （空闲 {{ "%.1f"|format(disk.free_gb) }} GB）
                         </div>
                         {% if not loop.last %}<div class="divider my-3"></div>{% endif %}
                     </div>
@@ -333,7 +333,7 @@
                     {% if not guest_disk_info %}
                     <div class="empty-hint">
                         <i class="bi bi-exclamation-triangle"></i>
-                        <p class="mb-0">Guest agent not available or no disk info</p>
+                        <p class="mb-0">客户机代理不可用或无磁盘信息</p>
                     </div>
                     {% endif %}
                 </div>
@@ -343,7 +343,7 @@
             {% if guest_network_info %}
             <!-- Guest IP Addresses Card -->
             <div class="card-x">
-                <div class="cx-head"><i class="bi bi-ethernet" style="color:var(--accent)"></i><span class="cx-title">Guest IP Addresses</span></div>
+                <div class="cx-head"><i class="bi bi-ethernet" style="color:var(--accent)"></i><span class="cx-title">客户机 IP 地址</span></div>
                 <div class="cx-body" style="max-height:300px;overflow-y:auto">
                     {% for iface in guest_network_info %}
                     <div>
@@ -366,20 +366,20 @@
             <!-- Recent Tasks -->
             <div class="card-x" style="flex:1" x-data="vmTasks('{{ node }}', '{{ vmid }}')">
                 <div class="cx-head">
-                    <i class="bi bi-clock-history" style="color:var(--accent)"></i><span class="cx-title">Recent Tasks</span>
-                    <button class="icon-btn ms-auto" style="width:28px;height:28px;font-size:13px" @click="refresh()" :disabled="loading" title="Refresh Tasks">
+                    <i class="bi bi-clock-history" style="color:var(--accent)"></i><span class="cx-title">最近任务</span>
+                    <button class="icon-btn ms-auto" style="width:28px;height:28px;font-size:13px" @click="refresh()" :disabled="loading" title="刷新任务">
                         <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i>
                     </button>
                 </div>
                 <div class="cx-body tight" style="max-height:350px;overflow-y:auto;">
                     <template x-if="loading && tasks.length === 0">
-                        <div class="text-center p-4"><div class="spinner-border spinner-border-sm" role="status"></div> Loading tasks...</div>
+                        <div class="text-center p-4"><div class="spinner-border spinner-border-sm" role="status"></div> 正在加载任务...</div>
                     </template>
                     <template x-if="error">
-                        <div class="text-danger p-4"><i class="bi bi-exclamation-triangle"></i> Error loading tasks</div>
+                        <div class="text-danger p-4"><i class="bi bi-exclamation-triangle"></i> 加载任务出错</div>
                     </template>
                     <template x-if="!loading && !error && tasks.length === 0">
-                        <div class="empty-hint"><i class="bi bi-info-circle"></i> No recent tasks</div>
+                        <div class="empty-hint"><i class="bi bi-info-circle"></i> 最近没有任务</div>
                     </template>
                     <table class="tbl" x-show="tasks.length > 0">
                         <tbody>
@@ -393,9 +393,9 @@
                                     <td>
                                         <div class="nm" style="font-size:12.5px" x-text="displayName(task)"></div>
                                         <div class="text-faint" style="font-size:11px">
-                                            Started: <span x-text="fmtDateTime(task.starttime)"></span>
+                                            开始于： <span x-text="fmtDateTime(task.starttime)"></span>
                                             <template x-if="task.endtime">
-                                                <span> · Ended: <span x-text="fmtDateTime(task.endtime)"></span></span>
+                                                <span> · 结束于： <span x-text="fmtDateTime(task.endtime)"></span></span>
                                             </template>
                                         </div>
                                     </td>
@@ -466,7 +466,7 @@
                 <!-- Hard Disks -->
                 {% if parsed_config.disks %}
                 <div class="cfg-box">
-                    <h6><i class="bi bi-hdd"></i> Hard Disks</h6>
+                    <h6><i class="bi bi-hdd"></i> 硬盘</h6>
                     {% for disk in parsed_config.disks %}
                     <div class="kv">
                         <span class="k">{{ disk.device }}</span>
@@ -492,7 +492,7 @@
                 <!-- Cloud-init Drive -->
                 {% if parsed_config.cloudinit_drive %}
                 <div class="cfg-box">
-                    <h6><i class="bi bi-cloud-arrow-up"></i> Cloud-init Drive</h6>
+                    <h6><i class="bi bi-cloud-arrow-up"></i> Cloud-init 驱动器</h6>
                     <div class="kv">
                         <span class="k">{{ parsed_config.cloudinit_drive.device }} <span class="type-chip">Cloud-init</span></span>
                         <span class="v mono" style="font-size:10.5px">{{ parsed_config.cloudinit_drive.details or parsed_config.cloudinit_drive.config }}</span>
@@ -503,7 +503,7 @@
                 <!-- Connected Devices -->
                 {% if parsed_config.devices %}
                 <div class="cfg-box">
-                    <h6><i class="bi bi-device-hdd"></i> Connected Devices</h6>
+                    <h6><i class="bi bi-device-hdd"></i> 已连接设备</h6>
                     {% for device in parsed_config.devices %}
                     <div class="kv"><span class="k">{{ device.device }}</span><span class="v mono" style="font-size:10.5px">{{ device.config }}</span></div>
                     {% endfor %}
@@ -529,7 +529,7 @@
                             {% if key == 'sshkeys' and value.parsed %}
                                 <div x-data="{ open: false }">
                                 <div class="d-flex justify-content-between align-items-center gap-2">
-                                    <span>{{ value.parsed|length }} SSH key(s)</span>
+                                    <span>{{ value.parsed|length }} 个 SSH 密钥</span>
                                     <button class="act-btn" type="button"
                                             data-bs-toggle="collapse"
                                             data-bs-target="#sshKeysCollapse"
@@ -551,7 +551,7 @@
                                 </div>
                             {% elif key == 'sshkeys' %}
                                 <span class="text-truncate d-inline-block" style="max-width: 200px;" title="{{ value }}">
-                                    SSH keys configured
+                                    SSH 密钥已配置
                                 </span>
                             {% else %}
                                 {{ value }}
@@ -575,7 +575,7 @@
                 <!-- Other Settings -->
                 {% if parsed_config.other %}
                 <div class="cfg-box">
-                    <h6><i class="bi bi-three-dots"></i> Other Settings</h6>
+                    <h6><i class="bi bi-three-dots"></i> 其他设置</h6>
                     {% for key, value in parsed_config.other.items() %}
                     <div class="kv"><span class="k">{{ key }}</span><span class="v">{{ value }}</span></div>
                     {% endfor %}
@@ -592,22 +592,22 @@
 <div class="card-x mt-3" x-data="vmSnapshots('{{ node }}', '{{ vmid }}', '{{ vm_type }}')" x-cloak>
     <div class="cx-head">
         <i class="bi bi-camera" style="color:var(--accent)"></i><span class="cx-title">Snapshots</span>
-        <button class="icon-btn ms-auto" style="width:28px;height:28px;font-size:13px" @click="load()" :disabled="loading" title="Refresh Snapshots">
+        <button class="icon-btn ms-auto" style="width:28px;height:28px;font-size:13px" @click="load()" :disabled="loading" title="刷新快照">
             <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i>
         </button>
         <button class="btn-x sm primary" @click="openCreate()" :disabled="busy">
-            <i class="bi bi-plus-lg"></i> Take Snapshot
+            <i class="bi bi-plus-lg"></i> 创建快照
         </button>
     </div>
     <div class="cx-body tight">
         <template x-if="loading && snapshots.length === 0">
-            <div class="text-center p-4"><div class="spinner-border spinner-border-sm" role="status"></div> Loading snapshots…</div>
+            <div class="text-center p-4"><div class="spinner-border spinner-border-sm" role="status"></div> 正在加载快照…</div>
         </template>
         <template x-if="error">
             <div class="text-danger p-4"><i class="bi bi-exclamation-triangle"></i> <span x-text="error"></span></div>
         </template>
         <template x-if="!loading && !error && snapshots.length === 0">
-            <div class="empty-hint"><i class="bi bi-camera"></i><p class="mb-0">No snapshots yet</p></div>
+            <div class="empty-hint"><i class="bi bi-camera"></i><p class="mb-0">暂无快照</p></div>
         </template>
         <div style="overflow-x:auto" x-show="snapshots.length > 0">
             <table class="tbl">
@@ -626,17 +626,17 @@
                             <td>
                                 <span class="nm mono" x-text="s.name"></span>
                                 <template x-if="s.vmstate">
-                                    <span class="tag ms-1" title="Includes guest RAM">RAM</span>
+                                    <span class="tag ms-1" title="包含客户机内存">RAM</span>
                                 </template>
                             </td>
                             <td class="text-faint" style="font-size:12px" x-text="s.description || '—'"></td>
                             <td class="text-faint mono" style="font-size:11.5px" x-text="fmtDate(s.snaptime)"></td>
                             <td class="text-faint mono" style="font-size:11.5px" x-text="s.parent || '—'"></td>
                             <td style="text-align:right;white-space:nowrap">
-                                <button class="btn-x sm" @click="ask('rollback', s)" :disabled="busy" title="Roll back to this snapshot">
+                                <button class="btn-x sm" @click="ask('rollback', s)" :disabled="busy" title="回滚到此快照">
                                     <i class="bi bi-arrow-counterclockwise"></i> Rollback
                                 </button>
-                                <button class="btn-x sm danger" @click="ask('delete', s)" :disabled="busy" title="Delete this snapshot">
+                                <button class="btn-x sm danger" @click="ask('delete', s)" :disabled="busy" title="删除此快照">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </td>
@@ -645,7 +645,7 @@
                     <template x-if="current">
                         <tr>
                             <td class="mono text-faint">NOW</td>
-                            <td class="text-faint" style="font-size:12px">Current running state</td>
+                            <td class="text-faint" style="font-size:12px">当前运行状态</td>
                             <td class="text-faint">—</td>
                             <td class="text-faint mono" style="font-size:11.5px" x-text="current.parent || '—'"></td>
                             <td></td>
@@ -661,7 +661,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title"><i class="bi bi-camera"></i> Take snapshot of {{ vmid }}</h5>
+                    <h5 class="modal-title"><i class="bi bi-camera"></i> 为 {{ vmid }} 创建快照</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -670,25 +670,25 @@
                         <input type="text" class="inp" x-model="createForm.name" maxlength="40"
                                :class="nameError && 'is-invalid'" placeholder="before-upgrade">
                         <div class="hint" x-show="nameError" x-text="nameError" style="color:var(--danger)"></div>
-                        <div class="hint" x-show="!nameError">2-40 characters, starting with a letter.</div>
+                        <div class="hint" x-show="!nameError">2–40 个字符，以字母开头。</div>
                     </div>
                     <div class="field">
-                        <label>Description <span class="text-faint">(optional)</span></label>
+                        <label>Description <span class="text-faint">（可选）</span></label>
                         <textarea class="inp" rows="2" x-model="createForm.description"></textarea>
                     </div>
                     {% if vm_type == 'qemu' %}
                     <div class="field">
                         <label class="d-flex align-items-center gap-2" style="cursor:pointer">
-                            <input type="checkbox" x-model="createForm.vmstate"> Include RAM (vmstate)
+                            <input type="checkbox" x-model="createForm.vmstate"> 包含内存（vmstate）
                         </label>
-                        <div class="hint">Saves the guest's memory so the rollback resumes exactly where it left off. Takes longer and uses extra storage.</div>
+                        <div class="hint">保存客户机内存，使回滚后能从中断处精确恢复。耗时更长且占用额外存储。</div>
                     </div>
                     {% endif %}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn-x" data-bs-dismiss="modal">Cancel</button>
                     <button type="button" class="btn-x primary" @click="submitCreate()" :disabled="!canCreate">
-                        <i class="bi bi-camera"></i> Take snapshot
+                        <i class="bi bi-camera"></i> 创建快照
                     </button>
                 </div>
             </div>
@@ -706,21 +706,21 @@
                 <div class="modal-body">
                     <template x-if="pending.action === 'rollback'">
                         <div>
-                            <p>Roll {{ 'container' if vm_type == 'lxc' else 'VM' }} {{ vmid }} back to snapshot
+                            <p>将{{ '容器' if vm_type == 'lxc' else '虚拟机' }} {{ vmid }} 回滚到快照
                                <strong class="mono" x-text="pending.name"></strong>?</p>
                             <p class="text-faint" style="font-size:12.5px">
-                                Every change made since that snapshot is discarded, and the guest is stopped for the rollback.
+                                自该快照以来的所有更改都将被丢弃，回滚期间客户机会被关机。
                             </p>
                             <label class="d-flex align-items-center gap-2" style="cursor:pointer">
-                                <input type="checkbox" x-model="pending.start"> Start afterwards
+                                <input type="checkbox" x-model="pending.start"> 随后启动
                             </label>
                         </div>
                     </template>
                     <template x-if="pending.action === 'delete'">
                         <div>
-                            <p>Permanently delete snapshot <strong class="mono" x-text="pending.name"></strong>
+                            <p>永久删除快照 <strong class="mono" x-text="pending.name"></strong>
                                of {{ 'container' if vm_type == 'lxc' else 'VM' }} {{ vmid }}?</p>
-                            <p class="text-faint" style="font-size:12.5px">This cannot be undone.</p>
+                            <p class="text-faint" style="font-size:12.5px">此操作不可撤销。</p>
                         </div>
                     </template>
                 </div>
@@ -745,7 +745,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
-                    <i class="bi bi-arrow-left-right"></i> Migrate {{ 'VM' if vm_type == 'qemu' else 'Container' }} {{ vmid }}
+                    <i class="bi bi-arrow-left-right"></i> 迁移{{ '虚拟机' if vm_type == 'qemu' else '容器' }} {{ vmid }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -754,14 +754,14 @@
                     {% if vm_type == 'lxc' %}
                     <div class="callout info mb-3">
                         <i class="bi bi-info-circle"></i>
-                        <div><div class="t">Note</div><div class="b">LXC containers don't support live migration. The container will be restarted during the migration process.</div></div>
+                        <div><div class="t">Note</div><div class="b">LXC 容器不支持在线迁移。迁移过程中容器将重启。</div></div>
                     </div>
                     {% endif %}
 
                     <div class="field">
-                        <label>Target Node</label>
+                        <label>目标节点</label>
                         <select class="inp" name="target_node" x-model="targetNode" @change="loadStorages()" required>
-                            <option value="">Select target node...</option>
+                            <option value="">选择目标节点...</option>
                             {% for target in available_nodes %}
                             <option value="{{ target }}">{{ target }}</option>
                             {% endfor %}
@@ -769,14 +769,14 @@
                     </div>
 
                     <div class="field mb-0">
-                        <label>Target Storage (Optional)</label>
+                        <label>目标存储（可选）</label>
                         <select class="inp" name="target_storage" x-model="targetStorage">
-                            <option value="">Keep current storage locations</option>
+                            <option value="">保留当前存储位置</option>
                             <template x-for="s in storages" :key="s.storage">
                                 <option :value="s.storage" x-text="s.storage + ' (' + s.type + ')' + (s.available_gb !== undefined ? ' - ' + s.available_gb + ' GB free' : '')"></option>
                             </template>
                         </select>
-                        <div class="hint">Leave empty to keep disks on current storage</div>
+                        <div class="hint">留空则磁盘保留在当前存储</div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -798,7 +798,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" style="color:var(--danger)">
-                    <i class="bi bi-exclamation-triangle"></i> Delete {{ 'Container' if vm_type == 'lxc' else 'VM' }} {{ vmid }}
+                    <i class="bi bi-exclamation-triangle"></i> 删除{{ '容器' if vm_type == 'lxc' else '虚拟机' }} {{ vmid }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
@@ -807,10 +807,10 @@
                     <div class="d-flex gap-3">
                         <i class="bi bi-exclamation-triangle-fill" style="color:var(--danger);font-size:22px"></i>
                         <div style="flex:1">
-                            <div style="font-weight:700;margin-bottom:4px">This action cannot be undone!</div>
+                            <div style="font-weight:700;margin-bottom:4px">此操作不可撤销！</div>
                             <div class="sec-sub" style="color:var(--text-muted)">
-                                Are you sure you want to delete {{ 'container' if vm_type == 'lxc' else 'VM' }} <strong>{{ config.name or vmid }}</strong>?
-                                This will permanently remove {{ 'container' if vm_type == 'lxc' else 'VM' }} configuration, all disks and data, and all snapshots (if any).
+                                确定要删除{{ '容器' if vm_type == 'lxc' else '虚拟机' }} <strong>{{ config.name or vmid }}</strong>？
+                                这将永久移除{{ '容器' if vm_type == 'lxc' else '虚拟机' }}的配置、所有磁盘与数据，以及所有快照（如有）。
                             </div>
                         </div>
                     </div>
@@ -833,7 +833,7 @@
                         :disabled="deleting || !canDelete">
                     <span x-show="deleting" class="spinner-border spinner-border-sm me-1" role="status"></span>
                     <span x-show="!deleting"><i class="bi bi-trash"></i></span>
-                    Delete {{ 'Container' if vm_type == 'lxc' else 'VM' }}
+                    删除{{ '容器' if vm_type == 'lxc' else '虚拟机' }}
                 </button>
             </div>
         </div>
@@ -843,17 +843,17 @@
 <!-- LXC Advanced Summary (read-only) -->
 <div class="card-x mt-3" x-data="lxcSummary()">
     <div class="cx-head">
-        <i class="bi bi-sliders" style="color:var(--accent)"></i><span class="cx-title">Advanced / Passthrough</span>
+        <i class="bi bi-sliders" style="color:var(--accent)"></i><span class="cx-title">高级 / 直通</span>
         <a href="{{ url_for('vm_edit', node=node, vmid=vmid) }}" class="btn-x sm ms-auto" style="text-decoration:none">
             <i class="bi bi-pencil-square"></i> Configure
         </a>
     </div>
     <div class="cx-body">
         <template x-if="loading">
-            <div class="text-muted small"><div class="spinner-border spinner-border-sm me-1" role="status"></div> Loading…</div>
+            <div class="text-muted small"><div class="spinner-border spinner-border-sm me-1" role="status"></div> 加载中…</div>
         </template>
         <template x-if="!loading && !hasAny">
-            <div class="empty-hint">No advanced configuration. <a href="{{ url_for('vm_edit', node=node, vmid=vmid) }}">Configure</a></div>
+            <div class="empty-hint">没有高级配置。 <a href="{{ url_for('vm_edit', node=node, vmid=vmid) }}">Configure</a></div>
         </template>
         <template x-if="!loading && hasAny">
             <div class="vstack gap-2">
@@ -938,14 +938,14 @@ function vmBackups(node, vmid) {
       const mins = Math.floor((Date.now() / 1000 - ts) / 60);
       if (mins < 60) return `${Math.max(mins, 0)}m ago`;
       const hours = Math.floor(mins / 60);
-      if (hours < 24) return `${hours}h ago`;
+      if (hours < 24) return `${hours} 小时前`;
       return `${Math.floor(hours / 24)}d ago`;
     },
     /** Second line of the hero tile: where the backups are, or why there are none. */
     get backupSummary() {
-      if (this.backupLoading) return 'checking storage…';
+      if (this.backupLoading) return '正在检查存储…';
       if (this.backupError) return this.backupError;
-      if (!this.backupCount) return 'no backups stored';
+      if (!this.backupCount) return '没有已存储的备份';
       return `${this.backupCount} on ${this.backupByStorage.map(r => r.storage).join(', ')}`;
     },
     async loadBackups() {
@@ -957,7 +957,7 @@ function vmBackups(node, vmid) {
         this.backupCount = r.count || 0;
         this.backupLatest = r.latest || 0;
       } catch (e) {
-        this.backupError = 'storage unreadable';
+        this.backupError = '存储不可读';
       } finally {
         this.backupLoading = false;
       }
@@ -980,9 +980,9 @@ function vmBackups(node, vmid) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(this.backupForm),
         });
-        ProxUtils.notify(r.message + ' Progress is shown under Recent Tasks.', 'success');
+        ProxUtils.notify(r.message + '进度显示在最近任务中。', 'success');
       } catch (e) {
-        ProxUtils.notify('Backup failed to start: ' + e.message, 'error');
+        ProxUtils.notify('备份启动失败：' + e.message, 'error');
       } finally {
         this.backupBusy = false;
       }
@@ -1044,7 +1044,7 @@ function vmMetrics(node, vmid) {
   // (Alpine's Proxy corrupts Chart.js internals: this.options.events → undefined).
   let charts = null;
   return {
-    timeframe: 'day', lastUpdate: 'Loading...', loading: false, _poller: null,
+    timeframe: 'day', lastUpdate: '加载中...', loading: false, _poller: null,
     init() {
       const cpuCtx = this.$refs.cpu.getContext('2d');
       const memCtx = this.$refs.memory.getContext('2d');
@@ -1054,27 +1054,27 @@ function vmMetrics(node, vmid) {
       charts = {
         cpu: new Chart(cpuCtx, {
           type: 'line',
-          data: { labels: [], datasets: [dataset(cpuCtx, 'CPU Usage (%)', accent, true)] },
+          data: { labels: [], datasets: [dataset(cpuCtx, 'CPU 使用率（%）', accent, true)] },
           options: themedOptions({ pct: true, max: 100 }),
         }),
         memory: new Chart(memCtx, {
           type: 'line',
-          data: { labels: [], datasets: [dataset(memCtx, 'Memory Usage (%)', violet, true)] },
+          data: { labels: [], datasets: [dataset(memCtx, '内存使用率（%）', violet, true)] },
           options: themedOptions({ pct: true, max: 100 }),
         }),
         network: new Chart(netCtx, {
           type: 'line',
           data: { labels: [], datasets: [
-            dataset(netCtx, 'Network In (MB)', ok, false),
-            dataset(netCtx, 'Network Out (MB)', accent, false),
+            dataset(netCtx, '网络入流量（MB）', ok, false),
+            dataset(netCtx, '网络出流量（MB）', accent, false),
           ] },
           options: themedOptions(),
         }),
         disk: new Chart(diskCtx, {
           type: 'line',
           data: { labels: [], datasets: [
-            dataset(diskCtx, 'Disk Read (MB)', warn, false),
-            dataset(diskCtx, 'Disk Write (MB)', accent, false),
+            dataset(diskCtx, '磁盘读取（MB）', warn, false),
+            dataset(diskCtx, '磁盘写入（MB）', accent, false),
           ] },
           options: themedOptions(),
         }),
@@ -1101,7 +1101,7 @@ function vmMetrics(node, vmid) {
           charts.memory.data.labels = labels; charts.memory.data.datasets[0].data = h.memory; charts.memory.update('none');
           charts.network.data.labels = labels; charts.network.data.datasets[0].data = h.network_in; charts.network.data.datasets[1].data = h.network_out; charts.network.update('none');
           charts.disk.data.labels = labels; charts.disk.data.datasets[0].data = h.disk_read; charts.disk.data.datasets[1].data = h.disk_write; charts.disk.update('none');
-          this.lastUpdate = `Last update: ${new Date().toLocaleTimeString()}`;
+          this.lastUpdate = `最后更新： ${new Date().toLocaleTimeString()}`;
         }
       } catch(e) {
         this.lastUpdate = `Error: ${e.message}`;
@@ -1120,8 +1120,8 @@ function vmDelete(node, vmid) {
     // Can only delete a stopped VM that isn't mid-operation (clone/migrate/…).
     get canDelete() { return this.isStopped && !this.busy; },
     get warnMsg() {
-      if (this.busy) return `Busy: ${lockLabel(this.lock)} Wait for the operation to finish.`;
-      return `Must be stopped before deletion. Current status: ${this.status}.`;
+      if (this.busy) return `忙碌中：${lockLabel(this.lock)} 请等待操作完成。`;
+      return `删除前必须先关机。当前状态：${this.status}。`;
     },
     init() {
       this.status = this.$el.dataset.status || '';
@@ -1138,7 +1138,7 @@ function vmDelete(node, vmid) {
     },
     async run() {
       this.deleting = true;
-      this.statusMsg = 'Deleting...';
+      this.statusMsg = '正在删除...';
       this.statusType = 'info';
       try {
         const data = await ProxUtils.apiJson(`/api/vm/${node}/${vmid}/delete`, {
@@ -1149,12 +1149,12 @@ function vmDelete(node, vmid) {
           this.statusType = 'success';
           setTimeout(() => { window.location.href = '/vms'; }, 2000);
         } else {
-          this.statusMsg = data.error || 'Deletion failed';
+          this.statusMsg = data.error || '删除失败';
           this.statusType = 'danger';
           this.deleting = false;
         }
       } catch {
-        this.statusMsg = 'Network error while deleting';
+        this.statusMsg = '删除时网络出错';
         this.statusType = 'danger';
         this.deleting = false;
       }
@@ -1202,11 +1202,11 @@ function lxcSummary() {
 
 // Friendly labels for Proxmox VM locks (set on the VM during clone/migrate/etc).
 const LOCK_LABELS = {
-  clone: 'Cloning…', migrate: 'Migrating…', backup: 'Backing up…',
-  snapshot: 'Snapshotting…', 'snapshot-delete': 'Deleting snapshot…',
-  rollback: 'Rolling back…', create: 'Creating…', destroyed: 'Destroyed',
+  clone: 'Cloning…', migrate: 'Migrating…', backup: '正在备份…',
+  snapshot: 'Snapshotting…', 'snapshot-delete': '正在删除快照…',
+  rollback: '正在回滚…', create: 'Creating…', destroyed: 'Destroyed',
   suspending: 'Suspending…', suspended: 'Suspended', mounted: 'Mounted',
-  disk: 'Disk operation…', fstrim: 'Trimming disk…',
+  disk: '磁盘操作…', fstrim: '正在精简磁盘…',
 };
 function lockLabel(lock) {
   if (!lock) return '';
@@ -1282,5 +1282,5 @@ function register() {
 }
 if (window.Alpine) register();
 else document.addEventListener('alpine:init', register);
-</script>
+</script>script
 {% endblock %}

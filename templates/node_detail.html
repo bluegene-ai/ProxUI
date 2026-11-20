@@ -15,7 +15,7 @@
 </div>
 <div class="callout danger">
     <i class="bi bi-exclamation-triangle"></i>
-    <div><div class="t">Node offline or unreachable</div><div class="b">Could not connect to <strong>{{ node }}</strong>. It may be powered off, disconnected from the cluster, or its API is not responding.</div></div>
+    <div><div class="t">节点离线或不可达</div><div class="b">无法连接到 <strong>{{ node }}</strong>。它可能已关机、与集群断开连接，或 API 无响应。</div></div>
 </div>
 {% else %}
 
@@ -38,13 +38,13 @@
         <div class="hero-stat"><div class="k">Uptime</div><div class="v mono">{{ status.uptime|humanize_uptime }}</div></div>
         <div class="hero-stat"><div class="k">CPU</div><div class="v">{{ (status.cpu * 100)|round(1) }}%</div></div>
         <div class="hero-stat"><div class="k">Memory</div><div class="v">{{ (status.memory.used / status.memory.total * 100)|round(1) if status.memory.total else 0 }}%</div></div>
-        <div class="hero-stat"><div class="k">Load Average</div><div class="v mono">{{ status.loadavg[0] if status.loadavg else 'N/A' }}</div></div>
-        <div class="hero-stat"><div class="k">CPU Cores</div><div class="v">{{ status.cpuinfo.cpus|default('N/A') }}</div></div>
+        <div class="hero-stat"><div class="k">平均负载</div><div class="v mono">{{ status.loadavg[0] if status.loadavg else 'N/A' }}</div></div>
+        <div class="hero-stat"><div class="k">CPU 核心数</div><div class="v">{{ status.cpuinfo.cpus|default('N/A') }}</div></div>
     </div>
 
     <div class="d-flex flex-wrap mb-3 pb-3" style="gap:8px 40px;border-bottom:1px solid var(--border-soft)">
         <div>
-            <div class="text-faint" style="font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;font-weight:700">CPU Model</div>
+            <div class="text-faint" style="font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;font-weight:700">CPU 型号</div>
             <div style="font-size:12px;font-weight:600">{{ status.cpuinfo.model|default('N/A') }}</div>
         </div>
         <div>
@@ -52,7 +52,7 @@
             <div class="mono" style="font-size:11.5px;font-weight:600">{{ status.kversion.split(' ')[:2]|join(' ') if status.kversion else 'N/A' }}</div>
         </div>
         <div>
-            <div class="text-faint" style="font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;font-weight:700">PVE Version</div>
+            <div class="text-faint" style="font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;font-weight:700">PVE 版本</div>
             <div class="mono" style="font-size:11.5px;font-weight:600">{{ status.pveversion|default('N/A') }}</div>
         </div>
     </div>
@@ -60,14 +60,14 @@
     <!-- Performance Metrics -->
     <div class="card-x mb-4">
         <div class="cx-head d-flex justify-content-between align-items-center flex-wrap gap-2">
-            <span class="cx-title"><i class="bi bi-graph-up" style="color:var(--accent)"></i> Performance Metrics</span>
+            <span class="cx-title"><i class="bi bi-graph-up" style="color:var(--accent)"></i> 性能指标</span>
             <div class="d-flex align-items-center gap-2">
                 <select class="inp" style="width:auto" x-model="timeframe">
-                    <option value="hour">Last Hour</option>
-                    <option value="day">Last Day</option>
-                    <option value="week">Last Week</option>
-                    <option value="month">Last Month</option>
-                    <option value="year">Last Year</option>
+                    <option value="hour">最近一小时</option>
+                    <option value="day">最近一天</option>
+                    <option value="week">最近一周</option>
+                    <option value="month">最近一个月</option>
+                    <option value="year">最近一年</option>
                 </select>
                 <span class="text-faint" style="font-size:12px" x-text="lastUpdate"></span>
                 <button class="icon-btn" style="width:32px;height:32px;font-size:15px" @click="refresh()" :disabled="loading" title="Refresh">
@@ -78,19 +78,19 @@
         <div class="cx-body">
             <div class="row g-4">
                 <div class="col-12 col-lg-6">
-                    <div class="text-faint" style="font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;font-weight:700"><i class="bi bi-cpu"></i> CPU Usage (%)</div>
+                    <div class="text-faint" style="font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;font-weight:700"><i class="bi bi-cpu"></i> CPU 使用率（%）</div>
                     <div class="chart-box"><canvas x-ref="cpu"></canvas></div>
                 </div>
                 <div class="col-12 col-lg-6">
-                    <div class="text-faint" style="font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;font-weight:700"><i class="bi bi-speedometer"></i> Load Average</div>
+                    <div class="text-faint" style="font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;font-weight:700"><i class="bi bi-speedometer"></i> 平均负载</div>
                     <div class="chart-box"><canvas x-ref="load"></canvas></div>
                 </div>
                 <div class="col-12 col-lg-6">
-                    <div class="text-faint" style="font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;font-weight:700"><i class="bi bi-memory"></i> Memory Usage (%)</div>
+                    <div class="text-faint" style="font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;font-weight:700"><i class="bi bi-memory"></i> 内存使用率（%）</div>
                     <div class="chart-box"><canvas x-ref="memory"></canvas></div>
                 </div>
                 <div class="col-12 col-lg-6">
-                    <div class="text-faint" style="font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;font-weight:700"><i class="bi bi-diagram-3"></i> Network I/O (MB)</div>
+                    <div class="text-faint" style="font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;font-weight:700"><i class="bi bi-diagram-3"></i> 网络 I/O（MB）</div>
                     <div class="chart-box"><canvas x-ref="network"></canvas></div>
                 </div>
             </div>
@@ -142,7 +142,7 @@
             </tbody>
         </table>
         {% if not storages %}
-        <div class="empty-hint"><i class="bi bi-inbox" style="font-size:26px"></i><div class="mt-2">No storage configured on this node.</div></div>
+        <div class="empty-hint"><i class="bi bi-inbox" style="font-size:26px"></i><div class="mt-2">此节点未配置存储。</div></div>
         {% endif %}
     </div>
 </div>
@@ -150,23 +150,23 @@
 <!-- Local Disks -->
 <div class="card-x mb-4" x-data="nodeDisks('{{ node }}')">
     <div class="cx-head d-flex justify-content-between align-items-center">
-        <span class="cx-title"><i class="bi bi-device-hdd" style="color:var(--accent)"></i> Local Disks</span>
+        <span class="cx-title"><i class="bi bi-device-hdd" style="color:var(--accent)"></i> 本地磁盘</span>
         <button class="icon-btn" style="width:32px;height:32px;font-size:15px" @click="load()" :disabled="loading" title="Refresh">
             <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i>
         </button>
     </div>
     <div class="cx-body flush tbl-scroll">
         <template x-if="loading && disks.length === 0">
-            <div class="text-center py-4"><div class="spinner-border spinner-border-sm" role="status"></div> Loading disks...</div>
+            <div class="text-center py-4"><div class="spinner-border spinner-border-sm" role="status"></div> 正在加载磁盘...</div>
         </template>
         <template x-if="error">
             <div class="text-danger p-3"><i class="bi bi-exclamation-triangle"></i> <span x-text="error"></span></div>
         </template>
         <template x-if="!loading && !error && disks.length === 0">
-            <div class="empty-hint">No disk information available.</div>
+            <div class="empty-hint">无可用磁盘信息。</div>
         </template>
         <table class="tbl" x-show="disks.length > 0">
-            <thead><tr><th>Device</th><th>Model</th><th>Serial</th><th>Type</th><th class="num">Size</th><th>Used By</th><th>SMART</th><th class="num">Wearout</th></tr></thead>
+            <thead><tr><th>Device</th><th>Model</th><th>Serial</th><th>Type</th><th class="num">Size</th><th>被以下对象使用</th><th>SMART</th><th class="num">Wearout</th></tr></thead>
             <tbody>
                 <template x-for="d in disks" :key="d.devpath">
                     <tr>
@@ -190,17 +190,17 @@
 <!-- ZFS Pools -->
 <div class="card-x mb-4" x-data="nodeZfs('{{ node }}')">
     <div class="cx-head d-flex justify-content-between align-items-center">
-        <span class="cx-title"><i class="bi bi-stack" style="color:var(--accent)"></i> ZFS Pools</span>
+        <span class="cx-title"><i class="bi bi-stack" style="color:var(--accent)"></i> ZFS 池</span>
         <button class="icon-btn" style="width:32px;height:32px;font-size:15px" @click="load()" :disabled="loading" title="Refresh">
             <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i>
         </button>
     </div>
     <div class="cx-body flush tbl-scroll">
         <template x-if="loading && pools.length === 0">
-            <div class="text-center py-4"><div class="spinner-border spinner-border-sm" role="status"></div> Loading ZFS pools...</div>
+            <div class="text-center py-4"><div class="spinner-border spinner-border-sm" role="status"></div> 正在加载 ZFS 池...</div>
         </template>
         <template x-if="!loading && pools.length === 0">
-            <div class="empty-hint"><i class="bi bi-info-circle"></i> No ZFS pools on this node.</div>
+            <div class="empty-hint"><i class="bi bi-info-circle"></i> 此节点上没有 ZFS 池。</div>
         </template>
         <table class="tbl" x-show="pools.length > 0">
             <thead><tr><th>Pool</th><th>Health</th><th style="width:230px">Usage</th><th class="num">Fragmentation</th></tr></thead>
@@ -226,7 +226,7 @@
 
 <!-- Guests on this node -->
 <div class="card-x" x-data="nodeGuests({{ guests|tojson|forceescape }})">
-    <div class="cx-head"><i class="bi bi-pc-display" style="color:var(--accent)"></i><span class="cx-title">VMs &amp; Containers</span><span class="text-faint ms-2" style="font-size:12px">{{ guests|length }} guests</span></div>
+    <div class="cx-head"><i class="bi bi-pc-display" style="color:var(--accent)"></i><span class="cx-title">虚拟机与容器</span><span class="text-faint ms-2" style="font-size:12px">{{ guests|length }} 个客户机</span></div>
     <div class="cx-body flush tbl-scroll">
         <table class="tbl">
             <thead>
@@ -249,7 +249,7 @@
                         </td>
                         <td>
                             <a :href="'/vm/' + g.node + '/' + g.vmid" class="nm" x-text="g.name"></a>
-                            <div class="text-faint mono" style="font-size:11px">VMID: <span x-text="g.vmid"></span></div>
+                            <div class="text-faint mono" style="font-size:11px">VMID： <span x-text="g.vmid"></span></div>
                         </td>
                         <td>
                             <span class="type-chip" :class="g.template ? '' : (g.type === 'qemu' ? 'vm' : 'lxc')" x-text="g.template ? 'TMPL' : (g.type === 'qemu' ? 'VM' : 'LXC')"></span>
@@ -276,7 +276,7 @@
             </tbody>
         </table>
         <template x-if="guests.length === 0">
-            <div class="empty-hint"><i class="bi bi-inbox" style="font-size:26px"></i><div class="mt-2">No guests on this node.</div></div>
+            <div class="empty-hint"><i class="bi bi-inbox" style="font-size:26px"></i><div class="mt-2">此节点上没有客户机。</div></div>
         </template>
     </div>
 </div>
@@ -335,7 +335,7 @@
   function nodeMetrics(node) {
     let charts = null;
     return {
-      timeframe: 'day', lastUpdate: 'Loading...', loading: false, _poller: null,
+      timeframe: 'day', lastUpdate: '加载中...', loading: false, _poller: null,
       init() {
         const cpuCtx = this.$refs.cpu.getContext('2d');
         const loadCtx = this.$refs.load.getContext('2d');
@@ -344,18 +344,18 @@
         const accent = cssVar('--accent'), violet = cssVar('--violet'), ok = cssVar('--ok'), warn = cssVar('--warn');
         charts = {
           cpu: new Chart(cpuCtx, { type: 'line',
-            data: { labels: [], datasets: [dataset(cpuCtx, 'CPU Usage (%)', accent, true)] },
+            data: { labels: [], datasets: [dataset(cpuCtx, 'CPU 使用率（%）', accent, true)] },
             options: themedOptions({ pct: true, max: 100 }) }),
           load: new Chart(loadCtx, { type: 'line',
-            data: { labels: [], datasets: [dataset(loadCtx, 'Load Average', warn, true)] },
+            data: { labels: [], datasets: [dataset(loadCtx, '平均负载', warn, true)] },
             options: themedOptions() }),
           memory: new Chart(memCtx, { type: 'line',
-            data: { labels: [], datasets: [dataset(memCtx, 'Memory Usage (%)', violet, true)] },
+            data: { labels: [], datasets: [dataset(memCtx, '内存使用率（%）', violet, true)] },
             options: themedOptions({ pct: true, max: 100 }) }),
           network: new Chart(netCtx, { type: 'line',
             data: { labels: [], datasets: [
-              dataset(netCtx, 'Network In (MB)', ok, false),
-              dataset(netCtx, 'Network Out (MB)', accent, false),
+              dataset(netCtx, '网络入流量（MB）', ok, false),
+              dataset(netCtx, '网络出流量（MB）', accent, false),
             ] },
             options: themedOptions() }),
         };
@@ -382,7 +382,7 @@
             charts.network.data.datasets[0].data = h.network_in;
             charts.network.data.datasets[1].data = h.network_out;
             charts.network.update('none');
-            this.lastUpdate = `Last update: ${new Date().toLocaleTimeString()}`;
+            this.lastUpdate = `最后更新： ${new Date().toLocaleTimeString()}`;
           }
         } catch (e) {
           this.lastUpdate = `Error: ${e.message}`;
@@ -470,5 +470,5 @@
   }
   if (window.Alpine) register();
   else document.addEventListener('alpine:init', register);
-</script>
+</script>script
 {% endblock %}

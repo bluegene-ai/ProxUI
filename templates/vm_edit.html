@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Edit {{ 'Container' if vm_type == 'lxc' else 'VM' }} {{ vm.name }} - Proxmox Manager{% endblock %}
+{% block title %}编辑{{ '容器' if vm_type == 'lxc' else '虚拟机' }} {{ vm.name }} - Proxmox Manager{% endblock %}
 
 {% block extra_head %}
 <style>
@@ -122,25 +122,25 @@
 .boot-device-item.reordered {
     animation: reorder 0.3s ease;
 }
-</style>
+</style>style
 {% endblock %}
 
 {% block content %}
 <div class="d-flex align-items-center flex-wrap gap-3 mb-3">
     <div class="me-auto">
-        <div class="sec-title">Edit {{ 'Container' if vm_type == 'lxc' else 'VM' }} {{ vm.name }}</div>
+        <div class="sec-title">编辑{{ '容器' if vm_type == 'lxc' else '虚拟机' }} {{ vm.name }}</div>
     </div>
     <span class="pill {{ 'run' if vm.status == 'running' else 'stop' if vm.status == 'stopped' else 'maint' }}"><span class="d"></span>{{ vm.status }}</span>
     <a href="{{ url_for('vm_detail', node=node, vmid=vm.vmid) }}" class="btn-x">
-        <i class="bi bi-arrow-left"></i> Back to Details
+        <i class="bi bi-arrow-left"></i> 返回详情
     </a>
 </div>
 
 {% if vm.status == 'running' %}
 <div class="callout warn mb-3">
     <i class="bi bi-exclamation-triangle"></i>
-    <div><div class="t">Warning</div><div class="b">Some configuration changes require the {{ 'container' if vm_type == 'lxc' else 'VM' }} to be stopped to take effect.
-    Memory and CPU changes can be applied to running {{ 'containers' if vm_type == 'lxc' else 'VMs' }} but may need a restart for optimal performance.</div></div>
+    <div><div class="t">Warning</div><div class="b">部分配置更改需要先关闭{{ '容器' if vm_type == 'lxc' else '虚拟机' }}才能生效。
+    内存与 CPU 的更改可应用于运行中的{{ '容器' if vm_type == 'lxc' else '虚拟机' }}，但可能需要重启才能达到最佳性能。</div></div>
 </div>
 {% endif %}
 
@@ -148,33 +148,33 @@
     <div class="col-md-8">
         <div class="card-x">
             <div class="cx-head">
-                <span class="cx-title"><i class="bi bi-{{ 'box' if vm_type == 'lxc' else 'cpu' }}"></i> {{ 'Container' if vm_type == 'lxc' else 'VM' }} Configuration</span>
+                <span class="cx-title"><i class="bi bi-{{ 'box' if vm_type == 'lxc' else 'cpu' }}"></i> {{ '容器' if vm_type == 'lxc' else '虚拟机' }}配置</span>
             </div>
             <div class="cx-body">
                 <form id="vmConfigForm">
                     <!-- General Settings (LXC only) -->
                     {% if vm_type == 'lxc' %}
                     <div class="mb-4">
-                        <div class="sub-h" style="margin-top:0"><i class="bi bi-gear"></i> General Settings</div>
+                        <div class="sub-h" style="margin-top:0"><i class="bi bi-gear"></i> 常规设置</div>
 
                         <div class="field">
                             <label for="hostname">Hostname</label>
                             <input type="text" class="inp" id="hostname" name="hostname"
                                    value="{{ config.hostname or '' }}" pattern="[a-zA-Z0-9\-]+">
-                            <div class="hint">Container hostname (alphanumeric and hyphens only)</div>
+                            <div class="hint">容器主机名（仅限字母、数字和连字符）</div>
                         </div>
                     </div>
                     {% endif %}
 
                     <!-- CPU Configuration -->
                     <div class="mb-4">
-                        <div class="sub-h" style="margin-top:0"><i class="bi bi-cpu"></i> CPU Configuration</div>
+                        <div class="sub-h" style="margin-top:0"><i class="bi bi-cpu"></i> CPU 配置</div>
 
                         {% if vm_type != 'lxc' %}
                         <div class="field">
-                            <label for="cpu_type">CPU Type</label>
+                            <label for="cpu_type">CPU 类型</label>
                             <select class="inp" id="cpu_type" name="cpu_type">
-                                <option value="host">Host (Recommended)</option>
+                                <option value="host">宿主机（推荐）</option>
                                 <option value="kvm64">KVM64</option>
                                 <option value="qemu64">QEMU64</option>
                                 <option value="Haswell">Intel Haswell</option>
@@ -201,7 +201,7 @@
                         </div>
                         {% else %}
                         <div class="field">
-                            <label for="cores">CPU Cores</label>
+                            <label for="cores">CPU 核心数</label>
                             <input type="number" class="inp" id="cores" name="cores"
                                    min="1" max="128" value="{{ config.cores or 1 }}">
                         </div>
@@ -210,12 +210,12 @@
 
                     <!-- Memory Configuration -->
                     <div class="mb-4">
-                        <div class="sub-h" style="margin-top:0"><i class="bi bi-memory"></i> Memory Configuration</div>
+                        <div class="sub-h" style="margin-top:0"><i class="bi bi-memory"></i> 内存配置</div>
 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="field">
-                                    <label for="memory">Memory (MB)</label>
+                                    <label for="memory">内存（MB）</label>
                                     <input type="number" class="inp" id="memory" name="memory"
                                            min="64" max="4194304" step="64" value="{{ config.memory or 512 }}">
                                 </div>
@@ -223,7 +223,7 @@
                             {% if vm_type == 'lxc' %}
                             <div class="col-md-6">
                                 <div class="field">
-                                    <label for="swap">Swap (MB)</label>
+                                    <label for="swap">交换分区（MB）</label>
                                     <input type="number" class="inp" id="swap" name="swap"
                                            min="0" max="4194304" step="64" value="{{ config.swap or 512 }}">
                                 </div>
@@ -235,33 +235,33 @@
                     <!-- Display Configuration (QEMU VMs only) -->
                     {% if vm_type|default('qemu') == 'qemu' %}
                     <div class="mb-4">
-                        <div class="sub-h" style="margin-top:0"><i class="bi bi-display"></i> Display Configuration</div>
+                        <div class="sub-h" style="margin-top:0"><i class="bi bi-display"></i> 显示配置</div>
 
                         <div class="field">
-                            <label for="vga_type">Display Type</label>
+                            <label for="vga_type">显示类型</label>
                             <select class="inp" id="vga_type" name="vga_type">
-                                <option value="std">Standard VGA (std)</option>
-                                <option value="cirrus">Cirrus Logic (cirrus)</option>
-                                <option value="vmware">VMware Compatible (vmware)</option>
-                                <option value="qxl">SPICE (qxl)</option>
-                                <option value="virtio">VirtIO-GPU (virtio)</option>
-                                <option value="virtio-gl">VirtIO-GPU with OpenGL (virtio-gl)</option>
-                                <option value="serial0">Serial Terminal (serial0)</option>
-                                <option value="none">None (headless)</option>
+                                <option value="std">标准 VGA（std）</option>
+                                <option value="cirrus">Cirrus Logic（cirrus）</option>
+                                <option value="vmware">VMware 兼容（vmware）</option>
+                                <option value="qxl">SPICE（qxl）</option>
+                                <option value="virtio">VirtIO-GPU（virtio）</option>
+                                <option value="virtio-gl">启用 OpenGL 的 VirtIO-GPU（virtio-gl）</option>
+                                <option value="serial0">串口终端（serial0）</option>
+                                <option value="none">无（无显示设备）</option>
                             </select>
                             <div class="hint">
-                                <strong>std</strong> - Standard VGA, most compatible<br>
-                                <strong>qxl</strong> - Best for SPICE remote access with multi-monitor support<br>
-                                <strong>virtio</strong> - Best performance for Linux guests with virtio drivers<br>
-                                <strong>serial0</strong> - Text-only serial console, no graphical display
+                                <strong>std</strong> - 标准 VGA，兼容性最好<br>
+                                <strong>qxl</strong> - 最适合支持多显示器的 SPICE 远程访问<br>
+                                <strong>virtio</strong> - 使用 virtio 驱动的 Linux 客户机性能最佳<br>
+                                <strong>serial0</strong> - 纯文本串口控制台，无图形显示
                             </div>
                         </div>
 
                         <div class="field" id="vgaMemoryContainer">
-                            <label for="vga_memory">VGA Memory (MB)</label>
+                            <label for="vga_memory">VGA 显存（MB）</label>
                             <input type="number" class="inp" id="vga_memory" name="vga_memory"
                                    min="4" max="512" step="4" value="16">
-                            <div class="hint">Video memory in MB (4-512). Default is 16MB. Higher values useful for higher resolutions.</div>
+                            <div class="hint">显存大小（MB，4–512）。默认 16MB。更高分辨率下可适当增大。</div>
                         </div>
                     </div>
                     {% endif %}
@@ -269,9 +269,9 @@
                     <!-- Disk Configuration -->
                     <div class="mb-4">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="sub-h mb-0" style="margin-top:0"><i class="bi bi-hdd"></i> Disk Configuration</div>
+                            <div class="sub-h mb-0" style="margin-top:0"><i class="bi bi-hdd"></i> 磁盘配置</div>
                             <button type="button" class="btn-x sm primary" id="addDiskBtn">
-                                <i class="bi bi-plus-circle"></i> Add Disk
+                                <i class="bi bi-plus-circle"></i> 添加磁盘
                             </button>
                         </div>
 
@@ -284,9 +284,9 @@
                     {% if vm_type|default('qemu') == 'qemu' %}
                     <div class="mb-4">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="sub-h mb-0" style="margin-top:0"><i class="bi bi-disc"></i> ISO/CD-ROM Images</div>
+                            <div class="sub-h mb-0" style="margin-top:0"><i class="bi bi-disc"></i> ISO/CD-ROM 镜像</div>
                             <button type="button" class="btn-x sm primary" id="attachIsoBtn">
-                                <i class="bi bi-plus-circle"></i> Attach ISO
+                                <i class="bi bi-plus-circle"></i> 挂载 ISO
                             </button>
                         </div>
 
@@ -297,7 +297,7 @@
 
                     <!-- Cloud-init Drive -->
                     <div class="mb-4" id="cloudinitSection" style="display: none;">
-                        <div class="sub-h" style="margin-top:0"><i class="bi bi-cloud-arrow-up"></i> Cloud-init Drive</div>
+                        <div class="sub-h" style="margin-top:0"><i class="bi bi-cloud-arrow-up"></i> Cloud-init 驱动器</div>
                         <div id="cloudinitDrive">
                             <!-- Cloud-init drive will be loaded here -->
                         </div>
@@ -307,9 +307,9 @@
                     <!-- Network Interfaces -->
                     <div class="mb-4" id="network">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="sub-h mb-0" style="margin-top:0"><i class="bi bi-diagram-3"></i> Network Interfaces</div>
+                            <div class="sub-h mb-0" style="margin-top:0"><i class="bi bi-diagram-3"></i> 网络接口</div>
                             <button type="button" class="btn-x sm primary" id="addNetworkBtn">
-                                <i class="bi bi-plus-circle"></i> Add Interface
+                                <i class="bi bi-plus-circle"></i> 添加接口
                             </button>
                         </div>
 
@@ -322,14 +322,14 @@
                          static/js/vm_edit inline script (loadBootOrder) selects it via
                          document.querySelector('.mb-4:has(#bootOrderList)'). Do not rename. -->
                     <div class="mb-4">
-                        <div class="sub-h" style="margin-top:0"><i class="bi bi-power"></i> Boot Options</div>
+                        <div class="sub-h" style="margin-top:0"><i class="bi bi-power"></i> 启动选项</div>
 
                         {% if vm_type != 'lxc' %}
                         <div class="field">
-                            <label for="bootOrder">Boot Order</label>
+                            <label for="bootOrder">启动顺序</label>
                             <div class="card-x">
                                 <div class="cx-head">
-                                    <small class="text-muted-2">Drag and drop to reorder boot devices</small>
+                                    <small class="text-muted-2">拖放以调整启动设备顺序</small>
                                 </div>
                                 <div class="cx-body tight">
                                     <div id="bootOrderList" class="list-group list-group-flush">
@@ -338,8 +338,7 @@
                                 </div>
                             </div>
                             <div class="hint mt-2">
-                                The VM will attempt to boot from devices in the order shown above.
-                                Available devices depend on your VM configuration.
+                                虚拟机将按上述顺序依次尝试从各设备启动。可用设备取决于你的虚拟机配置。
                             </div>
                         </div>
                         {% endif %}
@@ -348,10 +347,10 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="autostart" name="autostart">
                                 <label class="form-check-label" for="autostart">
-                                    Auto-start {{ 'Container' if vm_type == 'lxc' else 'VM' }} on node boot
+                                    节点启动时自动启动{{ '容器' if vm_type == 'lxc' else '虚拟机' }}
                                 </label>
                             </div>
-                            <div class="hint">{{ 'Container' if vm_type == 'lxc' else 'VM' }} will automatically start when the Proxmox node boots</div>
+                            <div class="hint">{{ '容器' if vm_type == 'lxc' else '虚拟机' }}将在 Proxmox 节点启动时自动启动</div>
                         </div>
                     </div>
 
@@ -364,7 +363,7 @@
                             <i class="bi bi-check-circle"></i> Save
                         </button>
                         <button type="button" class="btn-x primary" id="saveCloseBtn">
-                            <i class="bi bi-check2-square"></i> Save and Close
+                            <i class="bi bi-check2-square"></i> 保存并关闭
                         </button>
                     </div>
                 </form>
@@ -378,7 +377,7 @@
      style="background-color: rgba(0,0,0,0.5); z-index: 9999;">
     <div class="bg-white rounded p-4 text-center">
         <div class="spinner-border text-primary mb-2" role="status"></div>
-        <div>Updating configuration...</div>
+        <div>正在更新配置...</div>
     </div>
 </div>
 
@@ -410,7 +409,7 @@
      }">
     <div class="col-md-8">
         <div class="card-x">
-            <div class="cx-head"><span class="cx-title"><i class="bi bi-key"></i> Reset Root Password</span></div>
+            <div class="cx-head"><span class="cx-title"><i class="bi bi-key"></i> 重置 root 密码</span></div>
             <div class="cx-body">
                 <p class="text-muted-2 small mb-3">
                     {% if vm_type == 'lxc' %}
@@ -423,14 +422,14 @@
                 <div class="row g-2 align-items-end">
                     <div class="col-sm-4">
                         <div class="field mb-0">
-                            <label>New password</label>
+                            <label>新密码</label>
                             <input type="password" class="inp" x-model="pw"
                                    @keydown.enter="submit()" autocomplete="new-password">
                         </div>
                     </div>
                     <div class="col-sm-4">
                         <div class="field mb-0">
-                            <label>Confirm password</label>
+                            <label>确认密码</label>
                             <input type="password" class="inp" x-model="pw2"
                                    @keydown.enter="submit()" autocomplete="new-password">
                         </div>
@@ -439,7 +438,7 @@
                         <button class="btn-x primary w-100" style="justify-content:center" @click="submit()" :disabled="busy">
                             <span x-show="busy" class="spinner-border spinner-border-sm me-1"></span>
                             <i x-show="!busy" class="bi bi-key-fill"></i>
-                            Reset Password
+                            重置密码
                         </button>
                     </div>
                 </div>
@@ -483,12 +482,10 @@
      }">
     <div class="col-md-8">
         <div class="card-x">
-            <div class="cx-head"><span class="cx-title"><i class="bi bi-cpu"></i> QEMU Guest Agent</span></div>
+            <div class="cx-head"><span class="cx-title"><i class="bi bi-cpu"></i> QEMU 客户机代理</span></div>
             <div class="cx-body">
                 <p class="text-muted-2 small mb-3">
-                    Enables improved guest integration: graceful shutdown, IP reporting,
-                    file system freeze, and in-guest password reset.
-                    Requires <code>qemu-guest-agent</code> installed in the guest OS.
+                    启用后可改善客户机集成：优雅关机、IP 上报、文件系统冻结以及客户机内密码重置。需要 <code>qemu-guest-agent</code> 已安装在客户机系统中。
                 </p>
                 <div class="d-flex align-items-center gap-3">
                     <div class="form-check form-switch mb-0">
@@ -574,49 +571,44 @@
      x-init="$watch('bios', () => { if (needsStorage) loadStorages(); })">
     <div class="col-md-8">
         <div class="card-x">
-            <div class="cx-head"><span class="cx-title"><i class="bi bi-motherboard"></i> BIOS &amp; machine</span></div>
+            <div class="cx-head"><span class="cx-title"><i class="bi bi-motherboard"></i> BIOS 与机型</span></div>
             <div class="cx-body">
                 <p class="text-muted-2 small mb-3">
-                    Firmware the VM boots with. Switching changes how the installed OS boots — a guest
-                    installed for legacy BIOS won't boot under UEFI and vice versa. The VM must be stopped.
+                    虚拟机启动所用的固件。切换会改变已安装系统的启动方式——按传统 BIOS 安装的客户机无法在 UEFI 下启动，反之亦然。必须先关闭虚拟机。
                 </p>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="field">
                             <label>BIOS</label>
                             <select class="inp" x-model="bios" :disabled="busy || !stopped">
-                                <option value="seabios">SeaBIOS (legacy BIOS)</option>
-                                <option value="ovmf">OVMF (UEFI)</option>
+                                <option value="seabios">SeaBIOS（传统 BIOS）</option>
+                                <option value="ovmf">OVMF（UEFI）</option>
                             </select>
-                            <div class="hint" x-show="efidisk">EFI disk: <code x-text="efidisk"></code></div>
+                            <div class="hint" x-show="efidisk">EFI 磁盘： <code x-text="efidisk"></code></div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="field">
-                            <label>Machine (emulated chipset)</label>
+                            <label>机型（模拟芯片组）</label>
                             <select class="inp" x-model="machine" :disabled="busy || !stopped">
-                                <option value="i440fx">i440fx (legacy PCI, Proxmox default)</option>
-                                <option value="q35">q35 (PCIe)</option>
+                                <option value="i440fx">i440fx（传统 PCI，Proxmox 默认）</option>
+                                <option value="q35">q35（PCIe）</option>
                             </select>
-                            <div class="hint" x-show="machineRaw && machineRaw !== machine">Current: <code x-text="machineRaw"></code></div>
+                            <div class="hint" x-show="machineRaw && machineRaw !== machine">当前： <code x-text="machineRaw"></code></div>
                         </div>
                     </div>
                 </div>
                 <div class="callout warn py-2 mb-2" x-show="recommendQ35">
                     <i class="bi bi-lightbulb"></i>
-                    Recommended: use <strong>q35</strong> with UEFI. On i440fx Proxmox boots OVMF without
-                    SMM, so it loads the firmware build without Secure Boot, and some guests (e.g. Ubuntu
-                    26.04) don't detect the IDE cloud-init drive, so cloud-init never runs.
-                    <button type="button" class="btn-x sm ms-1" @click="machine = 'q35'">Use q35</button>
+                    推荐使用 <strong>q35</strong> 以 UEFI 启动。在 i440fx 上，Proxmox 启动的 OVMF 不带 SMM，因此加载的是不支持安全启动的固件版本，且部分客户机（如 Ubuntu 26.04）无法识别 IDE cloud-init 驱动器，导致 cloud-init 从不执行。
+                    <button type="button" class="btn-x sm ms-1" @click="machine = 'q35'">使用 q35</button>
                 </div>
                 <div class="hint mb-2" x-show="machine !== currentMachine">
-                    Changing the machine type changes the guest's PCI layout: network interface names
-                    (e.g. <code>ens18</code>) can change, and Windows re-detects hardware. A pinned
-                    version is replaced by the latest one.
+                    更改机型会改变客户机的 PCI 布局：网络接口名称（例如 <code>ens18</code>）会发生变化，Windows 将重新检测硬件。固定版本会被替换为最新版本。
                 </div>
                 <div x-show="needsStorage">
                     <div class="field">
-                        <label>EFI disk storage</label>
+                        <label>EFI 磁盘存储</label>
                         <select class="inp" x-model="storage" :disabled="busy">
                             <template x-for="s in storages" :key="s.storage">
                                 <option :value="s.storage" x-text="s.storage" :selected="s.storage === storage"></option>
@@ -625,12 +617,12 @@
                     </div>
                     <div class="form-check mb-2">
                         <input class="form-check-input" type="checkbox" id="biosSecureBoot" x-model="secureBoot">
-                        <label class="form-check-label" for="biosSecureBoot">Pre-enroll Secure Boot keys</label>
+                        <label class="form-check-label" for="biosSecureBoot">预置 Secure Boot 密钥</label>
                     </div>
                 </div>
                 <div class="form-check mb-2" x-show="bios === 'seabios' && current === 'ovmf' && efidisk">
                     <input class="form-check-input" type="checkbox" id="biosRemoveEfidisk" x-model="removeEfidisk">
-                    <label class="form-check-label" for="biosRemoveEfidisk">Delete the EFI disk (its UEFI variables and boot entries are lost)</label>
+                    <label class="form-check-label" for="biosRemoveEfidisk">删除 EFI 磁盘（其中的 UEFI 变量与启动项将丢失）</label>
                 </div>
                 <div class="d-flex align-items-center gap-2">
                     <button type="button" class="btn-x primary" @click="save()"
@@ -638,7 +630,7 @@
                         <span x-show="busy" class="spinner-border spinner-border-sm me-1"></span>
                         Apply
                     </button>
-                    <span x-show="!stopped" class="text-muted-2 small">Stop the VM to change the BIOS or machine type.</span>
+                    <span x-show="!stopped" class="text-muted-2 small">请先关闭虚拟机再更改 BIOS 或机型。</span>
                 </div>
                 <div x-show="error" class="callout danger mt-2 mb-0 py-2"><span x-text="error"></span></div>
                 <div x-show="success" class="callout info mt-2 mb-0 py-2">
@@ -662,9 +654,9 @@
                 <div class="d-flex align-items-center gap-2">
                     <span x-show="loading" class="spinner-border spinner-border-sm text-secondary"></span>
                     <button class="btn-x sm" @click="regenerate()" :disabled="regenBusy"
-                            title="Regenerate the cloud-init drive from the current config (qm cloudinit update). Reboot the VM to apply — an already-provisioned guest may also need 'cloud-init clean' inside it first.">
+                            title="依据当前配置重新生成 cloud-init 驱动器（qm cloudinit update）。需重启虚拟机生效——已初始化过的客户机可能还需先在内部执行 'cloud-init clean'。">
                         <span x-show="regenBusy" class="spinner-border spinner-border-sm me-1"></span>
-                        <i x-show="!regenBusy" class="bi bi-arrow-clockwise"></i> Regenerate drive
+                        <i x-show="!regenBusy" class="bi bi-arrow-clockwise"></i> 重新生成驱动器
                     </button>
                 </div>
             </div>
@@ -673,13 +665,13 @@
                     <li class="nav-item">
                         <a class="nav-link" :class="{active: tab==='native'}" href="#"
                            @click.prevent="tab='native'">
-                            <i class="bi bi-sliders"></i> Native Settings
+                            <i class="bi bi-sliders"></i> 原生设置
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" :class="{active: tab==='snippet'}" href="#"
                            @click.prevent="openSnippetTab()">
-                            <i class="bi bi-file-code"></i> Custom Snippet
+                            <i class="bi bi-file-code"></i> 自定义片段
                             <span x-show="cicustom" class="badge bg-success ms-1" style="font-size:.7em;">attached</span>
                         </a>
                     </li>
@@ -691,21 +683,18 @@
                         <div class="alert alert-warning py-2 small d-flex align-items-start gap-2 mb-3">
                             <i class="bi bi-exclamation-triangle-fill mt-1"></i>
                             <div>
-                                A custom <strong>user</strong> snippet is attached, so Proxmox ignores the
-                                native <strong>Default User</strong>, <strong>password</strong> and
-                                <strong>SSH keys</strong> — those are managed by the snippet.
-                                Set them in the <a href="#" @click.prevent="tab='snippet'">Custom Snippet</a> tab instead.
-                                Network settings below still apply.
+                                A custom <strong>user</strong> 片段已挂载，因此 Proxmox 会忽略原生的 <strong>默认用户</strong>, <strong>password</strong> and
+                                <strong>SSH 密钥</strong> — 这些由片段管理。请在以下位置设置 <a href="#" @click.prevent="tab='snippet'">自定义片段</a> 标签页中设置。下方的网络设置仍然生效。
                             </div>
                         </div>
                     </template>
                     <div class="row g-3">
                         <div class="col-sm-6">
-                            <label class="form-label small fw-semibold">Default User</label>
+                            <label class="form-label small fw-semibold">默认用户</label>
                             <input type="text" class="form-control form-control-sm" x-model="ciuser"
                                    :disabled="hasUserSnippet" :class="hasUserSnippet && 'bg-light'"
                                    :title="hasUserSnippet ? 'Managed by the attached user snippet — edit it in the Custom Snippet tab' : ''"
-                                   placeholder="e.g. ubuntu">
+                                   placeholder="例如 ubuntu">
                         </div>
                         <div class="col-sm-6">
                             <label class="form-label small fw-semibold">Nameserver</label>
@@ -713,18 +702,18 @@
                                    placeholder="8.8.8.8 1.1.1.1">
                         </div>
                         <div class="col-sm-6">
-                            <label class="form-label small fw-semibold">Search Domain</label>
+                            <label class="form-label small fw-semibold">搜索域</label>
                             <input type="text" class="form-control form-control-sm" x-model="searchdomain"
                                    placeholder="example.com">
                         </div>
                         <div class="col-sm-6">
-                            <label class="form-label small fw-semibold">IP Config (ipconfig0)</label>
+                            <label class="form-label small fw-semibold">IP 配置（ipconfig0）</label>
                             <input type="text" class="form-control form-control-sm" x-model="ipconfig0"
                                    placeholder="ip=dhcp  or  ip=10.0.0.10/24,gw=10.0.0.1">
                         </div>
                         <div class="col-12">
                             <label class="form-label small fw-semibold">
-                                SSH Authorized Keys <span class="text-muted fw-normal">(one per line)</span>
+                                SSH 授权密钥 <span class="text-muted fw-normal">（每行一个）</span>
                             </label>
                             <textarea class="form-control form-control-sm font-monospace" rows="4"
                                       x-model="sshkeys" :disabled="hasUserSnippet"
@@ -736,7 +725,7 @@
                     <div class="mt-3 d-flex gap-2 align-items-center">
                         <button class="btn btn-sm btn-primary" @click="saveNative()" :disabled="nativeBusy">
                             <span x-show="nativeBusy" class="spinner-border spinner-border-sm me-1"></span>
-                            <i x-show="!nativeBusy" class="bi bi-save"></i> Save Settings
+                            <i x-show="!nativeBusy" class="bi bi-save"></i> 保存设置
                         </button>
                     </div>
                     <div x-show="nativeError" class="alert alert-danger py-2 small mt-2 mb-0" x-text="nativeError"></div>
@@ -748,7 +737,7 @@
                     <template x-if="cicustom">
                         <div class="alert alert-info py-2 small d-flex align-items-center gap-2 mb-3">
                             <i class="bi bi-paperclip"></i>
-                            <span><strong>Attached:</strong> <code x-text="cicustom"></code></span>
+                            <span><strong>已挂载：</strong> <code x-text="cicustom"></code></span>
                             <button class="btn btn-sm btn-outline-danger py-0 ms-auto"
                                     @click="detachSnippet()" :disabled="snippetBusy">Detach</button>
                         </div>
@@ -759,8 +748,8 @@
                             <label class="form-label small fw-semibold">Template</label>
                             <select class="form-select form-select-sm" x-model="template"
                                     @change="applyTemplate()">
-                                <option value="">— blank —</option>
-                                <option value="generic">Generic / Base</option>
+                                <option value="">— 空白 —</option>
+                                <option value="generic">通用 / 基础</option>
                                 <option value="ubuntu">Ubuntu / Debian</option>
                                 <option value="rhel">RHEL / CentOS / Rocky</option>
                                 <option value="freebsd">FreeBSD</option>
@@ -770,7 +759,7 @@
                             <label class="form-label small fw-semibold">Storage</label>
                             <select class="form-select form-select-sm" x-model="snippetStorage"
                                     @change="recomputeSelectedStorage()">
-                                <option value="">— select storage —</option>
+                                <option value="">— 选择存储 —</option>
                                 <template x-for="s in snippetStorages" :key="s.storage">
                                     <option :value="s.storage" x-text="storageLabel(s)"></option>
                                 </template>
@@ -790,9 +779,8 @@
                              class="alert alert-warning py-2 small mb-2">
                             <i class="bi bi-exclamation-triangle"></i>
                             <strong x-text="selectedStorage && selectedStorage.storage"></strong>
-                            is node-local — a snippet here won't follow the VM on migration
-                            (cloud-init would lose it). Prefer a shared storage, or
-                            <a href="#" @click.prevent="createSharedStorage()">create a shared /etc/pve snippet storage</a>.
+                            是节点本地存储——此处的片段不会随虚拟机迁移（cloud-init 会丢失）。建议改用共享存储，或
+                            <a href="#" @click.prevent="createSharedStorage()">创建一个共享的 /etc/pve 片段存储</a>.
                         </div>
                         <!-- Chosen storage lacks the snippets content type.
                              x-show lives on a wrapper without .d-flex: Bootstrap's
@@ -801,58 +789,58 @@
                         <div x-show="selectedStorage && !selectedStorage.snippets_enabled">
                             <div class="alert alert-info py-2 small mb-2 d-flex align-items-center gap-2">
                                 <span>Storage <code x-text="selectedStorage && selectedStorage.storage"></code>
-                                    doesn't allow snippets yet.</span>
+                                    尚不允许使用片段存储。</span>
                                 <button class="btn btn-sm btn-outline-primary py-0 ms-auto"
-                                        @click="enableSnippets()" :disabled="setupBusy">Enable snippets</button>
+                                        @click="enableSnippets()" :disabled="setupBusy">启用片段存储</button>
                             </div>
                         </div>
                         <!-- Access status + actions -->
                         <div class="d-flex align-items-center gap-2 flex-wrap small">
                             <span x-show="ssh.sftp_ok" class="text-success">
-                                <i class="bi bi-check-circle-fill"></i> Node write access ready
+                                <i class="bi bi-check-circle-fill"></i> 节点写权限就绪
                             </span>
                             <span x-show="ssh.checked && !ssh.sftp_ok" class="text-muted">
-                                <i class="bi bi-shield-lock"></i> ProxUI needs SSH access to write snippets to nodes.
+                                <i class="bi bi-shield-lock"></i> ProxUI 需要 SSH 访问权限才能向节点写入片段。
                             </span>
                             <button x-show="ssh.checked && !ssh.sftp_ok" class="btn btn-sm btn-outline-secondary py-0"
-                                    @click="showSetup = !showSetup">Set up access</button>
+                                    @click="showSetup = !showSetup">配置访问权限</button>
                             <button x-show="!snippetStorages.some(s => s.shared && s.snippets_enabled)"
                                     class="btn btn-sm btn-outline-secondary py-0"
                                     @click="createSharedStorage()" :disabled="setupBusy"
-                                    title="Create a cluster-shared snippet storage on /etc/pve (migration-safe)">
-                                <i class="bi bi-hdd-network"></i> Create shared /etc/pve storage
+                                    title="在 /etc/pve 上创建集群共享的片段存储（迁移安全）">
+                                <i class="bi bi-hdd-network"></i> 创建共享的 /etc/pve 存储
                             </button>
                         </div>
                         <!-- Setup form -->
                         <div x-show="showSetup" class="p-2 border rounded bg-light mt-2 small">
-                            <div>ProxUI will install its SSH key into root's <code>authorized_keys</code>
-                                (shared across the cluster via pmxcfs), then write snippets over SFTP.</div>
+                            <div>ProxUI 会将其 SSH 密钥安装到 root 的 <code>authorized_keys</code>
+                                （通过 pmxcfs 在集群内共享），然后通过 SFTP 写入片段。</div>
                             <div x-show="!ssh.root_pam" class="mt-2">
-                                <label class="form-label small mb-1">root's password
-                                    <span class="text-muted">(used once to install the key, not stored)</span></label>
+                                <label class="form-label small mb-1">root 密码
+                                    <span class="text-muted">（仅用于安装密钥，不会保存）</span></label>
                                 <input type="password" class="form-control form-control-sm" x-model="rootPassword"
                                        style="max-width: 20rem;" autocomplete="off">
                             </div>
                             <div x-show="ssh.root_pam" class="text-muted mt-1">
-                                This cluster uses root@pam — the node console can install the key without a password.
+                                此集群使用 root@pam —— 节点控制台无需密码即可安装密钥。
                             </div>
                             <div class="mt-2">
-                                <div class="form-text small mb-1">If other ProxUI instances have already installed a key here:</div>
+                                <div class="form-text small mb-1">如果其他 ProxUI 实例已在此安装过密钥：</div>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" id="keyModeAdd" value="add" x-model="keyMode">
-                                    <label class="form-check-label small" for="keyModeAdd">Keep them, add this key</label>
+                                    <label class="form-check-label small" for="keyModeAdd">保留原有密钥并添加此密钥</label>
                                 </div>
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" id="keyModeReplace" value="replace" x-model="keyMode">
-                                    <label class="form-check-label small" for="keyModeReplace">Replace all ProxUI keys with this one</label>
+                                    <label class="form-check-label small" for="keyModeReplace">用此密钥替换所有 ProxUI 密钥</label>
                                 </div>
                             </div>
                             <button class="btn btn-sm btn-primary mt-2" @click="setupAccess()" :disabled="setupBusy">
                                 <span x-show="setupBusy" class="spinner-border spinner-border-sm me-1"></span>
-                                <i x-show="!setupBusy" class="bi bi-key"></i> Install key
+                                <i x-show="!setupBusy" class="bi bi-key"></i> 安装密钥
                             </button>
                             <div class="mt-2">
-                                <a href="#" @click.prevent="showPubkey = !showPubkey">show public key (manual install)</a>
+                                <a href="#" @click.prevent="showPubkey = !showPubkey">显示公钥（手动安装）</a>
                                 <pre x-show="showPubkey" class="mt-1 mb-0 p-2 bg-body border rounded"
                                      style="white-space: pre-wrap; font-size: .72rem;" x-text="ssh.pubkey"></pre>
                             </div>
@@ -870,22 +858,21 @@
                          cipassword is ignored, so offer setting it here instead. -->
                     <div class="mt-2 p-2 border rounded bg-light">
                         <label class="form-label small fw-semibold mb-1">
-                            <i class="bi bi-key"></i> Set a login password via this snippet
-                            <span class="text-muted fw-normal">— optional</span>
+                            <i class="bi bi-key"></i> 通过此片段设置登录密码
+                            <span class="text-muted fw-normal">— 可选</span>
                         </label>
                         <div class="d-flex gap-2 align-items-center flex-wrap">
                             <input type="text" class="form-control form-control-sm font-monospace" style="max-width: 12rem;"
-                                   x-model="pwUser" placeholder="user (e.g. root)">
+                                   x-model="pwUser" placeholder="用户（例如 root）">
                             <input type="text" class="form-control form-control-sm font-monospace" style="max-width: 14rem;"
                                    x-model="pwPassword" placeholder="password">
                             <button class="btn btn-sm btn-outline-secondary"
                                     @click="insertPasswordBlock()" :disabled="!pwPassword.trim()">
-                                <i class="bi bi-plus-lg"></i> Insert into config
+                                <i class="bi bi-plus-lg"></i> 插入配置
                             </button>
                         </div>
                         <div class="form-text small mt-1">
-                            Adds a <code>chpasswd</code> block (with <code>ssh_pwauth</code>) to the YAML above.
-                            The password is stored as a SHA-512 crypt hash, not plaintext — still, prefer SSH keys where you can.
+                            Adds a <code>chpasswd</code> 块设备（带 <code>ssh_pwauth</code>）追加到上方的 YAML 中。密码以 SHA-512 crypt 哈希存储而非明文——但仍建议尽量使用 SSH 密钥。
                         </div>
                     </div>
 
@@ -893,11 +880,11 @@
                     <div x-show="validateResult" class="mt-2">
                         <div x-show="validateResult && validateResult.valid && !validateResult.warnings.length"
                              class="alert alert-success py-2 small mb-0">
-                            <i class="bi bi-check-circle"></i> Valid cloud-init config.
+                            <i class="bi bi-check-circle"></i> cloud-init 配置有效。
                         </div>
                         <div x-show="validateResult && validateResult.errors.length"
                              class="alert alert-danger py-2 small mb-0">
-                            <strong><i class="bi bi-x-circle"></i> Errors:</strong>
+                            <strong><i class="bi bi-x-circle"></i> 错误：</strong>
                             <ul class="mb-0 ps-3 mt-1">
                                 <template x-for="e in (validateResult ? validateResult.errors : [])" :key="e">
                                     <li x-text="e"></li>
@@ -906,7 +893,7 @@
                         </div>
                         <div x-show="validateResult && validateResult.warnings.length"
                              class="alert alert-warning py-2 small mt-1 mb-0">
-                            <strong><i class="bi bi-exclamation-triangle"></i> Warnings:</strong>
+                            <strong><i class="bi bi-exclamation-triangle"></i> 警告：</strong>
                             <ul class="mb-0 ps-3 mt-1">
                                 <template x-for="w in (validateResult ? validateResult.warnings : [])" :key="w">
                                     <li x-text="w"></li>
@@ -926,7 +913,7 @@
                                 @click="saveSnippet()"
                                 :disabled="snippetBusy || !snippetContent.trim() || !snippetStorage">
                             <span x-show="snippetBusy" class="spinner-border spinner-border-sm me-1"></span>
-                            <i x-show="!snippetBusy" class="bi bi-save"></i> Save &amp; Attach
+                            <i x-show="!snippetBusy" class="bi bi-save"></i> 保存并挂载
                         </button>
                     </div>
                     <div x-show="snippetError" class="alert alert-danger py-2 small mt-2 mb-0" x-text="snippetError"></div>
@@ -946,11 +933,11 @@
     <div class="col-md-8">
         <div class="card-x">
             <div class="cx-head d-flex justify-content-between align-items-center">
-                <span class="cx-title"><i class="bi bi-sliders"></i> Advanced / Passthrough</span>
+                <span class="cx-title"><i class="bi bi-sliders"></i> 高级 / 直通</span>
                 <div class="d-flex gap-2 align-items-center">
                     <small class="text-faint fst-italic" x-show="hasBackup" x-text="'Snapshot: ' + backupTimestamp"></small>
                     <button class="btn-x sm" x-show="hasBackup"
-                            @click="restore()" title="Revert to pre-write snapshot">
+                            @click="restore()" title="回退到写入前的快照">
                         <i class="bi bi-arrow-counterclockwise"></i> Restore
                     </button>
                     <button class="icon-btn" style="width:32px;height:32px;font-size:15px" @click="refresh()" title="Refresh">
@@ -962,7 +949,7 @@
                 <template x-if="loading">
                     <div class="text-center py-3">
                         <div class="spinner-border spinner-border-sm" role="status"></div>
-                        <span class="ms-2">Loading…</span>
+                        <span class="ms-2">加载中…</span>
                     </div>
                 </template>
                 <template x-if="!loading && errorMsg">
@@ -975,17 +962,16 @@
                 </div>
                 <div x-show="!loading && isRunning" class="alert alert-info py-2 mb-3">
                     <i class="bi bi-info-circle"></i>
-                    <strong>Container is running.</strong>
-                    Feature flag changes take effect after restart.
-                    Device &amp; mount changes require the container to be stopped first.
+                    <strong>容器正在运行。</strong>
+                    功能标志的变更在重启后生效。设备与挂载变更需先关闭容器。
                 </div>
                 <div x-show="!loading && !canWrite" class="alert alert-warning py-2 mb-3">
                     <i class="bi bi-lock"></i>
-                    <strong>Read-only connection.</strong> Write actions are disabled.
+                    <strong>只读连接。</strong> 写操作已禁用。
                 </div>
                 <div x-show="!loading && !errorMsg">
                     <!-- Feature Flags -->
-                    <h6 class="text-primary mb-3"><i class="bi bi-toggles"></i> Feature Flags</h6>
+                    <h6 class="text-primary mb-3"><i class="bi bi-toggles"></i> 功能标志</h6>
                     <div class="row g-2 mb-3">
                         <template x-for="f in LXC_FLAGS" :key="f.key">
                             <div class="col-sm-6 col-lg-4">
@@ -1005,16 +991,16 @@
                         </template>
                     </div>
                     <button class="btn btn-primary btn-sm" x-show="canWrite" @click="previewFeatures()">
-                        <i class="bi bi-eye"></i> Preview &amp; Apply
+                        <i class="bi bi-eye"></i> 预览并应用
                     </button>
                     <hr class="my-3">
                     <!-- Devices -->
-                    <h6 class="text-primary mb-2"><i class="bi bi-device-hdd"></i> Devices / Passthrough</h6>
+                    <h6 class="text-primary mb-2"><i class="bi bi-device-hdd"></i> 设备 / 直通</h6>
                     <div x-show="!supportsDevN" class="alert alert-warning py-2 mb-2">
                         <i class="bi bi-exclamation-triangle"></i>
-                        PVE <span x-text="pveVersion || '< 8.2'"></span> detected — the <code>dev[n]</code> API requires PVE 8.2+.
+                        PVE <span x-text="pveVersion || '< 8.2'"></span> 已检测到—— <code>dev[n]</code> 该 API 需要 PVE 8.2+。
                     </div>
-                    <p x-show="devices.length === 0 && legacyDevices.length === 0" class="text-muted small mb-2">No device passthrough configured.</p>
+                    <p x-show="devices.length === 0 && legacyDevices.length === 0" class="text-muted small mb-2">未配置设备直通。</p>
                     <div class="mb-2" x-show="devices.length > 0 || legacyDevices.length > 0">
                         <template x-for="d in devices" :key="d.key">
                             <div class="border rounded p-2 mb-1 d-flex align-items-center gap-2">
@@ -1036,17 +1022,16 @@
                         </template>
                     </div>
                     <button x-show="canWrite && supportsDevN" class="btn btn-sm btn-outline-primary" @click="openAddDevice()">
-                        <i class="bi bi-plus-circle"></i> Add Device
+                        <i class="bi bi-plus-circle"></i> 添加设备
                     </button>
                     <hr class="my-3">
                     <!-- Mounts -->
-                    <h6 class="text-primary mb-2"><i class="bi bi-folder2-open"></i> Bind Mounts</h6>
+                    <h6 class="text-primary mb-2"><i class="bi bi-folder2-open"></i> 绑定挂载</h6>
                     <div x-show="!isRoot" class="alert alert-warning py-2 mb-2">
                         <i class="bi bi-lock"></i>
-                        Proxmox restricts adding bind mounts to <strong>root@pam</strong> only.
-                        You can view existing mounts but cannot add new ones with this connection.
+                        Proxmox 限制仅能向以下类型添加绑定挂载： <strong>root@pam</strong> 。此连接下可查看现有挂载，但无法新增挂载。
                     </div>
-                    <p x-show="mounts.length === 0" class="text-muted small mb-2">No bind mounts configured.</p>
+                    <p x-show="mounts.length === 0" class="text-muted small mb-2">未配置绑定挂载。</p>
                     <div class="mb-2" x-show="mounts.length > 0">
                         <template x-for="m in mounts" :key="m.key">
                             <div class="border rounded p-2 mb-1 d-flex align-items-center gap-2">
@@ -1060,12 +1045,12 @@
                         </template>
                     </div>
                     <button x-show="canWrite && isRoot" class="btn btn-sm btn-outline-primary" @click="openAddMount()">
-                        <i class="bi bi-plus-circle"></i> Add Mount
+                        <i class="bi bi-plus-circle"></i> 添加挂载
                     </button>
                     <hr class="my-3">
                     <!-- idmap -->
-                    <h6 class="text-primary mb-2"><i class="bi bi-shield-lock"></i> UID/GID Mapping (idmap)</h6>
-                    <p x-show="idmaps.length === 0" class="text-muted small mb-2">No idmap entries (container uses default subuid/subgid mapping).</p>
+                    <h6 class="text-primary mb-2"><i class="bi bi-shield-lock"></i> UID/GID 映射（idmap）</h6>
+                    <p x-show="idmaps.length === 0" class="text-muted small mb-2">没有 idmap 条目（容器使用默认的 subuid/subgid 映射）。</p>
                     <div class="mb-2" x-show="idmaps.length > 0">
                         <template x-for="m in idmaps" :key="m.key">
                             <div class="border rounded p-2 mb-1 d-flex align-items-center gap-2">
@@ -1079,7 +1064,7 @@
                         </template>
                     </div>
                     <button x-show="canWrite" class="btn btn-sm btn-outline-primary" @click="openAddIdmap()">
-                        <i class="bi bi-plus-circle"></i> Add Mapping
+                        <i class="bi bi-plus-circle"></i> 添加映射
                     </button>
                 </div>
             </div>
@@ -1092,17 +1077,17 @@
     <div class="col-md-8">
         <div class="card-x">
             <div class="cx-head d-flex justify-content-between align-items-center">
-                <span class="cx-title"><i class="bi bi-collection"></i> Apply Config Profile</span>
+                <span class="cx-title"><i class="bi bi-collection"></i> 应用配置方案</span>
                 <button class="icon-btn" style="width:32px;height:32px;font-size:15px" @click="loadProfiles()" title="Refresh">
                     <i class="bi bi-arrow-clockwise"></i>
                 </button>
             </div>
             <div class="cx-body">
                 <template x-if="loading">
-                    <div class="text-center py-3"><div class="spinner-border spinner-border-sm" role="status"></div><span class="ms-2">Loading…</span></div>
+                    <div class="text-center py-3"><div class="spinner-border spinner-border-sm" role="status"></div><span class="ms-2">加载中…</span></div>
                 </template>
                 <template x-if="!loading && profiles.length === 0">
-                    <p class="text-muted">No profiles found.</p>
+                    <p class="text-muted">未找到方案。</p>
                 </template>
                 <div class="row g-3" x-show="profiles.length > 0">
                     <template x-for="p in profiles" :key="p.id">
@@ -1118,11 +1103,11 @@
                                 </div>
                                 <p class="text-muted small flex-grow-1 mb-2" x-text="p.description"></p>
                                 <div class="d-flex gap-2 text-muted small mb-2">
-                                    <span><i class="bi bi-toggles"></i> <span x-text="Object.keys(p.features || {}).length"></span> flag(s)</span>
-                                    <span><i class="bi bi-device-hdd"></i> <span x-text="(p.devices || []).length"></span> device(s)</span>
+                                    <span><i class="bi bi-toggles"></i> <span x-text="Object.keys(p.features || {}).length"></span> 个标志</span>
+                                    <span><i class="bi bi-device-hdd"></i> <span x-text="(p.devices || []).length"></span> 个设备</span>
                                 </div>
                                 <button class="btn btn-sm btn-outline-primary" @click="openPreviewProfile(p.id, p.name)">
-                                    <i class="bi bi-eye"></i> Preview &amp; Apply
+                                    <i class="bi bi-eye"></i> 预览并应用
                                 </button>
                             </div>
                         </div>
@@ -1138,7 +1123,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><i class="bi bi-eye"></i> <span x-text="profileTitle">Profile Preview</span></h5>
+                <h5 class="modal-title"><i class="bi bi-eye"></i> <span x-text="profileTitle">方案预览</span></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
@@ -1149,11 +1134,11 @@
                     <div class="alert alert-danger" x-text="profileDiff.error"></div>
                 </template>
                 <template x-if="profileDiff && !profileDiff.loading && !profileDiff.error && profileDiff.alreadyApplied">
-                    <div class="alert alert-success"><i class="bi bi-check-circle"></i> This profile is already fully applied to this container.</div>
+                    <div class="alert alert-success"><i class="bi bi-check-circle"></i> 此方案已完整应用于该容器。</div>
                 </template>
                 <div x-show="profileDiff && !profileDiff.loading && !profileDiff.error && !profileDiff.alreadyApplied">
                     <div x-show="profileDiff && profileDiff.featuresToAdd && profileDiff.featuresToAdd.length > 0" class="mb-3">
-                        <h6 class="text-primary"><i class="bi bi-plus-circle"></i> Features to enable</h6>
+                        <h6 class="text-primary"><i class="bi bi-plus-circle"></i> 要启用的功能</h6>
                         <ul class="mb-0">
                             <template x-for="f in (profileDiff ? profileDiff.featuresToAdd : [])" :key="f">
                                 <li><code x-text="f"></code></li>
@@ -1161,7 +1146,7 @@
                         </ul>
                     </div>
                     <div x-show="profileDiff && profileDiff.devicesToAdd && profileDiff.devicesToAdd.length > 0" class="mb-3">
-                        <h6 class="text-primary"><i class="bi bi-device-hdd"></i> Devices to add</h6>
+                        <h6 class="text-primary"><i class="bi bi-device-hdd"></i> 待添加的设备</h6>
                         <ul class="mb-0">
                             <template x-for="d in (profileDiff ? profileDiff.devicesToAdd : [])" :key="d.path">
                                 <li><code x-text="d.path + (d.gid ? ' (gid=' + d.gid + ')' : '')"></code></li>
@@ -1169,18 +1154,18 @@
                         </ul>
                     </div>
                     <div x-show="profileDiff && (profileDiff.featuresAlreadySet.length > 0 || profileDiff.devicesAlreadyPresent.length > 0)" class="text-muted small">
-                        <i class="bi bi-check2"></i> Already present:
+                        <i class="bi bi-check2"></i> 已存在：
                         <span x-text="profileDiff ? [...profileDiff.featuresAlreadySet, ...(profileDiff.devicesAlreadyPresent.map(d=>d.path))].join(', ') : ''"></span>
                     </div>
                     <div x-show="profileDiff && profileDiff.running && profileDiff.devicesRequireStop" class="alert alert-warning mt-3 mb-0">
                         <i class="bi bi-exclamation-triangle"></i>
-                        <strong>Container is running.</strong> Device changes require it to be stopped first.
+                        <strong>容器正在运行。</strong> 设备变更需先将其关机。
                     </div>
                     <div x-show="profileDiff && profileDiff.running && !profileDiff.devicesRequireStop" class="alert alert-info mt-3 mb-0">
-                        <i class="bi bi-info-circle"></i> Container is running — feature changes take effect after restart.
+                        <i class="bi bi-info-circle"></i> 容器正在运行——功能变更将在重启后生效。
                     </div>
                     <div x-show="profileDiff && !profileDiff.supportsDevN && profileDiff.devicesToAdd && profileDiff.devicesToAdd.length > 0" class="alert alert-warning mt-3 mb-0">
-                        <i class="bi bi-exclamation-triangle"></i> PVE &lt; 8.2 detected — device passthrough not supported via API.
+                        <i class="bi bi-exclamation-triangle"></i> 检测到 PVE < 8.2 —— 该版本不支持通过 API 进行设备直通。
                     </div>
                 </div>
             </div>
@@ -1189,7 +1174,7 @@
                 <button type="button" class="btn btn-primary" @click="applyProfile()"
                         :disabled="profileApplyDisabled || busy.applyProfile">
                     <span x-show="busy.applyProfile" class="spinner-border spinner-border-sm me-1"></span>
-                    <i x-show="!busy.applyProfile" class="bi bi-check2-circle"></i> Apply Profile
+                    <i x-show="!busy.applyProfile" class="bi bi-check2-circle"></i> 应用方案
                 </button>
             </div>
         </div>
@@ -1201,15 +1186,15 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><i class="bi bi-eye"></i> Preview Changes</h5>
+                <h5 class="modal-title"><i class="bi bi-eye"></i> 预览变更</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p class="text-muted mb-2">The following will be written to the container config:</p>
+                <p class="text-muted mb-2">以下内容将写入容器配置：</p>
                 <pre class="bg-light rounded p-3 small mb-2" style="white-space:pre-wrap;" x-text="previewDiffText"></pre>
                 <div class="alert alert-warning mb-0" x-show="previewRunningWarn">
                     <i class="bi bi-exclamation-triangle"></i>
-                    <strong>Container is running.</strong> Changes take effect after the next restart.
+                    <strong>容器正在运行。</strong> 更改将在下次重启后生效。
                 </div>
             </div>
             <div class="modal-footer">
@@ -1228,43 +1213,42 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><i class="bi bi-device-hdd"></i> Add Device Passthrough</h5>
+                <h5 class="modal-title"><i class="bi bi-device-hdd"></i> 添加设备直通</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <label class="form-label fw-semibold">Quick Preset</label>
+                    <label class="form-label fw-semibold">快捷预设</label>
                     <select class="form-select" x-model="dev.preset" @change="applyDevicePreset()">
-                        <option value="">— choose a common device —</option>
-                        <option value="0">renderD128 (QuickSync / VA-API)</option>
-                        <option value="1">card0 (DRI primary)</option>
-                        <option value="2">card1 (DRI secondary)</option>
-                        <option value="3">net/tun (Tailscale)</option>
+                        <option value="">— 选择常用设备 —</option>
+                        <option value="0">renderD128（QuickSync / VA-API）</option>
+                        <option value="1">card0（DRI 主设备）</option>
+                        <option value="2">card1（DRI 次设备）</option>
+                        <option value="3">net/tun（Tailscale）</option>
                         <option value="4">fuse</option>
                         <option value="5">kvm</option>
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Device path <span class="text-danger">*</span></label>
+                    <label class="form-label">设备路径 <span class="text-danger">*</span></label>
                     <input type="text" class="form-control font-monospace" x-model="dev.path"
                            placeholder="/dev/dri/renderD128">
                 </div>
                 <div class="row g-2 mb-2">
                     <div class="col-6">
-                        <label class="form-label">GID override
-                            <i class="bi bi-info-circle text-muted" title="Debian render group = 104, video group = 44"></i>
+                        <label class="form-label">GID 覆盖
+                            <i class="bi bi-info-circle text-muted" title="Debian 中 render 组 = 104，video 组 = 44"></i>
                         </label>
                         <input type="number" class="form-control" x-model="dev.gid" placeholder="104 (render)">
                     </div>
                     <div class="col-6">
-                        <label class="form-label">UID override</label>
+                        <label class="form-label">UID 覆盖</label>
                         <input type="number" class="form-control" x-model="dev.uid" placeholder="0">
                     </div>
                 </div>
                 <div class="alert alert-info py-2 small mb-0">
                     <i class="bi bi-info-circle"></i>
-                    Requires PVE 8.2+ and the container must be <strong>stopped</strong>.
-                    Debian render group GID is typically <strong>104</strong>.
+                    需要 PVE 8.2+，且容器必须处于 <strong>stopped</strong>。Debian 的 render 组 GID 通常为 <strong>104</strong>.
                 </div>
                 <div x-show="modalError" class="alert alert-danger py-2 small mt-2 mb-0" x-text="modalError"></div>
             </div>
@@ -1284,18 +1268,18 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><i class="bi bi-shield-lock"></i> Add UID/GID Mapping</h5>
+                <h5 class="modal-title"><i class="bi bi-shield-lock"></i> 添加 UID/GID 映射</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <label class="form-label fw-semibold">Quick preset</label>
+                    <label class="form-label fw-semibold">快捷预设</label>
                     <select class="form-select" x-model="idmap.preset" @change="applyIdmapPreset()">
-                        <option value="">— common patterns —</option>
-                        <option value="full_u">Full UID map (u 0 100000 65536)</option>
-                        <option value="full_g">Full GID map (g 0 100000 65536)</option>
-                        <option value="root_u">Map root only — UID (u 0 0 1)</option>
-                        <option value="root_g">Map root only — GID (g 0 0 1)</option>
+                        <option value="">— 常用模式 —</option>
+                        <option value="full_u">完整 UID 映射（u 0 100000 65536）</option>
+                        <option value="full_g">完整 GID 映射（g 0 100000 65536）</option>
+                        <option value="root_u">仅映射 root — UID（u 0 0 1）</option>
+                        <option value="root_g">仅映射 root — GID（g 0 0 1）</option>
                     </select>
                 </div>
                 <div class="mb-3">
@@ -1303,21 +1287,21 @@
                     <div class="d-flex gap-3">
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="idmapType" id="idmapTypeU" value="u" x-model="idmap.type">
-                            <label class="form-check-label" for="idmapTypeU">UID (u)</label>
+                            <label class="form-check-label" for="idmapTypeU">UID（u）</label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="idmapType" id="idmapTypeG" value="g" x-model="idmap.type">
-                            <label class="form-check-label" for="idmapTypeG">GID (g)</label>
+                            <label class="form-check-label" for="idmapTypeG">GID（g）</label>
                         </div>
                     </div>
                 </div>
                 <div class="row g-2 mb-3">
                     <div class="col-4">
-                        <label class="form-label">Container start ID</label>
+                        <label class="form-label">容器起始 ID</label>
                         <input type="number" class="form-control" x-model.number="idmap.ct_id" min="0">
                     </div>
                     <div class="col-4">
-                        <label class="form-label">Host start ID</label>
+                        <label class="form-label">宿主机起始 ID</label>
                         <input type="number" class="form-control" x-model.number="idmap.host_id" min="0">
                     </div>
                     <div class="col-4">
@@ -1328,9 +1312,7 @@
                 <div class="bg-light rounded p-2 small font-monospace mb-3" x-text="idmapPreviewText"></div>
                 <div class="alert alert-warning py-2 small mb-0">
                     <i class="bi bi-exclamation-triangle"></i>
-                    For an <strong>unprivileged</strong> container to access a bind-mounted directory,
-                    the host directory must be owned by the mapped UID/GID.
-                    Use <code>chown -R 100000:100000 /host/path</code> as root on the host.
+                    For an <strong>unprivileged</strong> 容器要访问绑定挂载的目录，宿主机目录必须归属映射后的 UID/GID。请使用 <code>chown -R 100000:100000 /host/path</code> 以 root 身份在宿主机上执行。
                 </div>
                 <div x-show="modalError" class="alert alert-danger py-2 small mt-2 mb-0" x-text="modalError"></div>
             </div>
@@ -1350,36 +1332,35 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><i class="bi bi-folder2-open"></i> Add Bind Mount</h5>
+                <h5 class="modal-title"><i class="bi bi-folder2-open"></i> 添加绑定挂载</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <label class="form-label">Host path <span class="text-danger">*</span></label>
+                    <label class="form-label">宿主机路径 <span class="text-danger">*</span></label>
                     <input type="text" class="form-control font-monospace" x-model="mount.host_path"
                            placeholder="/mnt/nvme/data">
-                    <div class="form-text">Absolute path on the Proxmox host.</div>
+                    <div class="form-text">Proxmox 宿主机上的绝对路径。</div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Container path <span class="text-danger">*</span></label>
+                    <label class="form-label">容器内路径 <span class="text-danger">*</span></label>
                     <input type="text" class="form-control font-monospace" x-model="mount.mp"
                            placeholder="/data">
-                    <div class="form-text">Absolute path inside the container.</div>
+                    <div class="form-text">容器内的绝对路径。</div>
                 </div>
                 <div class="d-flex gap-4 mb-2">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="mpReadOnly" x-model="mount.ro">
-                        <label class="form-check-label" for="mpReadOnly">Read-only</label>
+                        <label class="form-check-label" for="mpReadOnly">只读</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="mpBackup" x-model="mount.backup">
-                        <label class="form-check-label" for="mpBackup">Include in backup</label>
+                        <label class="form-check-label" for="mpBackup">包含在备份中</label>
                     </div>
                 </div>
                 <div class="alert alert-info py-2 small mb-0">
                     <i class="bi bi-info-circle"></i>
-                    Container must be <strong>stopped</strong> before adding mounts.
-                    For unprivileged containers, the host directory owner must match the container UID mapping.
+                    容器必须处于 <strong>stopped</strong> 然后才能添加挂载。对于非特权容器，宿主机目录的所有者必须与容器的 UID 映射一致。
                 </div>
                 <div x-show="modalError" class="alert alert-danger py-2 small mt-2 mb-0" x-text="modalError"></div>
             </div>
@@ -1399,7 +1380,7 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='vendor/sortablejs@1.15.0/Sortable.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/sortablejs@1.15.0/Sortable.min.js') }}"></script>script
 <script>
 const node = '{{ node }}';
 const vmid = '{{ vm.vmid }}';
@@ -1432,7 +1413,7 @@ function addNetworkInterface() {
     const bridge = document.getElementById('newBridge').value;
 
     if (!bridge) {
-        showNotification('Please select a network bridge', 'warning');
+        showNotification('请选择网络网桥', 'warning');
         return;
     }
 
@@ -1472,7 +1453,7 @@ function addNetworkInterface() {
         .then(response => response.json())
         .then(result => {
             if (result.success) {
-                showNotification(result.message || 'Network interface added', 'success');
+                showNotification(result.message || '网络接口已添加', 'success');
                 loadNetworkInterfaces(); // Reload interface list
 
                 // Close modal
@@ -1481,17 +1462,17 @@ function addNetworkInterface() {
                     modal.hide();
                 }
             } else {
-                showNotification(result.error || 'Failed to add network interface', 'error');
+                showNotification(result.error || '添加网络接口失败', 'error');
             }
         })
         .catch(error => {
-            console.error('Error adding network interface:', error);
-            showNotification('Network error while adding interface: ' + error.message, 'error');
+            console.error('添加网络接口出错：', error);
+            showNotification('添加接口时网络出错：' + error.message, 'error');
         });
 }
 
 function removeNetworkInterface(interfaceKey) {
-    if (!confirm(`Remove network interface ${interfaceKey} from ${vmName}? This cannot be undone.`)) {
+    if (!confirm(`确定要从 ${vmName} 移除网络接口 ${interfaceKey} 吗？此操作不可撤销。`)) {
         return;
     }
 
@@ -1501,14 +1482,14 @@ function removeNetworkInterface(interfaceKey) {
     .then(response => response.json())
     .then(result => {
         if (result.success) {
-            showNotification(`Network interface ${interfaceKey} removed`, 'success');
+            showNotification(`网络接口 ${interfaceKey} 已移除`, 'success');
             loadNetworkInterfaces(); // Reload interface list
         } else {
-            showNotification(result.error || 'Failed to remove interface', 'error');
+            showNotification(result.error || '移除接口失败', 'error');
         }
     })
     .catch(error => {
-        showNotification('Network error while removing interface', 'error');
+        showNotification('移除接口时网络出错', 'error');
     });
 }
 
@@ -1537,7 +1518,7 @@ function loadNetworkInterfaces() {
     getVmConfig()
         .then(data => {
             if (data.error) {
-                console.error('Error loading network interfaces:', data.error);
+                console.error('加载网络接口出错：', data.error);
                 return;
             }
             
@@ -1565,7 +1546,7 @@ function loadNetworkInterfaces() {
             });
             
             if (interfaces.length === 0) {
-                container.innerHTML = '<div class="text-muted">No network interfaces configured</div>';
+                container.innerHTML = '<div class="text-muted">未配置网络接口</div>';
             } else {
                 interfaces.forEach(iface => {
                     container.appendChild(createNetworkInterfaceCard(iface));
@@ -1573,7 +1554,7 @@ function loadNetworkInterfaces() {
             }
         })
         .catch(error => {
-            console.error('Error loading network interfaces:', error);
+            console.error('加载网络接口出错：', error);
         });
 }
 
@@ -1629,14 +1610,14 @@ function createNetworkInterfaceCard(iface) {
                     <div class="col-md-2">
                         <label class="form-label small mb-1">Bridge</label>
                         <select class="form-select form-select-sm bridge-select" data-interface="${iface.key}">
-                            <option value="">Loading...</option>
+                            <option value="">加载中...</option>
                         </select>
                     </div>
                     <div class="col-md-1">
                         <label class="form-label small mb-1 d-block">Firewall</label>
                         <div class="form-check form-switch mb-0">
                             <input class="form-check-input" type="checkbox" ${firewall ? 'checked' : ''}
-                                   title="Apply guest firewall rules to this interface (firewall=1)"
+                                   title="将客户机防火墙规则应用于此接口（firewall=1）"
                                    onchange="setNicFirewall('${iface.key}', this)">
                         </div>
                     </div>
@@ -1680,17 +1661,17 @@ function createNetworkInterfaceCard(iface) {
                     </div>
                     <div class="col-md-4">
                         <select class="form-select form-select-sm bridge-select" data-interface="${iface.key}">
-                            <option value="">Loading bridges...</option>
+                            <option value="">正在加载网桥...</option>
                         </select>
                     </div>
                     <div class="col-md-2">
-                        <small class="text-muted">${macAddr ? macAddr.substring(0, 17) : 'Auto MAC'}</small>
+                        <small class="text-muted">${macAddr ? macAddr.substring(0, 17) : '自动 MAC'}</small>
                     </div>
                     <div class="col-md-1">
                         <label class="form-label small mb-1 d-block">Firewall</label>
                         <div class="form-check form-switch mb-0">
                             <input class="form-check-input" type="checkbox" ${firewall ? 'checked' : ''}
-                                   title="Apply guest firewall rules to this interface (firewall=1)"
+                                   title="将客户机防火墙规则应用于此接口（firewall=1）"
                                    onchange="setNicFirewall('${iface.key}', this)">
                         </div>
                     </div>
@@ -1725,12 +1706,12 @@ function setNicFirewall(interfaceKey, checkbox) {
         if (ok && result.success) {
             showNotification(result.message, result.pending ? 'warning' : 'success');
         } else {
-            showNotification(result.error || 'Failed to update interface', 'error');
+            showNotification(result.error || '更新接口失败', 'error');
             checkbox.checked = !checkbox.checked;
         }
     })
     .catch(() => {
-        showNotification('Network error while updating interface', 'error');
+        showNotification('更新接口时网络出错', 'error');
         checkbox.checked = !checkbox.checked;
     })
     .finally(() => { checkbox.disabled = false; });
@@ -1782,14 +1763,14 @@ function saveLxcNetworkConfig(interfaceKey) {
     .then(response => response.json())
     .then(result => {
         if (result.success) {
-            showNotification(`Network interface ${interfaceKey} updated`, 'success');
+            showNotification(`网络接口 ${interfaceKey} 已更新`, 'success');
         } else {
-            showNotification(result.error || 'Failed to update interface', 'error');
+            showNotification(result.error || '更新接口失败', 'error');
             loadNetworkInterfaces();
         }
     })
     .catch(error => {
-        showNotification('Network error while updating interface', 'error');
+        showNotification('更新接口时网络出错', 'error');
         loadNetworkInterfaces();
     });
 }
@@ -1800,7 +1781,7 @@ function populateBridgeSelect(selectElement, currentBridge) {
         return;
     }
 
-    selectElement.innerHTML = '<option value="">Select bridge...</option>';
+    selectElement.innerHTML = '<option value="">选择网桥...</option>';
 
     window.availableBridges.forEach(bridge => {
         const option = document.createElement('option');
@@ -1861,14 +1842,14 @@ function updateNetworkInterface(interfaceKey, newBridge) {
             .then(response => response.json())
             .then(result => {
                 if (result.success) {
-                    showNotification(`Network interface ${interfaceKey} updated`, 'success');
+                    showNotification(`网络接口 ${interfaceKey} 已更新`, 'success');
                 } else {
-                    showNotification(result.error || 'Failed to update interface', 'error');
+                    showNotification(result.error || '更新接口失败', 'error');
                     loadNetworkInterfaces(); // Reload to revert changes
                 }
             })
             .catch(error => {
-                showNotification('Network error while updating interface', 'error');
+                showNotification('更新接口时网络出错', 'error');
                 loadNetworkInterfaces(); // Reload to revert changes
             });
         });
@@ -1879,21 +1860,21 @@ function loadAvailableBridges() {
         .then(response => response.json())
         .then(data => {
             if (data.error) {
-                console.error('Error loading network bridges:', data.error);
+                console.error('加载网络网桥出错：', data.error);
                 return;
             }
             
             window.availableBridges = data.filter(net => net.type === 'bridge');
         })
         .catch(error => {
-            console.error('Error loading network bridges:', error);
+            console.error('加载网络网桥出错：', error);
             window.availableBridges = [];
         });
 }
 
 function showAddNetworkModal() {
     if (!window.availableBridges || window.availableBridges.length === 0) {
-        showNotification('No network bridges available', 'warning');
+        showNotification('没有可用的网络网桥', 'warning');
         return;
     }
     
@@ -1903,12 +1884,12 @@ function showAddNetworkModal() {
 
     const typeField = vmType === 'lxc' ? `
         <div class="mb-3">
-            <label for="newIfName" class="form-label">Interface Name</label>
-            <input type="text" class="form-control" id="newIfName" placeholder="eth0 (auto if blank)">
+            <label for="newIfName" class="form-label">接口名称</label>
+            <input type="text" class="form-control" id="newIfName" placeholder="eth0（留空则自动）">
         </div>
     ` : `
         <div class="mb-3">
-            <label for="newModel" class="form-label">Network Model</label>
+            <label for="newModel" class="form-label">网卡型号</label>
             <select class="form-select" id="newModel">
                 <option value="virtio">VirtIO (Recommended)</option>
                 <option value="e1000">Intel E1000</option>
@@ -1922,42 +1903,42 @@ function showAddNetworkModal() {
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Add Network Interface</h5>
+                        <h5 class="modal-title">添加网络接口</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="newBridge" class="form-label">Network Bridge</label>
+                            <label for="newBridge" class="form-label">网络网桥</label>
                             <select class="form-select" id="newBridge">
-                                <option value="">Select bridge...</option>
+                                <option value="">选择网桥...</option>
                                 ${bridgeOptions}
                             </select>
                         </div>
                         ${typeField}
                         <div class="row">
                             <div class="col-6 mb-3">
-                                <label for="newVlan" class="form-label">VLAN Tag</label>
+                                <label for="newVlan" class="form-label">VLAN 标签</label>
                                 <input type="number" class="form-control" id="newVlan" min="1" max="4094" placeholder="none">
                             </div>
                             <div class="col-6 mb-3">
-                                <label for="newRate" class="form-label">Rate Limit (MB/s)</label>
+                                <label for="newRate" class="form-label">限速（MB/s）</label>
                                 <input type="number" class="form-control" id="newRate" min="0" step="0.1" placeholder="unlimited">
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label for="newMac" class="form-label">MAC Address</label>
-                            <input type="text" class="form-control" id="newMac" placeholder="auto-generated if blank">
+                            <label for="newMac" class="form-label">MAC 地址</label>
+                            <input type="text" class="form-control" id="newMac" placeholder="留空则自动生成">
                         </div>
                         <div class="mb-3">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="newFirewall">
-                                <label class="form-check-label" for="newFirewall">Enable firewall</label>
+                                <label class="form-check-label" for="newFirewall">启用防火墙</label>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" id="addNetworkSubmitBtn">Add Interface</button>
+                        <button type="button" class="btn btn-primary" id="addNetworkSubmitBtn">添加接口</button>
                     </div>
                 </div>
             </div>
@@ -1985,7 +1966,7 @@ function loadDiskInterfaces() {
     getVmConfig()
         .then(data => {
             if (data.error) {
-                console.error('Error loading disk interfaces:', data.error);
+                console.error('加载磁盘接口出错：', data.error);
                 return;
             }
 
@@ -2042,7 +2023,7 @@ function loadDiskInterfaces() {
             }
 
             if (disks.length === 0) {
-                container.innerHTML = '<div class="text-muted">No disks configured</div>';
+                container.innerHTML = '<div class="text-muted">未配置磁盘</div>';
             } else {
                 disks.forEach(disk => {
                     container.appendChild(createDiskInterfaceCard(disk));
@@ -2050,7 +2031,7 @@ function loadDiskInterfaces() {
             }
         })
         .catch(error => {
-            console.error('Error loading disk interfaces:', error);
+            console.error('加载磁盘接口出错：', error);
         });
 }
 
@@ -2096,8 +2077,8 @@ function createDiskInterfaceCard(disk) {
         size = size + 'G';
     }
 
-    const displayName = disk.isRootfs ? 'Root Filesystem' : disk.key;
-    const displayType = disk.isRootfs ? 'rootfs' : (disk.key.match(/^mp\d+$/) ? 'Mount Point' : storage);
+    const displayName = disk.isRootfs ? '根文件系统' : disk.key;
+    const displayType = disk.isRootfs ? 'rootfs' : (disk.key.match(/^mp\d+$/) ? '挂载点' : storage);
 
     // Extract the container mount path for bind mounts
     let bindMountPath = '';
@@ -2111,14 +2092,14 @@ function createDiskInterfaceCard(disk) {
             <div class="row align-items-center">
                 <div class="col-md-2">
                     <strong>${displayName}</strong><br>
-                    <small class="text-muted">Bind Mount</small>
+                    <small class="text-muted">绑定挂载</small>
                 </div>
                 <div class="col-md-5">
-                    <label class="form-label small mb-1">Host Path → Container Path</label>
+                    <label class="form-label small mb-1">宿主机路径 → 容器内路径</label>
                     <div class="font-monospace small">${firstPart} → ${bindMountPath || '?'}</div>
                 </div>
                 <div class="col-md-5 text-muted small fst-italic">
-                    Bind mounts are managed in the Advanced / Passthrough section below.
+                    绑定挂载在下方“高级 / 直通”区域管理。
                 </div>
             </div>
         </div>
@@ -2130,17 +2111,17 @@ function createDiskInterfaceCard(disk) {
                     <small class="text-muted">${displayType}</small>
                 </div>
                 <div class="col-md-3">
-                    <label class="form-label small mb-1">Current Size</label>
+                    <label class="form-label small mb-1">当前容量</label>
                     <div><strong>${size || 'Unknown'}</strong></div>
                 </div>
                 <div class="col-md-4">
-                    <label for="resize_${disk.key}" class="form-label small mb-1">Resize to (GB)</label>
+                    <label for="resize_${disk.key}" class="form-label small mb-1">扩容至（GB）</label>
                     <input type="number" class="form-control form-control-sm"
                            id="resize_${disk.key}"
                            min="${sizeGB || 1}"
                            value="${sizeGB || ''}"
                            step="1">
-                    <small class="text-muted">Can only expand</small>
+                    <small class="text-muted">只能扩容</small>
                 </div>
                 <div class="col-md-2">
                     <button type="button" class="btn btn-sm btn-outline-primary" onclick="resizeDisk('${disk.key}')">
@@ -2166,11 +2147,11 @@ function resizeDisk(diskKey) {
     const newSize = parseInt(newSizeInput.value);
     
     if (!newSize || newSize <= 0) {
-        showNotification('Please enter a valid size', 'warning');
+        showNotification('请输入有效的大小', 'warning');
         return;
     }
     
-    if (!confirm(`Resize disk ${diskKey} to ${newSize}GB? This action cannot be undone.`)) {
+    if (!confirm(`确定要将磁盘 ${diskKey} 扩容到 ${newSize}GB 吗？此操作不可撤销。`)) {
         return;
     }
     
@@ -2185,27 +2166,27 @@ function resizeDisk(diskKey) {
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`HTTP 错误！状态码： ${response.status}`);
         }
         return response.json();
     })
     .then(result => {
-        console.log('Resize result:', result);
+        console.log('扩容结果：', result);
         if (result.success) {
-            showNotification(`Disk ${diskKey} resized to ${newSize}GB successfully`, 'success');
+            showNotification(`磁盘 ${diskKey} 已成功扩容到 ${newSize}GB`, 'success');
             loadDiskInterfaces(); // Reload disk list
         } else {
-            showNotification(result.error || 'Failed to resize disk', 'error');
+            showNotification(result.error || '磁盘扩容失败', 'error');
         }
     })
     .catch(error => {
-        console.error('Error resizing disk:', error);
-        showNotification('Network error while resizing disk: ' + error.message, 'error');
+        console.error('磁盘扩容出错：', error);
+        showNotification('磁盘扩容时网络出错：' + error.message, 'error');
     });
 }
 
 function removeDisk(diskKey) {
-    if (!confirm(`Remove disk ${diskKey} from ${vmName}? The data on this volume will NOT be erased immediately — it is kept as an unused volume, but detaching it stops the guest from using it. This cannot be undone from this screen.`)) {
+    if (!confirm(`确定要从 ${vmName} 移除磁盘 ${diskKey} 吗？该卷上的数据不会被立即擦除——它会保留为未使用的卷，但卸载后客户机将不再能使用它。此操作无法在本页面撤销。`)) {
         return;
     }
 
@@ -2218,12 +2199,12 @@ function removeDisk(diskKey) {
             showNotification(result.message || `Disk ${diskKey} removed`, 'success');
             loadDiskInterfaces();
         } else {
-            showNotification(result.error || 'Failed to remove disk', 'error');
+            showNotification(result.error || '移除磁盘失败', 'error');
         }
     })
     .catch(error => {
-        console.error('Error removing disk:', error);
-        showNotification('Network error while removing disk: ' + error.message, 'error');
+        console.error('移除磁盘出错：', error);
+        showNotification('移除磁盘时网络出错：' + error.message, 'error');
     });
 }
 
@@ -2232,11 +2213,11 @@ function showAddDiskModal() {
         .then(response => response.json())
         .then(data => {
             if (data.error) {
-                showNotification('Error loading storages: ' + data.error, 'error');
+                showNotification('加载存储出错：' + data.error, 'error');
                 return;
             }
             if (!data.length) {
-                showNotification('No suitable storage available on this node', 'warning');
+                showNotification('此节点上没有合适的存储', 'warning');
                 return;
             }
 
@@ -2246,9 +2227,9 @@ function showAddDiskModal() {
 
             const busField = vmType === 'lxc' ? `
                 <div class="mb-3">
-                    <label for="newDiskPath" class="form-label">Container Path</label>
+                    <label for="newDiskPath" class="form-label">容器内路径</label>
                     <input type="text" class="form-control" id="newDiskPath" placeholder="/mnt/data">
-                    <div class="form-text">Absolute path where the mount point appears inside the container.</div>
+                    <div class="form-text">容器内挂载点所呈现的绝对路径。</div>
                 </div>
             ` : `
                 <div class="mb-3">
@@ -2267,21 +2248,21 @@ function showAddDiskModal() {
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="newDiskSsd">
-                        <label class="form-check-label" for="newDiskSsd">Emulate SSD</label>
+                        <label class="form-check-label" for="newDiskSsd">模拟 SSD</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="newDiskIothread">
-                        <label class="form-check-label" for="newDiskIothread">Use IO thread</label>
+                        <label class="form-check-label" for="newDiskIothread">使用 IO 线程</label>
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label for="newDiskCache" class="form-label">Cache Mode</label>
+                    <label for="newDiskCache" class="form-label">缓存模式</label>
                     <select class="form-select" id="newDiskCache">
                         <option value="">Default (no cache)</option>
-                        <option value="writethrough">Write through</option>
-                        <option value="writeback">Write back</option>
+                        <option value="writethrough">write through（直写）</option>
+                        <option value="writeback">write back（回写）</option>
                         <option value="unsafe">Unsafe</option>
-                        <option value="directsync">Direct sync</option>
+                        <option value="directsync">direct sync（直接同步）</option>
                     </select>
                 </div>
             `;
@@ -2291,14 +2272,14 @@ function showAddDiskModal() {
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Add Disk</h5>
+                                <h5 class="modal-title">添加磁盘</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <div class="modal-body">
                                 <div class="mb-3">
                                     <label for="newDiskStorage" class="form-label">Storage</label>
                                     <select class="form-select" id="newDiskStorage">
-                                        <option value="">Select storage...</option>
+                                        <option value="">选择存储...</option>
                                         ${storageOptions}
                                     </select>
                                 </div>
@@ -2310,13 +2291,13 @@ function showAddDiskModal() {
                                 <div class="mb-3">
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="newDiskBackup" checked>
-                                        <label class="form-check-label" for="newDiskBackup">Include in backups</label>
+                                        <label class="form-check-label" for="newDiskBackup">包含在备份中</label>
                                     </div>
                                 </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-primary" id="addDiskSubmitBtn">Add Disk</button>
+                                <button type="button" class="btn btn-primary" id="addDiskSubmitBtn">添加磁盘</button>
                             </div>
                         </div>
                     </div>
@@ -2336,8 +2317,8 @@ function showAddDiskModal() {
             document.getElementById('addDiskSubmitBtn').addEventListener('click', addDisk);
         })
         .catch(error => {
-            console.error('Error loading storages:', error);
-            showNotification('Network error while loading storages', 'error');
+            console.error('加载存储出错：', error);
+            showNotification('加载存储时网络出错', 'error');
         });
 }
 
@@ -2346,11 +2327,11 @@ function addDisk() {
     const sizeGb = parseInt(document.getElementById('newDiskSize').value);
 
     if (!storage) {
-        showNotification('Please select a storage', 'warning');
+        showNotification('请选择存储', 'warning');
         return;
     }
     if (!sizeGb || sizeGb <= 0) {
-        showNotification('Please enter a valid size', 'warning');
+        showNotification('请输入有效的大小', 'warning');
         return;
     }
 
@@ -2363,7 +2344,7 @@ function addDisk() {
     if (vmType === 'lxc') {
         const path = document.getElementById('newDiskPath').value.trim();
         if (!path.startsWith('/')) {
-            showNotification('Container path must be absolute (start with /)', 'warning');
+            showNotification('容器路径必须是绝对路径（以 / 开头）', 'warning');
             return;
         }
         payload.path = path;
@@ -2386,7 +2367,7 @@ function addDisk() {
     .then(response => response.json())
     .then(result => {
         if (result.success) {
-            showNotification(result.message || 'Disk added', 'success');
+            showNotification(result.message || '磁盘已添加', 'success');
             loadDiskInterfaces();
 
             const modal = bootstrap.Modal.getInstance(document.getElementById('addDiskModal'));
@@ -2394,12 +2375,12 @@ function addDisk() {
                 modal.hide();
             }
         } else {
-            showNotification(result.error || 'Failed to add disk', 'error');
+            showNotification(result.error || '添加磁盘失败', 'error');
         }
     })
     .catch(error => {
-        console.error('Error adding disk:', error);
-        showNotification('Network error while adding disk: ' + error.message, 'error');
+        console.error('添加磁盘出错：', error);
+        showNotification('添加磁盘时网络出错：' + error.message, 'error');
     });
 }
 
@@ -2407,7 +2388,7 @@ function loadIsoInterfaces() {
     getVmConfig()
         .then(data => {
             if (data.error) {
-                console.error('Error loading ISO interfaces:', data.error);
+                console.error('加载 ISO 接口出错：', data.error);
                 return;
             }
             
@@ -2436,7 +2417,7 @@ function loadIsoInterfaces() {
             });
             
             if (isos.length === 0) {
-                container.innerHTML = '<div class="text-muted">No ISO images attached</div>';
+                container.innerHTML = '<div class="text-muted">未挂载 ISO 镜像</div>';
             } else {
                 isos.forEach(iso => {
                     container.appendChild(createIsoInterfaceCard(iso));
@@ -2444,7 +2425,7 @@ function loadIsoInterfaces() {
             }
         })
         .catch(error => {
-            console.error('Error loading ISO interfaces:', error);
+            console.error('加载 ISO 接口出错：', error);
         });
 }
 
@@ -2481,7 +2462,7 @@ function createIsoInterfaceCard(iso) {
                     <div class="d-flex align-items-center">
                         <i class="bi bi-disc me-2"></i>
                         <div>
-                            <div><strong>${isoName || 'Unknown ISO'}</strong></div>
+                            <div><strong>${isoName || '未知 ISO'}</strong></div>
                             <small class="text-muted">${isoPath}</small>
                         </div>
                     </div>
@@ -2502,7 +2483,7 @@ function loadCloudinitDrive() {
     getVmConfig()
         .then(data => {
             if (data.error) {
-                console.error('Error loading cloud-init drive:', data.error);
+                console.error('加载 cloud-init 驱动器出错：', data.error);
                 return;
             }
 
@@ -2530,7 +2511,7 @@ function loadCloudinitDrive() {
             }
         })
         .catch(error => {
-            console.error('Error loading cloud-init drive:', error);
+            console.error('加载 cloud-init 驱动器出错：', error);
         });
 }
 
@@ -2556,14 +2537,14 @@ function createCloudinitCard(cloudinit) {
                     <div class="d-flex align-items-center">
                         <i class="bi bi-cloud-arrow-up me-2 text-info"></i>
                         <div>
-                            <div><strong>Cloud-init Configuration Drive</strong></div>
+                            <div><strong>Cloud-init 配置驱动器</strong></div>
                             <small class="text-muted">Storage: ${storage}</small>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <small class="text-muted">
-                        <i class="bi bi-info-circle"></i> Provides cloud-init data to the VM
+                        <i class="bi bi-info-circle"></i> 为虚拟机提供 cloud-init 数据
                     </small>
                 </div>
             </div>
@@ -2579,12 +2560,12 @@ function showAttachIsoModal() {
         .then(response => response.json())
         .then(data => {
             if (data.error) {
-                showNotification('Error loading ISO images: ' + data.error, 'error');
+                showNotification('加载 ISO 镜像出错：' + data.error, 'error');
                 return;
             }
             
             if (data.length === 0) {
-                showNotification('No ISO images available on this node', 'warning');
+                showNotification('此节点上没有可用的 ISO 镜像', 'warning');
                 return;
             }
             
@@ -2598,14 +2579,14 @@ function showAttachIsoModal() {
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Attach ISO Image</h5>
+                                <h5 class="modal-title">挂载 ISO 镜像</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <div class="modal-body">
                                 <div class="mb-3">
-                                    <label for="isoSelect" class="form-label">ISO Image</label>
+                                    <label for="isoSelect" class="form-label">ISO 镜像</label>
                                     <select class="form-select" id="isoSelect">
-                                        <option value="">Select ISO image...</option>
+                                        <option value="">选择 ISO 镜像...</option>
                                         ${isoOptions}
                                     </select>
                                 </div>
@@ -2617,12 +2598,12 @@ function showAttachIsoModal() {
                                         <option value="ide1">ide1</option>
                                         <option value="ide3">ide3</option>
                                     </select>
-                                    <div class="form-text">CD-ROM drives use IDE interfaces</div>
+                                    <div class="form-text">CD-ROM 驱动器使用 IDE 接口</div>
                                 </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <button type="button" class="btn btn-primary" id="attachIsoSubmitBtn">Attach ISO</button>
+                                <button type="button" class="btn btn-primary" id="attachIsoSubmitBtn">挂载 ISO</button>
                             </div>
                         </div>
                     </div>
@@ -2646,8 +2627,8 @@ function showAttachIsoModal() {
             document.getElementById('attachIsoSubmitBtn').addEventListener('click', attachIso);
         })
         .catch(error => {
-            console.error('Error loading ISO images:', error);
-            showNotification('Network error while loading ISO images', 'error');
+            console.error('加载 ISO 镜像出错：', error);
+            showNotification('加载 ISO 镜像时网络出错', 'error');
         });
 }
 
@@ -2659,7 +2640,7 @@ function attachIso() {
     const interface = interfaceSelect.value;
     
     if (!isoImage) {
-        showNotification('Please select an ISO image', 'warning');
+        showNotification('请选择 ISO 镜像', 'warning');
         return;
     }
     
@@ -2683,17 +2664,17 @@ function attachIso() {
                 modal.hide();
             }
         } else {
-            showNotification(result.error || 'Failed to attach ISO', 'error');
+            showNotification(result.error || '挂载 ISO 失败', 'error');
         }
     })
     .catch(error => {
-        console.error('Error attaching ISO:', error);
-        showNotification('Network error while attaching ISO: ' + error.message, 'error');
+        console.error('挂载 ISO 出错：', error);
+        showNotification('挂载 ISO 时网络出错：' + error.message, 'error');
     });
 }
 
 function detachIso(interface) {
-    if (!confirm(`Are you sure you want to detach the ISO from ${interface}?`)) {
+    if (!confirm(`确定要从 ${interface} 卸载 ISO 吗？`)) {
         return;
     }
     
@@ -2710,12 +2691,12 @@ function detachIso(interface) {
             showNotification(result.message, 'success');
             loadIsoInterfaces(); // Reload ISO list
         } else {
-            showNotification(result.error || 'Failed to detach ISO', 'error');
+            showNotification(result.error || '卸载 ISO 失败', 'error');
         }
     })
     .catch(error => {
-        console.error('Error detaching ISO:', error);
-        showNotification('Network error while detaching ISO: ' + error.message, 'error');
+        console.error('卸载 ISO 出错：', error);
+        showNotification('卸载 ISO 时网络出错：' + error.message, 'error');
     });
 }
 
@@ -2732,7 +2713,7 @@ function loadBootOrder() {
     getVmConfig()
         .then(data => {
             if (data.error) {
-                console.error('Error loading boot order:', data.error);
+                console.error('加载启动顺序出错：', data.error);
                 return;
             }
             
@@ -2749,7 +2730,7 @@ function loadBootOrder() {
             setTimeout(initBootOrderSorting, 100);
         })
         .catch(error => {
-            console.error('Error loading boot order:', error);
+            console.error('加载启动顺序出错：', error);
         });
 }
 
@@ -2758,9 +2739,9 @@ function parseBootOrder(config, bootConfig) {
     
     // Available device types with icons and labels
     const deviceTypes = {
-        'disk': { icon: 'bi-hdd', label: 'Hard Disk', priority: 1 },
+        'disk': { icon: 'bi-hdd', label: '硬盘', priority: 1 },
         'cdrom': { icon: 'bi-disc', label: 'CD/DVD-ROM', priority: 2 },
-        'network': { icon: 'bi-ethernet', label: 'Network (PXE)', priority: 3 }
+        'network': { icon: 'bi-ethernet', label: '网络（PXE）', priority: 3 }
     };
     
     // Find actual devices in the config
@@ -2774,7 +2755,7 @@ function parseBootOrder(config, bootConfig) {
             availableDevices.push({
                 id: key,
                 type: 'disk',
-                name: `${key.toUpperCase()} (Disk)`,
+                name: `${key.toUpperCase()}（磁盘）`,
                 ...deviceTypes.disk
             });
         }
@@ -2784,7 +2765,7 @@ function parseBootOrder(config, bootConfig) {
             availableDevices.push({
                 id: key,
                 type: 'cdrom',
-                name: `${key.toUpperCase()} (CD-ROM)`,
+                name: `${key.toUpperCase()}（CD-ROM）`,
                 ...deviceTypes.cdrom
             });
         }
@@ -2794,7 +2775,7 @@ function parseBootOrder(config, bootConfig) {
     availableDevices.push({
         id: 'net',
         type: 'network',
-        name: 'Network Boot (PXE)',
+        name: '网络启动（PXE）',
         ...deviceTypes.network
     });
     
@@ -2835,7 +2816,7 @@ function renderBootOrder(devices) {
     if (devices.length === 0) {
         container.innerHTML = `
             <div class="boot-order-placeholder">
-                <span>No bootable devices available</span>
+                <span>没有可用的启动设备</span>
             </div>
         `;
         return;
@@ -2885,14 +2866,14 @@ function initBootOrderSorting() {
     
     // Check if Sortable is available
     if (typeof Sortable === 'undefined') {
-        console.warn('Sortable library not loaded, adding fallback buttons');
+        console.warn('排序库未加载，已启用备用按钮');
         addFallbackButtons();
         return;
     }
     
     // Use fallback buttons for very small screens or touch-only devices
     if (isMobile && window.innerWidth < 576) {
-        console.log('Using fallback buttons for small mobile screen');
+        console.log('移动端小屏下使用备用按钮');
         addFallbackButtons();
         return;
     }
@@ -2940,14 +2921,14 @@ function initBootOrderSorting() {
         // Test if drag and drop actually works after a short delay
         setTimeout(() => {
             if (!testDragDropSupport()) {
-                console.warn('Drag and drop not working properly, switching to fallback');
+                console.warn('拖放功能异常，已切换为备用方式');
                 sortableInstance.destroy();
                 addFallbackButtons();
             }
         }, 1000);
         
     } catch (error) {
-        console.warn('Failed to initialize Sortable:', error);
+        console.warn('初始化排序功能失败：', error);
         addFallbackButtons();
     }
 }
@@ -3084,15 +3065,15 @@ function saveBootOrder() {
     .then(response => response.json())
     .then(result => {
         if (result.success) {
-            showNotification('Boot order updated successfully', 'success');
+            showNotification('启动顺序更新成功', 'success');
         } else {
-            showNotification(result.error || 'Failed to update boot order', 'error');
+            showNotification(result.error || '更新启动顺序失败', 'error');
             loadBootOrder(); // Reload on error
         }
     })
     .catch(error => {
-        console.error('Error saving boot order:', error);
-        showNotification('Network error while updating boot order', 'error');
+        console.error('保存启动顺序出错：', error);
+        showNotification('更新启动顺序时网络出错', 'error');
         loadBootOrder(); // Reload on error
     });
 }
@@ -3135,7 +3116,7 @@ document.addEventListener('DOMContentLoaded', function() {
         getVmConfig()
             .then(data => {
                 if (data.error) {
-                    showNotification('Error loading VM configuration: ' + data.error, 'error');
+                    showNotification('加载虚拟机配置出错：' + data.error, 'error');
                     return;
                 }
 
@@ -3184,8 +3165,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             })
             .catch(error => {
-                console.error('Error loading VM configuration:', error);
-                showNotification('Failed to load VM configuration', 'error');
+                console.error('加载虚拟机配置出错：', error);
+                showNotification('加载虚拟机配置失败', 'error');
             });
     }
 
@@ -3268,7 +3249,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('loadingOverlay').classList.add('d-none');
 
             if (data.success) {
-                showNotification('VM configuration updated successfully', 'success');
+                showNotification('虚拟机配置更新成功', 'success');
 
                 if (redirectAfterSave) {
                     // Redirect back to VM details after brief delay
@@ -3277,7 +3258,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }, 1000);
                 }
             } else {
-                showNotification(data.error || 'Failed to update VM configuration', 'error');
+                showNotification(data.error || '更新虚拟机配置失败', 'error');
             }
         })
         .catch(error => {
@@ -3285,13 +3266,13 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('loadingOverlay').classList.remove('d-flex');
             document.getElementById('loadingOverlay').classList.add('d-none');
             
-            console.error('Error updating VM configuration:', error);
-            showNotification('Network error while updating configuration', 'error');
+            console.error('更新虚拟机配置出错：', error);
+            showNotification('更新配置时网络出错', 'error');
         });
     }
     
 });
-</script>
+</script>script
 {% if vm_type != 'lxc' %}
 <script type="module">
 import * as ProxUtils from "{{ url_for('static', filename='js/utils.js') }}";
@@ -3451,8 +3432,8 @@ function cloudInit(node, vmid) {
     storageLabel(s) {
       const parts = [s.storage];
       if (s.type) parts.push(`(${s.type})`);
-      parts.push(s.shared ? '· shared' : '· local');
-      if (!s.snippets_enabled) parts.push('· snippets off');
+      parts.push(s.shared ? '· 共享' : '· 本地');
+      if (!s.snippets_enabled) parts.push('· 片段已关闭');
       return parts.join(' ');
     },
 
@@ -3493,11 +3474,11 @@ function cloudInit(node, vmid) {
           body: JSON.stringify(body),
         });
         this.rootPassword = '';
-        this.setupOk = true; this.setupMsg = r.message || 'SSH key installed.';
+        this.setupOk = true; this.setupMsg = r.message || 'SSH 密钥已安装。';
         this.showSetup = false;
         await this.loadSshStatus();
       } catch(e) {
-        this.setupOk = false; this.setupMsg = e.message || 'Setup failed';
+        this.setupOk = false; this.setupMsg = e.message || '设置失败';
       } finally { this.setupBusy = false; }
     },
 
@@ -3508,10 +3489,10 @@ function cloudInit(node, vmid) {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ node }),
         });
-        this.setupOk = true; this.setupMsg = r.message || 'Shared storage created.';
+        this.setupOk = true; this.setupMsg = r.message || '共享存储已创建。';
         await this.loadStorages(r.storage);
       } catch(e) {
-        this.setupOk = false; this.setupMsg = e.message || 'Could not create storage';
+        this.setupOk = false; this.setupMsg = e.message || '无法创建存储';
       } finally { this.setupBusy = false; }
     },
 
@@ -3523,7 +3504,7 @@ function cloudInit(node, vmid) {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ node, storage: this.selectedStorage.storage }),
         });
-        this.setupOk = true; this.setupMsg = r.message || 'Snippets enabled.';
+        this.setupOk = true; this.setupMsg = r.message || '片段存储已启用。';
         // Optimistically flip the flag so the alert clears immediately even if
         // the user stays on the tab, then reconcile with the server.
         const s = this.snippetStorages.find(x => x.storage === this.snippetStorage);
@@ -3531,7 +3512,7 @@ function cloudInit(node, vmid) {
         this.recomputeSelectedStorage();
         await this.loadStorages(this.snippetStorage);
       } catch(e) {
-        this.setupOk = false; this.setupMsg = e.message || 'Could not enable snippets';
+        this.setupOk = false; this.setupMsg = e.message || '无法启用片段存储';
       } finally { this.setupBusy = false; }
     },
 
@@ -3565,7 +3546,7 @@ function cloudInit(node, vmid) {
         .filter(k => k.trim())
         .map(k => `      - ${k.trim()}`)
         .join('\n');
-      this.snippetContent = fn(this.vmName, keyLines || '      # no SSH keys configured');
+      this.snippetContent = fn(this.vmName, keyLines || '      # 未配置 SSH 密钥');
       this.validateResult = null;
     },
 
@@ -3581,7 +3562,7 @@ function cloudInit(node, vmid) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ password: pw }),
         })).hash;
-      } catch(e) { this.snippetError = e.message || 'Could not hash password'; return; }
+      } catch(e) { this.snippetError = e.message || '无法对密码做哈希'; return; }
       let content = this.snippetContent || '';
       if (!content.trim()) content = '#cloud-config\n';
       if (!content.endsWith('\n')) content += '\n';
@@ -3591,7 +3572,7 @@ function cloudInit(node, vmid) {
       this.snippetContent = content;
       this.pwPassword = '';
       this.validateResult = null;
-      this.snippetSuccess = `Password block for '${user}' inserted — review, then Save & Attach.`;
+      this.snippetSuccess = `已插入用户 '${user}' 的密码配置块——请检查后点击“保存并挂载”。`;
     },
 
     async saveNative() {
@@ -3607,7 +3588,7 @@ function cloudInit(node, vmid) {
           }),
         });
         this.nativeSuccess = data.message;
-      } catch(e) { this.nativeError = e.message || 'Request failed'; }
+      } catch(e) { this.nativeError = e.message || '请求失败'; }
       finally { this.nativeBusy = false; }
     },
 
@@ -3638,12 +3619,12 @@ function cloudInit(node, vmid) {
         this.cicustom = data.cicustom;
         this.snippetSuccess = data.message;
         this.validateResult = null;
-      } catch(e) { this.snippetError = e.message || 'Request failed'; }
+      } catch(e) { this.snippetError = e.message || '请求失败'; }
       finally { this.snippetBusy = false; }
     },
 
     async detachSnippet() {
-      if (!confirm('Detach this snippet from the VM? The file will NOT be deleted.')) return;
+      if (!confirm('从虚拟机上卸载此片段？文件本身不会被删除。')) return;
       this.snippetBusy = true; this.snippetError = ''; this.snippetSuccess = '';
       try {
         const data = await ProxUtils.apiJson(`/api/vm/${node}/${vmid}/cloudinit/snippet`, {
@@ -3653,20 +3634,20 @@ function cloudInit(node, vmid) {
         });
         this.cicustom = '';
         this.snippetSuccess = data.message;
-      } catch(e) { this.snippetError = e.message || 'Request failed'; }
+      } catch(e) { this.snippetError = e.message || '请求失败'; }
       finally { this.snippetBusy = false; }
     },
 
     async regenerate() {
       if (!confirm('Regenerate the cloud-init drive from the current config?\n\n' +
-                   'Reboot the VM afterwards to apply. An already-provisioned guest may ' +
-                   'also need "cloud-init clean" run inside it before the reboot.')) return;
+                   '之后重启虚拟机以生效。已初始化过的客户机可能' +
+                   '还需在重启前于其内部执行 “cloud-init clean”。')) return;
       this.regenBusy = true;
       try {
         const data = await ProxUtils.apiJson(`/api/vm/${node}/${vmid}/cloudinit/regenerate`, { method: 'POST' });
-        ProxUtils.notify(data.message || 'Cloud-init drive regenerated.', 'success');
+        ProxUtils.notify(data.message || 'cloud-init 驱动器已重新生成。', 'success');
       } catch(e) {
-        ProxUtils.notify(e.message || 'Failed to regenerate cloud-init drive', 'error');
+        ProxUtils.notify(e.message || '重新生成 cloud-init 驱动器失败', 'error');
       } finally { this.regenBusy = false; }
     },
   };
@@ -3674,7 +3655,7 @@ function cloudInit(node, vmid) {
 
 (function(){ function reg(){ window.Alpine.data('cloudInit', cloudInit); }
   if(window.Alpine) reg(); else document.addEventListener('alpine:init', reg); })();
-</script>
+</script>script
 {% endif %}
 
 {% if vm_type == 'lxc' %}
@@ -3682,6 +3663,6 @@ function cloudInit(node, vmid) {
   import { lxcAdvanced } from "{{ url_for('static', filename='js/lxc-advanced.js') }}";
   (function(){ function reg(){ window.Alpine.data('lxcAdvanced', lxcAdvanced); }
     if(window.Alpine) reg(); else document.addEventListener('alpine:init', reg); })();
-</script>
+</script>script
 {% endif %}
 {% endblock %}

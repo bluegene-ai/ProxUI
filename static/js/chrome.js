@@ -42,7 +42,7 @@ export function globalJobs() {
         this.jobs = Array.isArray(data.items) ? data.items : [];
       } catch (e) {
         // Keep the last known list on transient failure; log for diagnostics.
-        console.error("Error loading activity:", e);
+        console.error("加载活动记录出错：", e);
       }
     },
 
@@ -100,8 +100,8 @@ export function clusterSwitcher(currentId, currentName, knownIds) {
     async switchTo(clusterId, clusterName = null, auto = false) {
       if (!auto) {
         this.switching = true;
-        this.switchingText = "Switching to cluster…";
-        this.currentName = clusterName || "Switching…";
+        this.switchingText = "正在切换集群…";
+        this.currentName = clusterName || "正在切换…";
       }
       try {
         const data = await ProxUtils.apiJson(`/api/switch-cluster/${clusterId}`, { method: "POST" });
@@ -110,15 +110,15 @@ export function clusterSwitcher(currentId, currentName, knownIds) {
             localStorage.setItem("selectedClusterId", clusterId);
             localStorage.setItem("selectedClusterName", data.cluster.name);
           } catch (_) {}
-          if (!auto) ProxUtils.notify(`Switched to ${data.cluster.name}`, "success");
+          if (!auto) ProxUtils.notify(`已切换到 ${data.cluster.name}`, "success");
           setTimeout(() => window.location.reload(), auto ? 200 : 800);
         } else {
           this.switching = false;
-          if (!auto) ProxUtils.notify(data.error || "Failed to switch cluster", "error");
+          if (!auto) ProxUtils.notify(data.error || "切换集群失败", "error");
         }
       } catch (e) {
         this.switching = false;
-        if (!auto) ProxUtils.notify("Network error while switching cluster", "error");
+        if (!auto) ProxUtils.notify("切换集群时网络出错", "error");
       }
     },
 

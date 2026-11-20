@@ -63,16 +63,16 @@ export function backupsApp(initial) {
     fmtBytes: ProxUtils.formatBytes,
     fmtDate: ProxUtils.formatDateTime,
 
-    /** Relative age ("3d ago"), which reads better than a timestamp for recency. */
+    /** Relative age ("3 天前"), which reads better than a timestamp for recency. */
     fmtAgo(unixSeconds) {
       if (!unixSeconds) return "Never";
       const mins = Math.floor((Date.now() / 1000 - unixSeconds) / 60);
-      if (mins < 1) return "just now";
-      if (mins < 60) return `${mins}m ago`;
+      if (mins < 1) return "刚刚";
+      if (mins < 60) return `${mins} 分钟前`;
       const hours = Math.floor(mins / 60);
-      if (hours < 24) return `${hours}h ago`;
+      if (hours < 24) return `${hours} 小时前`;
       const days = Math.floor(hours / 24);
-      if (days < 31) return `${days}d ago`;
+      if (days < 31) return `${days} 天前`;
       return ProxUtils.formatDateTime(unixSeconds).split(",")[0];
     },
 
@@ -94,7 +94,7 @@ export function backupsApp(initial) {
     sizeTitle(row) {
       const logical = row.kind === "backup" ? row.backup.size : row.guest.size;
       if (!logical) return "";
-      return `Logical size: ${ProxUtils.formatBytes(logical)}`;
+      return `逻辑大小：${ProxUtils.formatBytes(logical)}`;
     },
 
     /** Real guests only — a job cannot select an orphan, and templates are skipped. */
@@ -111,11 +111,11 @@ export function backupsApp(initial) {
       if (j.vmid) {
         const ids = String(j.vmid).split(",").filter(Boolean);
         return ids.length > 6
-          ? `${ids.slice(0, 6).join(", ")} +${ids.length - 6} more`
+          ? `${ids.slice(0, 6).join("、")} 等 +${ids.length - 6} 项`
           : ids.join(", ");
       }
-      if (j.pool) return `Pool: ${j.pool}`;
-      if (j.all) return j.exclude ? `All except ${j.exclude}` : "All guests";
+      if (j.pool) return `资源池：${j.pool}`;
+      if (j.all) return j.exclude ? `除 ${j.exclude} 之外全部` : "全部客户机";
       return "—";
     },
 
@@ -127,7 +127,7 @@ export function backupsApp(initial) {
           .map(([k, v]) => `${k.replace("keep-", "")}: ${v}`);
         if (parts.length) return parts.join(", ");
       }
-      if (j.maxfiles) return `max ${j.maxfiles}`;
+      if (j.maxfiles) return `最多 ${j.maxfiles}`;
       return "—";
     },
 
@@ -192,7 +192,7 @@ export function backupsApp(initial) {
         this.guests = r.guests || [];
         this.recomputeTotals();
       } catch (e) {
-        ProxUtils.notify("Failed to refresh backups: " + e.message, "error");
+        ProxUtils.notify("刷新备份失败：" + e.message, "error");
       } finally {
         this.loading = false;
       }
@@ -224,7 +224,7 @@ export function backupsApp(initial) {
         j.enabled = r.enabled;
         ProxUtils.notify(r.message, "success");
       } catch (e) {
-        ProxUtils.notify("Failed to update job: " + e.message, "error");
+        ProxUtils.notify("更新作业失败：" + e.message, "error");
       } finally {
         this.busyJob = null;
       }
@@ -241,7 +241,7 @@ export function backupsApp(initial) {
         ProxUtils.notify(r.message, "success");
         (r.failed || []).forEach(f => ProxUtils.notify(f, "error"));
       } catch (e) {
-        ProxUtils.notify("Failed to start job: " + e.message, "error");
+        ProxUtils.notify("启动作业失败：" + e.message, "error");
       } finally {
         this.busyJob = null;
       }
@@ -304,7 +304,7 @@ export function backupsApp(initial) {
             body: JSON.stringify(this.jobForm),
           });
         this._modal("jobModal").hide();
-        ProxUtils.notify(editing ? "Backup job updated." : "Backup job created.", "success");
+        ProxUtils.notify(editing ? "备份作业已更新。" : "备份作业已创建。", "success");
         await this.reload();
       } catch (e) {
         this.jobError = e.message;
@@ -321,9 +321,9 @@ export function backupsApp(initial) {
       try {
         await ProxUtils.apiJson(`/api/backups/job/${j.id}`, { method: "DELETE" });
         this.jobs = this.jobs.filter(x => x.id !== j.id);
-        ProxUtils.notify("Backup job deleted.", "success");
+        ProxUtils.notify("备份作业已删除。", "success");
       } catch (e) {
-        ProxUtils.notify("Failed to delete job: " + e.message, "error");
+        ProxUtils.notify("删除作业失败：" + e.message, "error");
       } finally {
         this.busyJob = null;
       }
@@ -466,7 +466,7 @@ export function backupsApp(initial) {
         });
         this._modal("restoreModal").hide();
         this.restoreTask = { upid: res.upid, node: res.node, vmid: res.vmid };
-        ProxUtils.notify(res.message + " Progress is shown on the Tasks page.", "success");
+        ProxUtils.notify(res.message + "进度显示在任务页面。", "success");
       } catch (e) {
         this.restoreError = e.message;
       } finally {
@@ -486,9 +486,9 @@ export function backupsApp(initial) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(this.form),
         });
-        ProxUtils.notify(r.message + " Progress is shown on the Tasks page.", "success");
+        ProxUtils.notify(r.message + "进度显示在任务页面。", "success");
       } catch (e) {
-        ProxUtils.notify("Backup failed to start: " + e.message, "error");
+        ProxUtils.notify("备份启动失败：" + e.message, "error");
       } finally {
         this.busyGuest = null;
       }
@@ -509,9 +509,9 @@ export function backupsApp(initial) {
         g.size = g.backups.reduce((a, x) => a + (x.size || 0), 0);
         g.latest = g.backups.reduce((a, x) => Math.max(a, x.ctime || 0), 0);
         this.recomputeTotals();
-        ProxUtils.notify("Backup deleted.", "success");
+        ProxUtils.notify("备份已删除。", "success");
       } catch (e) {
-        ProxUtils.notify("Delete failed: " + e.message, "error");
+        ProxUtils.notify("删除失败：" + e.message, "error");
       } finally {
         this.busyVolid = null;
       }

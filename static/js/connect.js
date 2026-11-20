@@ -62,7 +62,7 @@ export function connectPage() {
           this.testWarning = data.warning || '';
         } else {
           this.testSuccess = false;
-          this.testError = data.error || 'Connection failed';
+          this.testError = data.error || '连接失败';
         }
       } catch (e) {
         this.testSuccess = false;
@@ -73,7 +73,7 @@ export function connectPage() {
     },
 
     async switchCluster(id) {
-      if (!confirm('Switch to this cluster? This will reload the page.')) return;
+      if (!confirm('切换到该集群？页面将重新加载。')) return;
       try {
         const data = await window.ProxUtils.apiJson(`/api/switch-cluster/${id}`, {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -82,15 +82,15 @@ export function connectPage() {
           localStorage.setItem('selectedClusterId', id);
           window.location.href = '/';
         } else {
-          alert('Failed to switch cluster: ' + (data.error || 'Unknown error'));
+          alert('切换集群失败：' + (data.error || '未知错误'));
         }
-      } catch (e) { alert('Network error: ' + e.message); }
+      } catch (e) { alert('网络错误：' + e.message); }
     },
 
     async openEdit(id) {
       try {
         const data = await window.ProxUtils.apiJson(`/api/cluster/${id}`);
-        if (!data.success) { alert('Failed to load cluster: ' + (data.error || 'Unknown error')); return; }
+        if (!data.success) { alert('加载集群失败：' + (data.error || '未知错误')); return; }
         const cluster = data.cluster;
         const node = cluster.nodes[0] || {};
         this.editId = cluster.id;
@@ -104,7 +104,7 @@ export function connectPage() {
         this.editPassword = '';
         this.editTokenValue = '';
         this._editModal?.show();
-      } catch (e) { alert('Network error: ' + e.message); }
+      } catch (e) { alert('网络错误：' + e.message); }
     },
 
     async saveEdit() {
@@ -136,19 +136,19 @@ export function connectPage() {
           this._editModal?.hide();
           window.location.reload();
         } else {
-          alert('Failed to save cluster: ' + (data.error || 'Unknown error'));
+          alert('保存集群失败：' + (data.error || '未知错误'));
         }
-      } catch (e) { alert('Network error: ' + e.message); }
+      } catch (e) { alert('网络错误：' + e.message); }
       finally { this.saving = false; }
     },
 
     async deleteCluster(id, name) {
-      if (!confirm(`Are you sure you want to delete cluster "${name}"? This action cannot be undone.`)) return;
+      if (!confirm(`确定要删除集群“${name}”吗？此操作不可撤销。`)) return;
       try {
         const data = await window.ProxUtils.apiJson(`/api/delete-cluster/${id}`, { method: 'DELETE' });
-        if (data.success) { alert('Cluster deleted successfully'); window.location.reload(); }
-        else alert('Failed to delete cluster: ' + (data.error || 'Unknown error'));
-      } catch (e) { alert('Network error: ' + e.message); }
+        if (data.success) { alert('集群已成功删除'); window.location.reload(); }
+        else alert('删除集群失败：' + (data.error || '未知错误'));
+      } catch (e) { alert('网络错误：' + e.message); }
     },
   };
 }

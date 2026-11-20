@@ -123,7 +123,7 @@ export function isosManager() {
         await Promise.all(online.map(n => this.loadNodeData(n.name)));
       } catch (e) {
         this.loading = false;
-        window.ProxUtils.notify('Error loading nodes: ' + e.message, 'error');
+        window.ProxUtils.notify('加载节点出错：' + e.message, 'error');
       }
     },
 
@@ -165,13 +165,13 @@ export function isosManager() {
     isoStorage(volid) { return (volid || '').split(':')[0] || ''; },
     isoSizeGB(iso) { return iso.size ? (iso.size / 1073741824).toFixed(2) : 'Unknown'; },
     vmMemGB(vm) { return vm.maxmem ? (vm.maxmem / 1073741824).toFixed(1) : 'Unknown'; },
-    vmCpuInfo(vm) { return vm.cpus ? `${vm.cpus} cores` : 'Unknown'; },
+    vmCpuInfo(vm) { return vm.cpus ? `${vm.cpus} 个核心` : 'Unknown'; },
     lxcOsInfo(t) {
       const fn = (t.volid || '').split('/').pop();
       return fn.replace('.tar.xz', '').replace('.tar.gz', '').replace('.tar.zst', '');
     },
     lxcSizeGB(t) { return t.size ? (t.size / 1073741824).toFixed(2) : 'Unknown'; },
-    storageLabel(s) { return `${s.storage} (${s.type}) - ${s.available_gb || 0} GB free`; },
+    storageLabel(s) { return `${s.storage}（${s.type}）- 剩余 ${s.available_gb || 0} GB`; },
     bridgeLabel(net) { return net.iface + (net.comments && net.comments !== 'default' ? ' - ' + net.comments : ''); },
 
     // ── Delete actions ────────────────────────────────────────────────────────
@@ -181,18 +181,18 @@ export function isosManager() {
       if (!confirm(`Delete ISO "${filename}"?\n\nThis cannot be undone.`)) return;
       try {
         const r = await window.ProxUtils.apiJson(`/api/node/${nodeName}/iso/${encodeURIComponent(volid)}`, { method: 'DELETE' });
-        if (r.success) { window.ProxUtils.notify(`ISO "${filename}" deleted`, 'success'); await this.loadIsos(nodeName); }
-        else window.ProxUtils.notify(r.error || 'Failed to delete ISO', 'error');
-      } catch (e) { window.ProxUtils.notify('Error: ' + e.message, 'error'); }
+        if (r.success) { window.ProxUtils.notify(`ISO“${filename}”已删除`, 'success'); await this.loadIsos(nodeName); }
+        else window.ProxUtils.notify(r.error || '删除 ISO 失败', 'error');
+      } catch (e) { window.ProxUtils.notify('错误：' + e.message, 'error'); }
     },
 
     async deleteVmTemplate(nodeName, vmid, name) {
       if (!confirm(`Delete VM template "${name}" (ID: ${vmid})?\n\nThis permanently deletes the template and all disks.`)) return;
       try {
         const r = await window.ProxUtils.apiJson(`/api/node/${nodeName}/template/${vmid}`, { method: 'DELETE' });
-        if (r.success) { window.ProxUtils.notify(`Template "${name}" deleted`, 'success'); await this.loadTemplates(nodeName); }
-        else window.ProxUtils.notify(r.error || 'Failed to delete template', 'error');
-      } catch (e) { window.ProxUtils.notify('Error: ' + e.message, 'error'); }
+        if (r.success) { window.ProxUtils.notify(`模板“${name}”已删除`, 'success'); await this.loadTemplates(nodeName); }
+        else window.ProxUtils.notify(r.error || '删除模板失败', 'error');
+      } catch (e) { window.ProxUtils.notify('错误：' + e.message, 'error'); }
     },
 
     async deleteLxcTemplate(nodeName, volid) {
@@ -200,9 +200,9 @@ export function isosManager() {
       if (!confirm(`Delete container template "${filename}"?\n\nThis cannot be undone.`)) return;
       try {
         const r = await window.ProxUtils.apiJson(`/api/node/${nodeName}/lxc-template/${encodeURIComponent(volid)}`, { method: 'DELETE' });
-        if (r.success) { window.ProxUtils.notify(`Template "${filename}" deleted`, 'success'); await this.loadTemplates(nodeName); }
-        else window.ProxUtils.notify(r.error || 'Failed to delete template', 'error');
-      } catch (e) { window.ProxUtils.notify('Error: ' + e.message, 'error'); }
+        if (r.success) { window.ProxUtils.notify(`模板“${filename}”已删除`, 'success'); await this.loadTemplates(nodeName); }
+        else window.ProxUtils.notify(r.error || '删除模板失败', 'error');
+      } catch (e) { window.ProxUtils.notify('错误：' + e.message, 'error'); }
     },
 
     // ── Clipboard ─────────────────────────────────────────────────────────────
@@ -210,14 +210,14 @@ export function isosManager() {
     async copyToClipboard(text) {
       try {
         await navigator.clipboard.writeText(text);
-        window.ProxUtils.notify('Copied to clipboard!', 'success');
+        window.ProxUtils.notify('已复制到剪贴板！', 'success');
       } catch {
         const ta = document.createElement('textarea');
         ta.value = text;
         document.body.appendChild(ta);
         ta.select();
-        try { document.execCommand('copy'); window.ProxUtils.notify('Copied!', 'success'); }
-        catch { window.ProxUtils.notify('Failed to copy', 'error'); }
+        try { document.execCommand('copy'); window.ProxUtils.notify('已复制！', 'success'); }
+        catch { window.ProxUtils.notify('复制失败', 'error'); }
         document.body.removeChild(ta);
       }
     },
@@ -228,14 +228,14 @@ export function isosManager() {
       const vmid = this[which].vmid;
       const status = this[which].vmidStatus;
       if (!vmid || vmid < 100) { status.checking = false; status.msg = ''; status.valid = null; return; }
-      status.checking = true; status.msg = 'Checking...'; status.valid = null;
+      status.checking = true; status.msg = '检查中...'; status.valid = null;
       try {
         const data = await window.ProxUtils.apiJson(`/api/cluster/vmid/${vmid}/check`);
         status.checking = false;
         if (data.error) { status.msg = data.error; status.valid = null; }
-        else if (data.available) { status.msg = 'ID is available'; status.valid = true; }
+        else if (data.available) { status.msg = 'ID 可用'; status.valid = true; }
         else {
-          let msg = data.reason || 'ID in use';
+          let msg = data.reason || 'ID 已被占用';
           if (data.name) msg += ` (${data.name} on ${data.node})`;
           status.msg = msg; status.valid = false;
         }
@@ -252,10 +252,10 @@ export function isosManager() {
       this._modals.downloadModal.show();
       try {
         const storages = await window.ProxUtils.apiJson(`/api/node/${nodeName}/iso-storages`);
-        if (storages && storages.error) window.ProxUtils.notify('Error loading storages: ' + storages.error, 'error');
-        else if (!Array.isArray(storages) || storages.length === 0) window.ProxUtils.notify('No ISO-compatible storages found', 'warning');
+        if (storages && storages.error) window.ProxUtils.notify('加载存储出错：' + storages.error, 'error');
+        else if (!Array.isArray(storages) || storages.length === 0) window.ProxUtils.notify('未找到支持 ISO 的存储', 'warning');
         else this.dl.storages = storages;
-      } catch (e) { window.ProxUtils.notify('Error: ' + e.message, 'error'); }
+      } catch (e) { window.ProxUtils.notify('错误：' + e.message, 'error'); }
       this.dl.loadingStorages = false;
     },
 
@@ -267,8 +267,8 @@ export function isosManager() {
     },
 
     async startDownload() {
-      if (!this.dl.url) { window.ProxUtils.notify('Please enter a URL', 'warning'); return; }
-      if (!this.dl.storage) { window.ProxUtils.notify('Please select a storage', 'warning'); return; }
+      if (!this.dl.url) { window.ProxUtils.notify('请输入 URL', 'warning'); return; }
+      if (!this.dl.storage) { window.ProxUtils.notify('请选择存储', 'warning'); return; }
       this.dl.busy = true; this.dl.showProgress = false; this.dl.manualUrl = '';
       try {
         const result = await window.ProxUtils.apiJson(`/api/node/${this.dl.node}/download-iso`, {
@@ -284,11 +284,11 @@ export function isosManager() {
         } else if (result.manual_instructions) {
           this.dl.manualUrl = this.dl.url;
           this.dl.showProgress = true;
-          window.ProxUtils.notify('Manual download required', 'warning');
+          window.ProxUtils.notify('需手动下载', 'warning');
         } else {
-          window.ProxUtils.notify(result.error || 'Download failed', 'error');
+          window.ProxUtils.notify(result.error || '下载失败', 'error');
         }
-      } catch (e) { window.ProxUtils.notify('Network error: ' + e.message, 'error'); }
+      } catch (e) { window.ProxUtils.notify('网络错误：' + e.message, 'error'); }
       this.dl.busy = false;
     },
 
@@ -316,7 +316,7 @@ export function isosManager() {
       if (this.cloud.images.length > 0) return;
       try {
         this.cloud.images = await window.ProxUtils.apiJson('/api/cloud-images');
-      } catch (e) { window.ProxUtils.notify('Error loading cloud images: ' + e.message, 'error'); }
+      } catch (e) { window.ProxUtils.notify('加载云镜像出错：' + e.message, 'error'); }
     },
 
     onCloudImageChange() {
@@ -347,8 +347,8 @@ export function isosManager() {
     },
 
     async createCloudTemplate() {
-      if (!this.cloud.image) { window.ProxUtils.notify('Please select a cloud image', 'warning'); return; }
-      if (!this.cloud.storage) { window.ProxUtils.notify('Please select a storage', 'warning'); return; }
+      if (!this.cloud.image) { window.ProxUtils.notify('请选择云镜像', 'warning'); return; }
+      if (!this.cloud.storage) { window.ProxUtils.notify('请选择存储', 'warning'); return; }
       this.cloud.busy = true; this.cloud.showProgress = true; this.cloud.result = null;
       try {
         const result = await window.ProxUtils.apiJson(`/api/node/${this.cloud.node}/create-cloud-template`, {
@@ -374,16 +374,16 @@ export function isosManager() {
         this.cloud.showProgress = false;
         this.cloud.result = result;
         if (result.success) {
-          window.ProxUtils.notify('Template creation job started', 'success');
+          window.ProxUtils.notify('模板创建作业已启动', 'success');
           window.dispatchEvent(new CustomEvent('proxui:jobs-refresh'));
           setTimeout(() => this._modals.cloudTemplateModal.hide(), 3000);
         } else {
-          window.ProxUtils.notify('Failed: ' + (result.error || 'Unknown error'), 'error');
+          window.ProxUtils.notify('失败：' + (result.error || '未知错误'), 'error');
         }
       } catch (e) {
         this.cloud.showProgress = false;
         this.cloud.result = { success: false, error: e.message };
-        window.ProxUtils.notify('Network error: ' + e.message, 'error');
+        window.ProxUtils.notify('网络错误：' + e.message, 'error');
       }
       this.cloud.busy = false;
     },
@@ -407,23 +407,23 @@ export function isosManager() {
       try {
         const storages = await window.ProxUtils.apiJson(`/api/node/${nodeName}/lxc-storages`);
         if (storages && storages.error) {
-          window.ProxUtils.notify('Error loading storages: ' + storages.error, 'error');
+          window.ProxUtils.notify('加载存储出错：' + storages.error, 'error');
           this.lxc.storages = [];
         } else if (!Array.isArray(storages) || storages.length === 0) {
-          window.ProxUtils.notify('No compatible storages found', 'warning');
+          window.ProxUtils.notify('未找到兼容的存储', 'warning');
           this.lxc.storages = [];
         } else {
           this.lxc.storages = storages;
         }
-      } catch (e) { this.lxc.storages = []; window.ProxUtils.notify('Error: ' + e.message, 'error'); }
+      } catch (e) { this.lxc.storages = []; window.ProxUtils.notify('错误：' + e.message, 'error'); }
     },
 
     async loadAvailableLxcTemplates(nodeName) {
       try {
         const data = await window.ProxUtils.apiJson(`/api/node/${nodeName}/available-lxc-templates`);
-        if (data && data.error) window.ProxUtils.notify('Error loading templates: ' + data.error, 'error');
+        if (data && data.error) window.ProxUtils.notify('加载模板出错：' + data.error, 'error');
         else this.lxc.availableTemplates = (data && data.templates) ? data.templates : {};
-      } catch (e) { window.ProxUtils.notify('Error loading templates: ' + e.message, 'error'); }
+      } catch (e) { window.ProxUtils.notify('加载模板出错：' + e.message, 'error'); }
     },
 
     onLxcTemplateChange() {
@@ -444,20 +444,20 @@ export function isosManager() {
       const src = this.lxc.sourceTab;
       let requestData;
       if (src === 'proxmox') {
-        if (!this.lxc.lxcStorage) { window.ProxUtils.notify('Please select a storage', 'warning'); return; }
-        if (!this.lxc.selectedTemplate) { window.ProxUtils.notify('Please select a template', 'warning'); return; }
+        if (!this.lxc.lxcStorage) { window.ProxUtils.notify('请选择存储', 'warning'); return; }
+        if (!this.lxc.selectedTemplate) { window.ProxUtils.notify('请选择模板', 'warning'); return; }
         requestData = { storage: this.lxc.lxcStorage, source_type: 'proxmox', template: this.lxc.selectedTemplate };
       } else if (src === 'url') {
-        if (!this.lxc.lxcUrlStorage) { window.ProxUtils.notify('Please select a storage', 'warning'); return; }
-        if (!this.lxc.lxcUrl) { window.ProxUtils.notify('Please enter a URL', 'warning'); return; }
+        if (!this.lxc.lxcUrlStorage) { window.ProxUtils.notify('请选择存储', 'warning'); return; }
+        if (!this.lxc.lxcUrl) { window.ProxUtils.notify('请输入 URL', 'warning'); return; }
         requestData = { storage: this.lxc.lxcUrlStorage, source_type: 'url', url: this.lxc.lxcUrl, filename: this.lxc.lxcUrlFilename || undefined };
       } else {
-        if (!this.lxc.lxcOciStorage) { window.ProxUtils.notify('Please select a storage', 'warning'); return; }
-        if (!this.lxc.lxcOciImage) { window.ProxUtils.notify('Please enter an OCI image reference', 'warning'); return; }
+        if (!this.lxc.lxcOciStorage) { window.ProxUtils.notify('请选择存储', 'warning'); return; }
+        if (!this.lxc.lxcOciImage) { window.ProxUtils.notify('请输入 OCI 镜像引用', 'warning'); return; }
         requestData = { storage: this.lxc.lxcOciStorage, source_type: 'oci', image: this.lxc.lxcOciImage };
       }
       this.lxc.busy = true; this.lxc.showProgress = true;
-      this.lxc.progressMsg = 'Starting download...'; this.lxc.result = null;
+      this.lxc.progressMsg = '正在开始下载...'; this.lxc.result = null;
       try {
         const result = await window.ProxUtils.apiJson(`/api/node/${this.lxc.node}/download-lxc-template`, {
           method: 'POST',
@@ -472,12 +472,12 @@ export function isosManager() {
           setTimeout(() => this._modals.lxcTemplateModal.hide(), 3000);
           setTimeout(() => this.loadTemplates(this.lxc.node), 5000);
         } else if (!result.manual_command) {
-          window.ProxUtils.notify(result.error || 'Import failed', 'error');
+          window.ProxUtils.notify(result.error || '导入失败', 'error');
         }
       } catch (e) {
         this.lxc.showProgress = false;
         this.lxc.result = { success: false, error: e.message };
-        window.ProxUtils.notify('Network error: ' + e.message, 'error');
+        window.ProxUtils.notify('网络错误：' + e.message, 'error');
       }
       this.lxc.busy = false;
     },
@@ -521,8 +521,8 @@ export function isosManager() {
 
     async createContainer() {
       const hostname = (this.ct.hostname || '').trim();
-      if (!hostname) { window.ProxUtils.notify('Please enter a hostname', 'warning'); return; }
-      if (!this.ct.storage) { window.ProxUtils.notify('Please select a storage', 'warning'); return; }
+      if (!hostname) { window.ProxUtils.notify('请输入主机名', 'warning'); return; }
+      if (!this.ct.storage) { window.ProxUtils.notify('请选择存储', 'warning'); return; }
       const bridge = this.ct.bridge || 'vmbr0';
       let net0;
       if (this.ct.ipConfig === 'dhcp') {
@@ -553,15 +553,15 @@ export function isosManager() {
         this.ct.showProgress = false;
         this.ct.result = result;
         if (result.success) {
-          window.ProxUtils.notify(`Container ${result.vmid} created successfully!`, 'success');
+          window.ProxUtils.notify(`容器 ${result.vmid} 创建成功！`, 'success');
           setTimeout(() => this._modals.createContainerModal.hide(), 3000);
         } else {
-          window.ProxUtils.notify(result.error || 'Failed to create container', 'error');
+          window.ProxUtils.notify(result.error || '创建容器失败', 'error');
         }
       } catch (e) {
         this.ct.showProgress = false;
         this.ct.result = { success: false, error: e.message };
-        window.ProxUtils.notify('Network error: ' + e.message, 'error');
+        window.ProxUtils.notify('网络错误：' + e.message, 'error');
       }
       this.ct.busy = false;
     },

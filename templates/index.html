@@ -5,8 +5,8 @@
 {% block content %}
 <div class="d-flex align-items-center flex-wrap gap-3 mb-4">
     <div class="me-auto">
-        <div class="sec-title">Cluster overview</div>
-        <div class="sec-sub">Live health and utilization across the current cluster</div>
+        <div class="sec-title">集群概览</div>
+        <div class="sec-sub">当前集群的实时健康状态与资源利用率</div>
     </div>
 </div>
 
@@ -15,7 +15,7 @@
     <div class="col-6 col-md-4 col-xl-2">
         <div class="stat">
             <div class="ico blue"><i class="bi bi-pc-display"></i></div>
-            <div><div class="val">{{ total_vms }}</div><div class="lbl">Virtual Machines</div></div>
+            <div><div class="val">{{ total_vms }}</div><div class="lbl">虚拟机</div></div>
         </div>
     </div>
     <div class="col-6 col-md-4 col-xl-2">
@@ -48,7 +48,7 @@
             <div>
                 <div class="val">{{ total_nodes }}</div>
                 <div class="lbl">Nodes</div>
-                <div class="trend" style="color:var(--ok)"><i class="bi bi-circle-fill" style="font-size:6px"></i> {{ online_nodes }} online</div>
+                <div class="trend" style="color:var(--ok)"><i class="bi bi-circle-fill" style="font-size:6px"></i> {{ online_nodes }} 个在线</div>
             </div>
         </div>
     </div>
@@ -56,25 +56,25 @@
 
 <!-- Node health -->
 <div class="d-flex align-items-center gap-2 mb-2">
-    <div class="sec-title" style="font-size:14px">Node health</div>
+    <div class="sec-title" style="font-size:14px">节点健康</div>
 </div>
 
 <div class="card-x mb-4" x-data="dashboardNodes()">
     <div class="cx-head d-flex justify-content-between align-items-center">
-        <span class="cx-title"><i class="bi bi-hdd-rack"></i> Node Status</span>
+        <span class="cx-title"><i class="bi bi-hdd-rack"></i> 节点状态</span>
         <button class="icon-btn" style="width:32px;height:32px;font-size:15px" @click="refresh()" :disabled="loading" title="Refresh">
             <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i>
         </button>
     </div>
     <div class="cx-body">
         <template x-if="loading && nodes.length === 0">
-            <div class="text-center py-3"><div class="spinner-border spinner-border-sm" role="status"></div> Loading node metrics...</div>
+            <div class="text-center py-3"><div class="spinner-border spinner-border-sm" role="status"></div> 正在加载节点指标...</div>
         </template>
         <template x-if="error">
-            <div class="text-danger p-3"><i class="bi bi-exclamation-triangle"></i> Error: <span x-text="error"></span></div>
+            <div class="text-danger p-3"><i class="bi bi-exclamation-triangle"></i> 错误： <span x-text="error"></span></div>
         </template>
         <template x-if="!loading && !error && nodes.length === 0">
-            <div class="empty-hint">No nodes available</div>
+            <div class="empty-hint">无可用节点</div>
         </template>
         <div class="node-strip" x-show="nodes.length > 0">
             <template x-for="node in nodes" :key="node.name">
@@ -102,7 +102,7 @@
 <div class="row g-3">
     <div class="col-12 col-xl-4">
         <div class="card-x h-100">
-            <div class="cx-head"><i class="bi bi-cpu" style="color:var(--accent)"></i><span class="cx-title">Top CPU Usage</span></div>
+            <div class="cx-head"><i class="bi bi-cpu" style="color:var(--accent)"></i><span class="cx-title">CPU 使用率排行</span></div>
             <div class="cx-body tight">
                 {% if top_cpu %}
                 <table class="tbl">
@@ -126,7 +126,7 @@
                     </tbody>
                 </table>
                 {% else %}
-                <div class="empty-hint">No running VMs</div>
+                <div class="empty-hint">没有运行中的虚拟机</div>
                 {% endif %}
             </div>
         </div>
@@ -134,7 +134,7 @@
 
     <div class="col-12 col-xl-4">
         <div class="card-x h-100">
-            <div class="cx-head"><i class="bi bi-memory" style="color:var(--accent)"></i><span class="cx-title">Top Memory Usage</span></div>
+            <div class="cx-head"><i class="bi bi-memory" style="color:var(--accent)"></i><span class="cx-title">内存使用排行</span></div>
             <div class="cx-body tight">
                 {% if top_memory %}
                 <table class="tbl">
@@ -158,7 +158,7 @@
                     </tbody>
                 </table>
                 {% else %}
-                <div class="empty-hint">No running VMs</div>
+                <div class="empty-hint">没有运行中的虚拟机</div>
                 {% endif %}
             </div>
         </div>
@@ -167,21 +167,21 @@
     <div class="col-12 col-xl-4">
         <div class="card-x h-100" x-data="dashboardTasks()">
             <div class="cx-head">
-                <i class="bi bi-clock-history" style="color:var(--accent)"></i><span class="cx-title">Recent Tasks</span>
+                <i class="bi bi-clock-history" style="color:var(--accent)"></i><span class="cx-title">最近任务</span>
                 <button class="icon-btn ms-auto" style="width:28px;height:28px;font-size:13px" @click="refresh()" :disabled="loading" title="Refresh">
                     <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i>
                 </button>
-                <a href="{{ url_for('tasks') }}" style="font-size:12px;font-weight:600">View all</a>
+                <a href="{{ url_for('tasks') }}" style="font-size:12px;font-weight:600">查看全部</a>
             </div>
             <div class="cx-body tight" style="max-height:350px;overflow-y:auto">
                 <template x-if="loading && tasks.length === 0">
-                    <div class="text-center py-4"><div class="spinner-border spinner-border-sm" role="status"></div> Loading recent tasks...</div>
+                    <div class="text-center py-4"><div class="spinner-border spinner-border-sm" role="status"></div> 正在加载最近任务...</div>
                 </template>
                 <template x-if="error">
-                    <div class="text-danger p-3"><i class="bi bi-exclamation-triangle"></i> Error loading tasks</div>
+                    <div class="text-danger p-3"><i class="bi bi-exclamation-triangle"></i> 加载任务出错</div>
                 </template>
                 <template x-if="!loading && !error && tasks.length === 0">
-                    <div class="empty-hint"><i class="bi bi-info-circle"></i> No recent tasks</div>
+                    <div class="empty-hint"><i class="bi bi-info-circle"></i> 最近没有任务</div>
                 </template>
                 <table class="tbl" x-show="tasks.length > 0">
                     <tbody>
@@ -197,7 +197,7 @@
                                     <div class="text-faint" style="font-size:11px">
                                         <span x-text="task.source === 'proxui' ? 'ProxUI' : (task.node || 'Unknown')"></span>
                                         <template x-if="vmUrl(task)">
-                                            <span> · VM/CT <a :href="vmUrl(task)" x-text="task.vmid"></a></span>
+                                            <span> · 虚拟机/容器 <a :href="vmUrl(task)" x-text="task.vmid"></a></span>
                                         </template>
                                         <template x-if="!task.vmid && task.target">
                                             <span> · <span x-text="task.target"></span></span>
@@ -279,5 +279,5 @@
   }
   if (window.Alpine) register();
   else document.addEventListener('alpine:init', register);
-</script>
+</script>script
 {% endblock %}

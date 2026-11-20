@@ -5,8 +5,8 @@
 {% block content %}
 <div class="d-flex align-items-center flex-wrap gap-3 mb-3">
     <div class="me-auto">
-        <div class="sec-title">Virtual Machines &amp; Containers</div>
-        <div class="sec-sub">{{ resources|length }} guests</div>
+        <div class="sec-title">虚拟机与容器</div>
+        <div class="sec-sub">{{ resources|length }} 个客户机</div>
     </div>
     <a href="{{ url_for('create_vm') }}" class="btn-x primary"><i class="bi bi-plus-lg"></i> Create</a>
 </div>
@@ -16,7 +16,7 @@
         <div class="filter-bar w-100">
             <div class="search-inp">
                 <i class="bi bi-search"></i>
-                <input type="text" class="inp" placeholder="Search name, VMID, or node…" autofocus
+                <input type="text" class="inp" placeholder="搜索名称、VMID 或节点…" autofocus
                        x-model="search" @keydown.escape="search = ''">
             </div>
             <span class="text-faint ms-auto" style="font-size:12px" x-text="'Filtering ' + {{ resources|length }} + ' guests'"></span>
@@ -63,7 +63,7 @@
                     </td>
                     <td>
                         <a href="{{ url_for('vm_detail', node=vm.node, vmid=vm.vmid) }}" class="nm">{{ vm.name }}</a>
-                        <div class="text-faint mono" style="font-size:11px">VMID: {{ vm.vmid }}</div>
+                        <div class="text-faint mono" style="font-size:11px">VMID：{{ vm.vmid }}</div>
                     </td>
                     <td>
                         {% if vm.get('template') == 1 %}
@@ -78,7 +78,7 @@
                             <div class="ubar"><i class="{{ 'crit' if vm.cpu_percent > 80 else 'hot' if vm.cpu_percent > 60 else 'okc' }}" style="width:{{ vm.cpu_percent }}%"></i></div>
                             <span class="pct">{{ "%.1f"|format(vm.cpu_percent) }}%</span>
                         </div>
-                        <div class="text-faint" style="font-size:10.5px">{{ vm.maxcpu }} vCPU</div>
+                        <div class="text-faint" style="font-size:10.5px">{{ vm.maxcpu }} 个 vCPU</div>
                     </td>
                     <td>
                         <div class="usage-cell">
@@ -113,7 +113,7 @@
             </tbody>
         </table>
         {% if not resources %}
-        <div class="empty-hint"><i class="bi bi-inbox" style="font-size:26px"></i><div class="mt-2">No guests found.</div></div>
+        <div class="empty-hint"><i class="bi bi-inbox" style="font-size:26px"></i><div class="mt-2">未找到客户机。</div></div>
         {% endif %}
     </div>
 </div>

@@ -6,8 +6,8 @@
 <div x-data="tasksPage()">
     <div class="d-flex align-items-center flex-wrap gap-3 mb-3">
         <div class="me-auto">
-            <div class="sec-title">Recent Tasks</div>
-            <div class="sec-sub">Proxmox tasks and ProxUI jobs across the cluster</div>
+            <div class="sec-title">最近任务</div>
+            <div class="sec-sub">集群内的 Proxmox 任务与 ProxUI 作业</div>
         </div>
         <button class="btn-x" @click="refresh()" :disabled="loading">
             <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i> Refresh
@@ -23,19 +23,19 @@
                 <button :class="{on:filter==='error'}" @click="filter='error'">Failed</button>
             </div>
             <div class="seg">
-                <button :class="{on:source==='all'}" @click="source='all'">All sources</button>
+                <button :class="{on:source==='all'}" @click="source='all'">全部来源</button>
                 <button :class="{on:source==='pve'}" @click="source='pve'">Proxmox</button>
                 <button :class="{on:source==='proxui'}" @click="source='proxui'">ProxUI</button>
             </div>
             <div class="seg ms-auto">
-                <button :class="{on:limit===50}" @click="limit=50; load()">Last 50</button>
-                <button :class="{on:limit===100}" @click="limit=100; load()">Last 100</button>
-                <button :class="{on:limit===200}" @click="limit=200; load()">Last 200</button>
+                <button :class="{on:limit===50}" @click="limit=50; load()">最近 50 条</button>
+                <button :class="{on:limit===100}" @click="limit=100; load()">最近 100 条</button>
+                <button :class="{on:limit===200}" @click="limit=200; load()">最近 200 条</button>
             </div>
         </div>
         <div class="cx-body flush tbl-scroll">
             <template x-if="loading && allTasks.length === 0">
-                <div class="text-center p-4"><div class="spinner-border spinner-border-sm" role="status"></div> Loading tasks...</div>
+                <div class="text-center p-4"><div class="spinner-border spinner-border-sm" role="status"></div> 正在加载任务...</div>
             </template>
             <template x-if="error">
                 <div class="text-danger p-3"><i class="bi bi-exclamation-triangle"></i> <span x-text="error"></span></div>
@@ -47,7 +47,7 @@
                 </div>
             </template>
             <table class="tbl" x-show="filteredTasks.length > 0">
-                <thead><tr><th>Status</th><th>Task</th><th>Node</th><th>User</th><th>Start time</th><th class="num">Duration</th></tr></thead>
+                <thead><tr><th>Status</th><th>Task</th><th>Node</th><th>User</th><th>开始时间</th><th class="num">Duration</th></tr></thead>
                 <tbody>
                     <template x-for="task in filteredTasks" :key="task.id">
                         <tr>
@@ -132,7 +132,7 @@
           this.allTasks = Array.isArray(data.items) ? data.items : [];
           this.error = data.error || '';
         } catch (e) {
-          this.error = 'Error loading tasks: ' + e.message;
+          this.error = '加载任务出错：' + e.message;
         } finally {
           this.loading = false;
         }
@@ -154,5 +154,5 @@
   }
   if (window.Alpine) register();
   else document.addEventListener('alpine:init', register);
-</script>
+</script>script
 {% endblock %}

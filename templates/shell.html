@@ -7,7 +7,7 @@
     <title>Shell - {{ target_name }} | Proxmox Manager</title>
     <script>
         window.PROXUI_CSRF_TOKEN = "{{ csrf_token() }}";
-    </script>
+    </script>script
     <link href="{{ url_for('static', filename='vendor/bootstrap@5.1.3/dist/css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-icons@1.7.2/font/bootstrap-icons.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='vendor/@xterm/xterm@5.5.0/css/xterm.css') }}">
@@ -133,7 +133,7 @@
                 display: none;
             }
         }
-    </style>
+    </style>style
 </head>
 <body>
     <div id="shell-container" x-data="shellToolbar()">
@@ -167,14 +167,14 @@
             <div id="terminal"></div>
             <div id="shell-overlay" x-cloak x-show="overlayVisible">
                 <div class="spinner-border text-primary" role="status" x-cloak x-show="state === 'connecting'">
-                    <span class="visually-hidden">Loading...</span>
+                    <span class="visually-hidden">加载中...</span>
                 </div>
                 <div class="msg" x-text="overlayText"></div>
                 <button class="btn btn-primary" x-cloak x-show="canRetry" @click="doReconnect()">
                     <i class="bi bi-arrow-clockwise"></i> Retry
                 </button>
                 <a class="btn btn-primary" x-cloak x-show="canOpenConsole" :href="consoleUrl">
-                    <i class="bi bi-display"></i> Open graphical console
+                    <i class="bi bi-display"></i> 打开图形控制台
                 </a>
             </div>
         </div>
@@ -190,7 +190,7 @@
                 const el = document.createElement('script');
                 el.src = src;
                 el.onload = resolve;
-                el.onerror = () => reject(new Error('Failed to load ' + src));
+                el.onerror = () => reject(new Error('加载失败' + src));
                 document.head.appendChild(el);
             });
         }
@@ -251,7 +251,7 @@
             });
             const data = await response.json().catch(() => ({}));
             if (!response.ok || !data.success) {
-                const error = new Error(data.error || 'Failed to open a terminal session');
+                const error = new Error(data.error || '打开终端会话失败');
                 // No serial port, or token auth: retrying cannot help, but the
                 // graphical console can still get the user in.
                 error.offerConsole = !!(data.no_serial || data.token_auth);
@@ -303,7 +303,7 @@
 
             disconnect();
             closedByUs = false;
-            setState('connecting', 'Connecting...', 'Opening terminal session...', false);
+            setState('connecting', '连接中...', '正在打开终端会话...', false);
 
             let session;
             try {
@@ -345,7 +345,7 @@
                 pingTimer = null;
                 if (ws === socket && !closedByUs) {
                     setState('disconnected', 'Disconnected',
-                        'The terminal session ended. Reconnect to start a new one.', true);
+                        '终端会话已结束。重新连接可开启新会话。', true);
                 }
             };
         }
@@ -355,8 +355,8 @@
         function register() {
             window.Alpine.data('shellToolbar', () => ({
                 state: 'connecting',
-                statusText: 'Connecting...',
-                overlayText: 'Opening terminal session...',
+                statusText: '连接中...',
+                overlayText: '正在打开终端会话...',
                 overlayVisible: true,
                 canOpenConsole: false,
                 consoleUrl,
@@ -389,7 +389,7 @@
                     try {
                         text = await navigator.clipboard.readText();
                     } catch {
-                        text = prompt('Text to paste into the terminal:') || '';
+                        text = prompt('要粘贴到终端的文本：') || '';
                     }
                     if (text) sendInput(text);
                 },
@@ -400,12 +400,12 @@
             }));
         }
         if (window.Alpine) register(); else document.addEventListener('alpine:init', register);
-    </script>
+    </script>script
 
     <!-- Loaded AFTER the module above: deferred scripts run in document order,
          so `shellToolbar` is registered by the time Alpine resolves x-data. -->
-    <script defer src="{{ url_for('static', filename='js/alpine.min.js') }}"></script>
+    <script defer src="{{ url_for('static', filename='js/alpine.min.js') }}"></script>script
 
-    <script src="{{ url_for('static', filename='vendor/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js') }}"></script>script
 </body>
 </html>

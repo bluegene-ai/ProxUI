@@ -6,20 +6,20 @@ import * as ProxUtils from "./utils.js";
 const CREATABLE_TYPES = ["nfs", "cifs", "dir", "pbs", "zfspool", "lvm", "lvmthin", "rbd", "cephfs"];
 
 const TYPE_LABELS = {
-  nfs: "NFS share", cifs: "SMB/CIFS share", dir: "Directory",
-  pbs: "Proxmox Backup Server", zfspool: "ZFS pool",
-  lvm: "LVM volume group", lvmthin: "LVM-thin pool",
+  nfs: "NFS 共享", cifs: "SMB/CIFS 共享", dir: "Directory",
+  pbs: "Proxmox Backup Server", zfspool: "ZFS 池",
+  lvm: "LVM 卷组", lvmthin: "LVM-thin 池",
   rbd: "Ceph RBD", cephfs: "CephFS",
 };
 
 const CONTENT_LABELS = {
-  images: "Disk images", rootdir: "Container volumes", vztmpl: "Templates",
-  iso: "ISO images", backup: "Backups", snippets: "Snippets",
+  images: "磁盘镜像", rootdir: "容器卷", vztmpl: "Templates",
+  iso: "ISO 镜像", backup: "Backups", snippets: "Snippets",
 };
 const CONTENT_CHOICES = Object.keys(CONTENT_LABELS);
 
 // What PVE actually allows per type -- offering the rest just invites a
-// "content type not supported" rejection from the API.
+// "不支持的内容类型" rejection from the API.
 const TYPE_CONTENT = {
   nfs: ["images", "rootdir", "vztmpl", "iso", "backup", "snippets"],
   cifs: ["images", "rootdir", "vztmpl", "iso", "backup", "snippets"],
@@ -51,7 +51,7 @@ const TYPE_DEFAULT_SHARED = {
   dir: false, zfspool: false, lvm: false, lvmthin: false,
 };
 
-// One-line "where does this storage live" summary, shown read-only in the edit
+// One-line "此存储位于何处" summary, shown read-only in the edit
 // form because none of these have a PUT parameter.
 const LOCATION_OF = {
   nfs: s => `${s.server}:${s.export || ""}`,
@@ -175,7 +175,7 @@ export function storagesApp(initialStorages, nodeNames) {
       try {
         this.storages = await ProxUtils.apiJson("/api/storages");
       } catch (e) {
-        ProxUtils.notify("Could not refresh storages: " + e.message, "error");
+        ProxUtils.notify("无法刷新存储：" + e.message, "error");
       } finally {
         this.loading = false;
       }
@@ -203,7 +203,7 @@ export function storagesApp(initialStorages, nodeNames) {
       try {
         s = await ProxUtils.apiJson(`/api/storages/${row.storage}`);
       } catch (e) {
-        ProxUtils.notify("Could not load storage config: " + e.message, "error");
+        ProxUtils.notify("无法加载存储配置：" + e.message, "error");
         return;
       }
       const content = (s.content || "").split(",").filter(Boolean);

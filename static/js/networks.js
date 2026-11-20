@@ -98,14 +98,14 @@ export function networksApp(initialNodes) {
     /** Why the delete button is off, since a disabled button explains nothing. */
     deleteHint(node, i) {
       if (i.iface === node.management) {
-        return `${i.iface} carries the address ${node.node} is reached on — ` +
-          "deleting it would cut the node off";
+        return `${i.iface} 承载了访问 ${node.node} 所用的地址 — ` +
+          "删除它会导致节点失联";
       }
       if (!CREATABLE.includes(i.type)) {
-        return `${i.type} interfaces come from the hardware, not from ` +
-          "/etc/network/interfaces — there is nothing to delete";
+        return `${i.type} 接口来自硬件，并非来自` +
+          "/etc/network/interfaces —— 没有可删除的内容";
       }
-      return `Delete ${i.iface}`;
+      return `删除 ${i.iface}`;
     },
 
     address(i) {
@@ -123,7 +123,7 @@ export function networksApp(initialNodes) {
         const r = await ProxUtils.apiJson("/api/networks");
         this.nodes = r.nodes || [];
       } catch (e) {
-        ProxUtils.notify("Could not refresh networks: " + e.message, "error");
+        ProxUtils.notify("无法刷新网络：" + e.message, "error");
       } finally {
         this.loading = false;
       }
@@ -286,8 +286,8 @@ export function networksApp(initialNodes) {
 
     async remove(node, i) {
       if (!confirm(`Delete interface ${i.iface} on ${node.node}?\n\n` +
-        "The interface is removed from the pending configuration; it stays up " +
-        "until you apply the changes.")) return;
+        "该接口已从待生效配置中移除；但它仍保持启用" +
+        "直到你应用这些更改。")) return;
       this.busy = `${node.node}/${i.iface}`;
       try {
         const r = await ProxUtils.apiJson(`/api/network/${node.node}/${i.iface}`, { method: "DELETE" });
@@ -336,14 +336,14 @@ export function networksApp(initialNodes) {
         ProxUtils.notify(r.message, "success");
         await this.reload();
       } catch (e) {
-        ProxUtils.notify("Apply failed: " + e.message, "error");
+        ProxUtils.notify("应用失败：" + e.message, "error");
       } finally {
         this.busy = null;
       }
     },
 
     async revert(node) {
-      if (!confirm(`Discard all pending network changes on ${node.node}?`)) return;
+      if (!confirm(`放弃 ${node.node} 上所有待应用的网络变更？`)) return;
       this._modal("diffModal").hide();
       this.busy = node.node;
       try {
@@ -351,7 +351,7 @@ export function networksApp(initialNodes) {
         ProxUtils.notify(r.message, "success");
         await this.reload();
       } catch (e) {
-        ProxUtils.notify("Revert failed: " + e.message, "error");
+        ProxUtils.notify("回退失败：" + e.message, "error");
       } finally {
         this.busy = null;
       }

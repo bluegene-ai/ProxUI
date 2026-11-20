@@ -25,7 +25,7 @@
         <div class="alert alert-danger"><i class="bi bi-exclamation-triangle"></i> <span x-text="error"></span></div>
     </template>
     <template x-if="loading && !item && !error">
-        <div class="text-center p-4"><div class="spinner-border spinner-border-sm" role="status"></div> Loading...</div>
+        <div class="text-center p-4"><div class="spinner-border spinner-border-sm" role="status"></div> 加载中...</div>
     </template>
 
     <template x-if="item">
@@ -55,7 +55,7 @@
                             <div class="mono" x-text="item.user"></div>
                         </div>
                         <div class="col-12 col-md-9" x-show="item.source === 'pve'">
-                            <div class="text-faint">Task ID</div>
+                            <div class="text-faint">任务 ID</div>
                             <div class="mono text-break" style="font-size:11px" x-text="item.id"></div>
                         </div>
                     </div>
@@ -71,7 +71,7 @@
                         </div>
                     </template>
                     <template x-if="item.error">
-                        <div class="alert alert-danger mt-3 mb-0"><strong>Error:</strong> <span x-text="item.error"></span></div>
+                        <div class="alert alert-danger mt-3 mb-0"><strong>错误：</strong> <span x-text="item.error"></span></div>
                     </template>
                 </div>
             </div>
@@ -80,8 +80,8 @@
             <template x-if="item.source === 'pve'">
                 <div class="card-x">
                     <div class="cx-head">
-                        <i class="bi bi-terminal" style="color:var(--accent)"></i><span class="cx-title">Task log</span>
-                        <small class="text-faint ms-auto" x-show="item.log_truncated">Showing the last 20000 lines</small>
+                        <i class="bi bi-terminal" style="color:var(--accent)"></i><span class="cx-title">任务日志</span>
+                        <small class="text-faint ms-auto" x-show="item.log_truncated">显示最近 20000 行</small>
                     </div>
                     <pre class="task-log" x-ref="log" x-text="(item.log || []).join('\n') || 'No output'"></pre>
                 </div>
@@ -101,12 +101,12 @@
                 <div class="card-x">
                     <div class="cx-head">
                         <i class="bi bi-diagram-3" style="color:var(--accent)"></i>
-                        <span class="cx-title">Proxmox tasks</span>
+                        <span class="cx-title">Proxmox 任务</span>
                         <small class="text-faint" x-text="'(' + item.children.length + ')'"></small>
                     </div>
                     <div class="cx-body flush">
                         <template x-if="!item.children.length">
-                            <div class="empty-hint"><i class="bi bi-info-circle"></i> This job has not started any Proxmox tasks</div>
+                            <div class="empty-hint"><i class="bi bi-info-circle"></i> 此作业尚未启动任何 Proxmox 任务</div>
                         </template>
                         <template x-for="child in item.children" :key="child.id">
                             <div class="border-bottom">
@@ -119,7 +119,7 @@
                                     <span class="nm" x-text="title(child)"></span>
                                     <span class="text-faint" style="font-size:12px" x-text="child.node"></span>
                                     <span class="text-faint mono ms-auto" style="font-size:12px" x-text="duration(child)"></span>
-                                    <a :href="detailUrl(child)" title="Open task"><i class="bi bi-box-arrow-up-right"></i></a>
+                                    <a :href="detailUrl(child)" title="打开任务"><i class="bi bi-box-arrow-up-right"></i></a>
                                 </div>
                                 <template x-if="openLogs[child.id]">
                                     <pre class="task-log mx-3 mb-2" x-text="childLog(child.id)"></pre>
@@ -199,18 +199,18 @@
       childLog(id) {
         const entry = this.openLogs[id];
         if (!entry) return '';
-        if (entry.loading) return 'Loading...';
-        if (entry.error) return 'Error: ' + entry.error;
-        return entry.lines.join('\n') || 'No output';
+        if (entry.loading) return '加载中...';
+        if (entry.error) return '错误：' + entry.error;
+        return entry.lines.join('\n') || '无输出';
       },
 
       async deleteJob() {
-        if (!confirm('Delete this job from the list?')) return;
+        if (!confirm('从列表中删除此作业？')) return;
         try {
           await ProxUtils.apiJson(`/api/jobs/${encodeURIComponent(this.itemId)}`, { method: 'DELETE' });
           window.location.href = '{{ url_for("tasks") }}';
         } catch (e) {
-          ProxUtils.notify('Error deleting job: ' + e.message, 'error');
+          ProxUtils.notify('删除作业出错：' + e.message, 'error');
         }
       },
 
@@ -232,5 +232,5 @@
   }
   if (window.Alpine) register();
   else document.addEventListener('alpine:init', register);
-</script>
+</script>script
 {% endblock %}

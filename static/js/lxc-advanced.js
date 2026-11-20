@@ -1,18 +1,18 @@
 // static/js/lxc-advanced.js — Alpine component for LXC Advanced / Passthrough
 
 const LXC_FLAGS = [
-  { key: 'nesting', label: 'Nesting', desc: 'Docker-in-LXC, systemd, nested LXC' },
-  { key: 'keyctl',  label: 'Keyctl',  desc: 'Key retention service (needed by some apps)' },
-  { key: 'fuse',    label: 'FUSE',    desc: 'User-space filesystem support' },
-  { key: 'mount',   label: 'Mount',   desc: 'Mount arbitrary filesystems (cifs, nfs…)' },
-  { key: 'mknod',   label: 'Mknod',   desc: 'Allow mknod in unprivileged containers' },
+  { key: 'nesting', label: 'Nesting', desc: 'LXC 内运行 Docker、systemd、嵌套 LXC' },
+  { key: 'keyctl',  label: 'Keyctl',  desc: '密钥保留服务（部分应用需要）' },
+  { key: 'fuse',    label: 'FUSE',    desc: '用户态文件系统支持' },
+  { key: 'mount',   label: 'Mount',   desc: '挂载任意文件系统（cifs、nfs…）' },
+  { key: 'mknod',   label: 'Mknod',   desc: '允许在非特权容器中执行 mknod' },
 ];
 
 const QUICKSYNC_DEVICES = [
-  { label: 'renderD128 (QuickSync / VA-API)', path: '/dev/dri/renderD128', gid: '104', uid: '0' },
-  { label: 'card0 (DRI primary)',              path: '/dev/dri/card0',      gid: '44',  uid: '0' },
-  { label: 'card1 (DRI secondary)',            path: '/dev/dri/card1',      gid: '44',  uid: '0' },
-  { label: 'net/tun (Tailscale)',              path: '/dev/net/tun',        gid: '',    uid: '' },
+  { label: 'renderD128（QuickSync / VA-API）', path: '/dev/dri/renderD128', gid: '104', uid: '0' },
+  { label: 'card0（DRI 主设备）',              path: '/dev/dri/card0',      gid: '44',  uid: '0' },
+  { label: 'card1（DRI 次设备）',            path: '/dev/dri/card1',      gid: '44',  uid: '0' },
+  { label: 'net/tun（Tailscale）',              path: '/dev/net/tun',        gid: '',    uid: '' },
   { label: 'fuse',                             path: '/dev/fuse',           gid: '',    uid: '' },
   { label: 'kvm',                              path: '/dev/kvm',            gid: '',    uid: '' },
 ];
@@ -130,7 +130,7 @@ export function lxcAdvanced(node, vmid) {
         this.mounts = mData.mounts || [];
         this.idmaps = iData.idmaps || [];
       } catch {
-        this.errorMsg = 'Failed to load advanced config';
+        this.errorMsg = '加载高级配置失败';
       } finally {
         this.loading = false;
       }
@@ -180,7 +180,7 @@ export function lxcAdvanced(node, vmid) {
         if (data.success) this.load();
       } catch(e) {
         this.closeModal('preview');
-        this.showFlash('danger', e.message || 'Request failed');
+        this.showFlash('danger', e.message || '请求失败');
       } finally {
         this.busy.applyFeatures = false;
       }
@@ -203,7 +203,7 @@ export function lxcAdvanced(node, vmid) {
     },
 
     async addDevice() {
-      if (!this.dev.path.trim()) { this.modalError = 'Device path is required'; return; }
+      if (!this.dev.path.trim()) { this.modalError = '需要填写设备路径'; return; }
       this.busy.addDevice = true;
       this.modalError = '';
       try {
@@ -219,20 +219,20 @@ export function lxcAdvanced(node, vmid) {
         this.showFlash('success', data.message);
         this.load();
       } catch(e) {
-        this.modalError = e.message || 'Request failed';
+        this.modalError = e.message || '请求失败';
       } finally {
         this.busy.addDevice = false;
       }
     },
 
     async removeDevice(key) {
-      if (!confirm(`Remove device entry ${key}?`)) return;
+      if (!confirm(`移除设备条目 ${key}？`)) return;
       try {
         const data = await window.ProxUtils.apiJson(`/api/vm/${node}/${vmid}/lxc/devices/${key}`, { method: 'DELETE' });
         this.showFlash(data.success ? 'success' : 'danger', data.success ? data.message : data.error);
         if (data.success) this.load();
       } catch(e) {
-        this.showFlash('danger', e.message || 'Request failed');
+        this.showFlash('danger', e.message || '请求失败');
       }
     },
 
@@ -246,7 +246,7 @@ export function lxcAdvanced(node, vmid) {
 
     async addMount() {
       if (!this.mount.host_path.trim() || !this.mount.mp.trim()) {
-        this.modalError = 'Host path and container path are required'; return;
+        this.modalError = '宿主机路径与容器路径均为必填'; return;
       }
       this.busy.addMount = true;
       this.modalError = '';
@@ -265,20 +265,20 @@ export function lxcAdvanced(node, vmid) {
         this.showFlash('success', data.message);
         this.load();
       } catch(e) {
-        this.modalError = e.message || 'Request failed';
+        this.modalError = e.message || '请求失败';
       } finally {
         this.busy.addMount = false;
       }
     },
 
     async removeMount(key) {
-      if (!confirm(`Remove mount ${key}?`)) return;
+      if (!confirm(`移除挂载 ${key}？`)) return;
       try {
         const data = await window.ProxUtils.apiJson(`/api/vm/${node}/${vmid}/lxc/mounts/${key}`, { method: 'DELETE' });
         this.showFlash(data.success ? 'success' : 'danger', data.success ? data.message : data.error);
         if (data.success) this.load();
       } catch(e) {
-        this.showFlash('danger', e.message || 'Request failed');
+        this.showFlash('danger', e.message || '请求失败');
       }
     },
 
@@ -302,7 +302,7 @@ export function lxcAdvanced(node, vmid) {
     async addIdmap() {
       const { type, ct_id, host_id, count } = this.idmap;
       if (!type || isNaN(ct_id) || isNaN(host_id) || isNaN(count)) {
-        this.modalError = 'All fields are required'; return;
+        this.modalError = '所有字段均为必填'; return;
       }
       this.busy.addIdmap = true;
       this.modalError = '';
@@ -316,27 +316,27 @@ export function lxcAdvanced(node, vmid) {
         this.showFlash('success', data.message);
         this.load();
       } catch(e) {
-        this.modalError = e.message || 'Request failed';
+        this.modalError = e.message || '请求失败';
       } finally {
         this.busy.addIdmap = false;
       }
     },
 
     async removeIdmap(key) {
-      if (!confirm(`Remove idmap entry ${key}?`)) return;
+      if (!confirm(`移除 idmap 条目 ${key}？`)) return;
       try {
         const data = await window.ProxUtils.apiJson(`/api/vm/${node}/${vmid}/lxc/idmap/${key}`, { method: 'DELETE' });
         this.showFlash(data.success ? 'success' : 'danger', data.success ? data.message : data.error);
         if (data.success) this.load();
       } catch(e) {
-        this.showFlash('danger', e.message || 'Request failed');
+        this.showFlash('danger', e.message || '请求失败');
       }
     },
 
     // ── Restore ────────────────────────────────────────────────────────────────
 
     async restore() {
-      if (!confirm('Restore the pre-write config snapshot? This will revert all Advanced/Passthrough changes.')) return;
+      if (!confirm('恢复写入前的配置快照？这将撤销所有高级/直通相关的更改。')) return;
       try {
         const data = await window.ProxUtils.apiJson(`/api/vm/${node}/${vmid}/lxc/config-restore`, {
           method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}),
@@ -344,7 +344,7 @@ export function lxcAdvanced(node, vmid) {
         this.showFlash(data.success ? 'success' : 'danger', data.success ? data.message : data.error);
         if (data.success) this.load();
       } catch(e) {
-        this.showFlash('danger', e.message || 'Request failed');
+        this.showFlash('danger', e.message || '请求失败');
       }
     },
 
@@ -352,7 +352,7 @@ export function lxcAdvanced(node, vmid) {
 
     async openPreviewProfile(profileId, profileName) {
       this.profileApplyId = profileId;
-      this.profileTitle = profileName + ' — Preview';
+      this.profileTitle = profileName + '— 预览';
       this.profileDiff = {
         loading: true, error: '', alreadyApplied: false,
         featuresToAdd: [], devicesToAdd: [],
@@ -379,7 +379,7 @@ export function lxcAdvanced(node, vmid) {
           supportsDevN: diff.pve_supports_dev_n !== false,
         };
       } catch {
-        this.profileDiff = { ...this.profileDiff, loading: false, error: 'Failed to load diff' };
+        this.profileDiff = { ...this.profileDiff, loading: false, error: '加载差异失败' };
       }
     },
 
@@ -393,7 +393,7 @@ export function lxcAdvanced(node, vmid) {
         this.showFlash(data.success ? 'success' : 'danger', data.success ? data.message : data.error);
         if (data.success) this.load();
       } catch(e) {
-        this.showFlash('danger', e.message || 'Request failed');
+        this.showFlash('danger', e.message || '请求失败');
       } finally {
         this.busy.applyProfile = false;
       }

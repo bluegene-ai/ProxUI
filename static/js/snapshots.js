@@ -23,16 +23,16 @@ export function vmSnapshots(node, vmid, vmType) {
     get nameError() {
       const n = this.createForm.name.trim();
       if (!n) return '';
-      if (n === 'current') return "'current' is reserved by Proxmox";
-      if (!NAME_RE.test(n)) return 'Use 2-40 chars: start with a letter, then letters, digits, _ or -';
-      if (this.snapshots.some(s => s.name === n)) return 'A snapshot with that name already exists';
+      if (n === 'current') return "“current” 为 Proxmox 保留名称";
+      if (!NAME_RE.test(n)) return '使用 2–40 个字符：以字母开头，其后可含字母、数字、_ 或 -';
+      if (this.snapshots.some(s => s.name === n)) return '已存在同名快照';
       return '';
     },
     get canCreate() {
       return !!this.createForm.name.trim() && !this.nameError && !this.busy;
     },
     get confirmTitle() {
-      return this.pending.action === 'rollback' ? 'Roll back to snapshot' : 'Delete snapshot';
+      return this.pending.action === 'rollback' ? '回滚到快照' : '删除快照';
     },
 
     async load() {
@@ -69,10 +69,10 @@ export function vmSnapshots(node, vmid, vmType) {
           }),
         });
         this._createModal.hide();
-        U.notify(r.message + ' Progress is shown under Recent Tasks.', 'success');
+        U.notify(r.message + '进度显示在最近任务中。', 'success');
         setTimeout(() => this.load(), 2000);
       } catch (e) {
-        U.notify('Snapshot failed to start: ' + e.message, 'error');
+        U.notify('快照启动失败：' + e.message, 'error');
       } finally {
         this.busy = false;
       }
@@ -98,10 +98,10 @@ export function vmSnapshots(node, vmid, vmType) {
               method: 'DELETE',
             });
         this._confirmModal.hide();
-        U.notify(r.message + ' Progress is shown under Recent Tasks.', 'success');
+        U.notify(r.message + '进度显示在最近任务中。', 'success');
         setTimeout(() => this.load(), 2000);
       } catch (e) {
-        U.notify(`Snapshot ${action} failed: ` + e.message, 'error');
+        U.notify(`快照操作（${action}）失败：` + e.message, 'error');
       } finally {
         this.busy = false;
       }

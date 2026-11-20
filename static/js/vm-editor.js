@@ -59,7 +59,7 @@ export function vmEditor(node, vmid, vmType) {
       try {
         const data = await window.ProxUtils.apiJson(`/api/vm/${this.node}/${this.vmid}/config`);
         if (data.error) {
-          window.ProxUtils.notify('Error loading config: ' + data.error, 'error');
+          window.ProxUtils.notify('加载配置出错：' + data.error, 'error');
           return;
         }
 
@@ -92,7 +92,7 @@ export function vmEditor(node, vmid, vmType) {
           this.initBootSorting();
         }
       } catch (e) {
-        window.ProxUtils.notify('Failed to load configuration: ' + e.message, 'error');
+        window.ProxUtils.notify('加载配置失败：' + e.message, 'error');
       } finally {
         this.loading = false;
       }
@@ -167,8 +167,8 @@ export function vmEditor(node, vmid, vmType) {
         size: size || 'Unknown',
         sizeGB: sizeGB || 1,
         isRootfs,
-        displayName: isRootfs ? 'Root Filesystem' : key,
-        displayType: isRootfs ? 'rootfs' : (key.match(/^mp\d+$/) ? 'Mount Point' : storage),
+        displayName: isRootfs ? '根文件系统' : key,
+        displayType: isRootfs ? 'rootfs' : (key.match(/^mp\d+$/) ? '挂载点' : storage),
         resizeTo: sizeGB || 1,
       };
     },
@@ -213,12 +213,12 @@ export function vmEditor(node, vmid, vmType) {
       for (const [key, value] of Object.entries(data)) {
         if (!key.match(/^(scsi|virtio|ide|sata)\d+$/)) continue;
         if (value.includes('media=cdrom') || value.includes('.iso')) {
-          available.push({ id: key, type: 'cdrom', name: `${key.toUpperCase()} (CD-ROM)`, ...TYPES.cdrom });
+          available.push({ id: key, type: 'cdrom', name: `${key.toUpperCase()}（CD-ROM）`, ...TYPES.cdrom });
         } else if (!value.toLowerCase().includes('cloudinit')) {
-          available.push({ id: key, type: 'disk', name: `${key.toUpperCase()} (Disk)`, ...TYPES.disk });
+          available.push({ id: key, type: 'disk', name: `${key.toUpperCase()}（磁盘）`, ...TYPES.disk });
         }
       }
-      available.push({ id: 'net', type: 'network', name: 'Network Boot (PXE)', ...TYPES.network });
+      available.push({ id: 'net', type: 'network', name: '网络启动（PXE）', ...TYPES.network });
 
       const boot = data.boot || '';
       if (boot.startsWith('order=')) {
@@ -248,7 +248,7 @@ export function vmEditor(node, vmid, vmType) {
 
     openAddNetwork() {
       if (!this.availableBridges.length) {
-        window.ProxUtils.notify('No network bridges available', 'warning');
+        window.ProxUtils.notify('没有可用的网络网桥', 'warning');
         return;
       }
       this.newNet = { bridge: this.availableBridges[0]?.iface || '', model: 'virtio' };
@@ -257,7 +257,7 @@ export function vmEditor(node, vmid, vmType) {
 
     async addNetwork() {
       if (!this.newNet.bridge) {
-        window.ProxUtils.notify('Please select a network bridge', 'warning');
+        window.ProxUtils.notify('请选择网络网桥', 'warning');
         return;
       }
       try {
@@ -273,18 +273,18 @@ export function vmEditor(node, vmid, vmType) {
         });
         this._modals.addNetworkModal?.hide();
         if (result.success) {
-          window.ProxUtils.notify('Network interface added', 'success');
+          window.ProxUtils.notify('网络接口已添加', 'success');
           await this.loadConfig();
         } else {
-          window.ProxUtils.notify(result.error || 'Failed to add interface', 'error');
+          window.ProxUtils.notify(result.error || '添加接口失败', 'error');
         }
       } catch (e) {
-        window.ProxUtils.notify('Network error: ' + e.message, 'error');
+        window.ProxUtils.notify('网络错误：' + e.message, 'error');
       }
     },
 
     async removeNetwork(key) {
-      if (!confirm(`Remove network interface ${key}?`)) return;
+      if (!confirm(`移除网络接口 ${key}？`)) return;
       try {
         const updateData = {};
         updateData[key] = '';
@@ -294,13 +294,13 @@ export function vmEditor(node, vmid, vmType) {
           body: JSON.stringify(updateData),
         });
         if (result.success) {
-          window.ProxUtils.notify(`Interface ${key} removed`, 'success');
+          window.ProxUtils.notify(`接口 ${key} 已移除`, 'success');
           await this.loadConfig();
         } else {
-          window.ProxUtils.notify(result.error || 'Failed to remove', 'error');
+          window.ProxUtils.notify(result.error || '移除失败', 'error');
         }
       } catch (e) {
-        window.ProxUtils.notify('Network error: ' + e.message, 'error');
+        window.ProxUtils.notify('网络错误：' + e.message, 'error');
       }
     },
 
@@ -329,10 +329,10 @@ export function vmEditor(node, vmid, vmType) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(updateData),
         });
-        if (result.success) window.ProxUtils.notify(`Interface ${iface.key} updated`, 'success');
-        else { window.ProxUtils.notify(result.error || 'Failed to update', 'error'); await this.loadConfig(); }
+        if (result.success) window.ProxUtils.notify(`接口 ${iface.key} 已更新`, 'success');
+        else { window.ProxUtils.notify(result.error || '更新失败', 'error'); await this.loadConfig(); }
       } catch (e) {
-        window.ProxUtils.notify('Network error: ' + e.message, 'error');
+        window.ProxUtils.notify('网络错误：' + e.message, 'error');
         await this.loadConfig();
       }
     },
@@ -355,10 +355,10 @@ export function vmEditor(node, vmid, vmType) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(updateData),
         });
-        if (result.success) window.ProxUtils.notify(`Interface ${iface.key} updated`, 'success');
-        else { window.ProxUtils.notify(result.error || 'Failed to update', 'error'); await this.loadConfig(); }
+        if (result.success) window.ProxUtils.notify(`接口 ${iface.key} 已更新`, 'success');
+        else { window.ProxUtils.notify(result.error || '更新失败', 'error'); await this.loadConfig(); }
       } catch (e) {
-        window.ProxUtils.notify('Network error: ' + e.message, 'error');
+        window.ProxUtils.notify('网络错误：' + e.message, 'error');
         await this.loadConfig();
       }
     },
@@ -369,8 +369,8 @@ export function vmEditor(node, vmid, vmType) {
       const disk = this.disks.find(d => d.key === key);
       if (!disk) return;
       const newSize = +disk.resizeTo;
-      if (!newSize || newSize <= 0) { window.ProxUtils.notify('Enter a valid size', 'warning'); return; }
-      if (!confirm(`Resize disk ${key} to ${newSize}GB? This cannot be undone.`)) return;
+      if (!newSize || newSize <= 0) { window.ProxUtils.notify('请输入有效的大小', 'warning'); return; }
+      if (!confirm(`将磁盘 ${key} 扩容到 ${newSize}GB？此操作不可撤销。`)) return;
       try {
         const result = await window.ProxUtils.apiJson(`/api/vm/${this.node}/${this.vmid}/resize-disk`, {
           method: 'PUT',
@@ -378,13 +378,13 @@ export function vmEditor(node, vmid, vmType) {
           body: JSON.stringify({ disk: key, size: newSize }),
         });
         if (result.success) {
-          window.ProxUtils.notify(`Disk ${key} resized to ${newSize}GB`, 'success');
+          window.ProxUtils.notify(`磁盘 ${key} 已扩容到 ${newSize}GB`, 'success');
           await this.loadConfig();
         } else {
-          window.ProxUtils.notify(result.error || 'Failed to resize', 'error');
+          window.ProxUtils.notify(result.error || '扩容失败', 'error');
         }
       } catch (e) {
-        window.ProxUtils.notify('Network error: ' + e.message, 'error');
+        window.ProxUtils.notify('网络错误：' + e.message, 'error');
       }
     },
 
@@ -394,19 +394,19 @@ export function vmEditor(node, vmid, vmType) {
       try {
         const data = await window.ProxUtils.apiJson(`/api/node/${this.node}/iso-images`);
         if (!Array.isArray(data) || data.length === 0) {
-          window.ProxUtils.notify('No ISO images available on this node', 'warning');
+          window.ProxUtils.notify('此节点上没有可用的 ISO 镜像', 'warning');
           return;
         }
         this.availableIsos = data;
         this.attachSel = { iso: '', iface: 'ide2' };
         this._modals.attachIsoModal?.show();
       } catch (e) {
-        window.ProxUtils.notify('Error loading ISOs: ' + e.message, 'error');
+        window.ProxUtils.notify('加载 ISO 出错：' + e.message, 'error');
       }
     },
 
     async attachIso() {
-      if (!this.attachSel.iso) { window.ProxUtils.notify('Select an ISO image', 'warning'); return; }
+      if (!this.attachSel.iso) { window.ProxUtils.notify('选择 ISO 镜像', 'warning'); return; }
       try {
         const result = await window.ProxUtils.apiJson(`/api/vm/${this.node}/${this.vmid}/iso/attach`, {
           method: 'POST',
@@ -415,18 +415,18 @@ export function vmEditor(node, vmid, vmType) {
         });
         this._modals.attachIsoModal?.hide();
         if (result.success) {
-          window.ProxUtils.notify(result.message || 'ISO attached', 'success');
+          window.ProxUtils.notify(result.message || 'ISO 已挂载', 'success');
           await this.loadConfig();
         } else {
-          window.ProxUtils.notify(result.error || 'Failed to attach ISO', 'error');
+          window.ProxUtils.notify(result.error || '挂载 ISO 失败', 'error');
         }
       } catch (e) {
-        window.ProxUtils.notify('Network error: ' + e.message, 'error');
+        window.ProxUtils.notify('网络错误：' + e.message, 'error');
       }
     },
 
     async detachIso(key) {
-      if (!confirm(`Detach ISO from ${key}?`)) return;
+      if (!confirm(`从 ${key} 卸载 ISO？`)) return;
       try {
         const result = await window.ProxUtils.apiJson(`/api/vm/${this.node}/${this.vmid}/iso/detach`, {
           method: 'POST',
@@ -434,13 +434,13 @@ export function vmEditor(node, vmid, vmType) {
           body: JSON.stringify({ interface: key }),
         });
         if (result.success) {
-          window.ProxUtils.notify(result.message || 'ISO detached', 'success');
+          window.ProxUtils.notify(result.message || 'ISO 已卸载', 'success');
           await this.loadConfig();
         } else {
-          window.ProxUtils.notify(result.error || 'Failed to detach ISO', 'error');
+          window.ProxUtils.notify(result.error || '卸载 ISO 失败', 'error');
         }
       } catch (e) {
-        window.ProxUtils.notify('Network error: ' + e.message, 'error');
+        window.ProxUtils.notify('网络错误：' + e.message, 'error');
       }
     },
 
@@ -484,13 +484,13 @@ export function vmEditor(node, vmid, vmType) {
           body: JSON.stringify({ boot_devices: bootDeviceIds }),
         });
         if (result.success) {
-          window.ProxUtils.notify('Boot order updated', 'success');
+          window.ProxUtils.notify('启动顺序已更新', 'success');
         } else {
-          window.ProxUtils.notify(result.error || 'Failed to update boot order', 'error');
+          window.ProxUtils.notify(result.error || '更新启动顺序失败', 'error');
           await this.loadConfig();
         }
       } catch (e) {
-        window.ProxUtils.notify('Network error: ' + e.message, 'error');
+        window.ProxUtils.notify('网络错误：' + e.message, 'error');
         await this.loadConfig();
       }
     },
@@ -525,13 +525,13 @@ export function vmEditor(node, vmid, vmType) {
           body: JSON.stringify(formData),
         });
         if (result.success) {
-          window.ProxUtils.notify('Configuration updated successfully', 'success');
+          window.ProxUtils.notify('配置更新成功', 'success');
           if (redirect) setTimeout(() => { window.location.href = `/vm/${this.node}/${this.vmid}`; }, 1000);
         } else {
-          window.ProxUtils.notify(result.error || 'Failed to save configuration', 'error');
+          window.ProxUtils.notify(result.error || '保存配置失败', 'error');
         }
       } catch (e) {
-        window.ProxUtils.notify('Network error: ' + e.message, 'error');
+        window.ProxUtils.notify('网络错误：' + e.message, 'error');
       } finally {
         this.saving = false;
       }

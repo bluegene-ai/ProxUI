@@ -74,7 +74,7 @@ export function createVmForm() {
         const data = await window.ProxUtils.apiJson(`/api/node/${this.node}/templates`);
         if (data.error) { this.templates = []; this.osTemplates = []; return; }
         if (this.vmType === 'qemu') {
-          this.templates = (data.qemu || []).map(t => ({ value: t.vmid, label: t.name || `Template VM ${t.vmid}` }));
+          this.templates = (data.qemu || []).map(t => ({ value: t.vmid, label: t.name || `模板虚拟机 ${t.vmid}` }));
         } else {
           this.osTemplates = (data.lxc || []).map(t => ({ value: t.volid, label: t.volid.split('/').pop() }));
         }
@@ -126,7 +126,7 @@ export function createVmForm() {
           this.vmidCls = 'text-warning';
           this.vmidValid = null;
         } else if (data.available) {
-          this.vmidMsg = 'VMID is available';
+          this.vmidMsg = 'VMID 可用';
           this.vmidCls = 'text-success';
           this.vmidValid = true;
         } else {

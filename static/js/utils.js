@@ -24,19 +24,19 @@ export function formatUptime(seconds) {
 }
 
 export const TASK_TYPE_NAMES = {
-  qmstart: 'Start VM', qmstop: 'Stop VM', qmshutdown: 'Shutdown VM',
-  qmreset: 'Reset VM', qmreboot: 'Reboot VM', qmigrate: 'Migrate VM',
-  qmclone: 'Clone VM', qmcreate: 'Create VM', qmdestroy: 'Destroy VM',
-  qmtemplate: 'Create VM template', qmrestore: 'Restore VM',
-  vzstart: 'Start Container', vzstop: 'Stop Container', vzshutdown: 'Shutdown Container',
-  vzmigrate: 'Migrate Container', vzclone: 'Clone Container', vzcreate: 'Create Container',
-  vzdestroy: 'Destroy Container', vzdump: 'Backup Container',
-  vzrestore: 'Restore Container',
-  download: 'Download ISO', aptupdate: 'Update package database',
-  startall: 'Bulk start VMs and Containers', stopall: 'Bulk stop VMs and Containers',
-  srvreload: 'SRV networking - reload', vncproxy: 'VNC Console',
-  clusterjoin: 'Add node to cluster', resize: 'Disk resize',
-  imgdel: 'Delete storage volume',
+  qmstart: '启动虚拟机', qmstop: '停止虚拟机', qmshutdown: '关闭虚拟机',
+  qmreset: '重置虚拟机', qmreboot: '重启虚拟机', qmigrate: '迁移虚拟机',
+  qmclone: '克隆虚拟机', qmcreate: '创建虚拟机', qmdestroy: '销毁虚拟机',
+  qmtemplate: '创建虚拟机模板', qmrestore: '恢复虚拟机',
+  vzstart: '启动容器', vzstop: '停止容器', vzshutdown: '关闭容器',
+  vzmigrate: '迁移容器', vzclone: '克隆容器', vzcreate: '创建容器',
+  vzdestroy: '销毁容器', vzdump: '备份容器',
+  vzrestore: '恢复容器',
+  download: '下载 ISO', aptupdate: '更新软件包数据库',
+  startall: '批量启动虚拟机与容器', stopall: '批量停止虚拟机与容器',
+  srvreload: 'SRV 网络 - 重载', vncproxy: 'VNC 控制台',
+  clusterjoin: '添加节点到集群', resize: '磁盘扩容',
+  imgdel: '删除存储卷',
 };
 
 export function taskTypeName(type) {
@@ -105,7 +105,7 @@ export async function apiFetch(url, options = {}) {
       errorMessage = response.statusText;
     }
     if (DEMO_MODE && (response.status === 403 || response.status === 401)) {
-      errorMessage = 'Demo mode: This action requires write permissions that are not available in the demo.';
+      errorMessage = '演示模式：此操作需要写权限，演示环境不提供。';
     }
     const error = new Error(errorMessage);
     error.status = response.status;

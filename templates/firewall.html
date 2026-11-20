@@ -25,23 +25,23 @@
             <div class="text-danger p-3"><i class="bi bi-exclamation-triangle"></i> <span x-text="error"></span></div>
         </template>
         <template x-if="loading && !{{ what }}.length">
-            <div class="text-center p-4"><div class="spinner-border spinner-border-sm" role="status"></div> Loading…</div>
+            <div class="text-center p-4"><div class="spinner-border spinner-border-sm" role="status"></div> 加载中…</div>
         </template>
 {% endmacro %}
 
 {% block content %}
 <div class="mb-3">
     <div class="sec-title">Firewall</div>
-    <div class="sec-sub">Datacenter-wide firewall for {{ current_cluster.name }} · node and guest rules are on their detail pages</div>
+    <div class="sec-sub">{{ current_cluster.name }} 的数据中心级防火墙 · 节点与客户机规则位于各自详情页</div>
 </div>
 
 <div x-data="{ tab: ['rules', 'groups', 'aliases', 'ipsets'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'rules',
                show(t) { this.tab = t; history.replaceState(null, '', '#' + t); } }">
     <ul class="nav nav-tabs">
         <li class="nav-item"><a class="nav-link" :class="{active: tab === 'rules'}" href="#rules" @click.prevent="show('rules')"><i class="bi bi-list-check"></i> Rules</a></li>
-        <li class="nav-item"><a class="nav-link" :class="{active: tab === 'groups'}" href="#groups" @click.prevent="show('groups')"><i class="bi bi-collection"></i> Security Groups</a></li>
+        <li class="nav-item"><a class="nav-link" :class="{active: tab === 'groups'}" href="#groups" @click.prevent="show('groups')"><i class="bi bi-collection"></i> 安全组</a></li>
         <li class="nav-item"><a class="nav-link" :class="{active: tab === 'aliases'}" href="#aliases" @click.prevent="show('aliases')"><i class="bi bi-tag"></i> Aliases</a></li>
-        <li class="nav-item"><a class="nav-link" :class="{active: tab === 'ipsets'}" href="#ipsets" @click.prevent="show('ipsets')"><i class="bi bi-hdd-network"></i> IP Sets</a></li>
+        <li class="nav-item"><a class="nav-link" :class="{active: tab === 'ipsets'}" href="#ipsets" @click.prevent="show('ipsets')"><i class="bi bi-hdd-network"></i> IP 集</a></li>
     </ul>
 
     <!-- Datacenter rules / options -->
@@ -53,17 +53,17 @@
     <div x-show="tab === 'groups'" x-data="fwGroups()" x-cloak>
         <div class="card-x mt-3">
             <div class="cx-head">
-                <i class="bi bi-collection" style="color:var(--accent)"></i><span class="cx-title">Security Groups</span>
-                <span class="text-faint ms-2" style="font-size:12px">Reusable rule sets; add one to a datacenter, node or guest with a rule of direction "group".</span>
+                <i class="bi bi-collection" style="color:var(--accent)"></i><span class="cx-title">安全组</span>
+                <span class="text-faint ms-2" style="font-size:12px">可复用的规则集；在数据中心、节点或客户机上添加一条方向为“group”的规则即可引用。</span>
                 <button class="icon-btn ms-auto" style="width:28px;height:28px;font-size:13px" @click="load()" :disabled="loading" title="Refresh">
                     <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i>
                 </button>
-                <button class="btn-x sm primary" @click="open(null)" :disabled="busy"><i class="bi bi-plus-lg"></i> New group</button>
+                <button class="btn-x sm primary" @click="open(null)" :disabled="busy"><i class="bi bi-plus-lg"></i> 新建组</button>
             </div>
             <div class="cx-body tight">
                 {{ load_state('groups') }}
                 <template x-if="!loading && !error && !groups.length">
-                    <div class="empty-hint"><i class="bi bi-collection"></i><p class="mb-0">No security groups</p></div>
+                    <div class="empty-hint"><i class="bi bi-collection"></i><p class="mb-0">没有安全组</p></div>
                 </template>
                 <table class="tbl" x-show="groups.length">
                     <thead><tr><th>Name</th><th>Comment</th><th style="text-align:right">Actions</th></tr></thead>
@@ -73,9 +73,9 @@
                                 <td><a href="#" class="nm mono" @click.prevent="selected = g.group" x-text="g.group"></a></td>
                                 <td class="text-faint" style="font-size:12px" x-text="g.comment || ''"></td>
                                 <td style="text-align:right;white-space:nowrap">
-                                    <button class="btn-x sm" @click="selected = g.group" title="Show rules"><i class="bi bi-list-check"></i> Rules</button>
-                                    <button class="btn-x sm" @click="open(g)" :disabled="busy" title="Rename / edit comment"><i class="bi bi-pencil"></i></button>
-                                    <button class="btn-x sm danger" @click="remove(g)" :disabled="busy" title="Delete group"><i class="bi bi-trash"></i></button>
+                                    <button class="btn-x sm" @click="selected = g.group" title="显示规则"><i class="bi bi-list-check"></i> Rules</button>
+                                    <button class="btn-x sm" @click="open(g)" :disabled="busy" title="重命名 / 编辑备注"><i class="bi bi-pencil"></i></button>
+                                    <button class="btn-x sm danger" @click="remove(g)" :disabled="busy" title="删除组"><i class="bi bi-trash"></i></button>
                                 </td>
                             </tr>
                         </template>
@@ -116,16 +116,16 @@
         <div class="card-x mt-3">
             <div class="cx-head">
                 <i class="bi bi-tag" style="color:var(--accent)"></i><span class="cx-title">Aliases</span>
-                <span class="text-faint ms-2" style="font-size:12px">Named addresses; use the name as a rule's source or destination.</span>
+                <span class="text-faint ms-2" style="font-size:12px">带名称的地址；可将名称用作规则的源或目标。</span>
                 <button class="icon-btn ms-auto" style="width:28px;height:28px;font-size:13px" @click="load()" :disabled="loading" title="Refresh">
                     <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i>
                 </button>
-                <button class="btn-x sm primary" @click="open(null)" :disabled="busy"><i class="bi bi-plus-lg"></i> New alias</button>
+                <button class="btn-x sm primary" @click="open(null)" :disabled="busy"><i class="bi bi-plus-lg"></i> 新建别名</button>
             </div>
             <div class="cx-body tight">
                 {{ load_state('aliases') }}
                 <template x-if="!loading && !error && !aliases.length">
-                    <div class="empty-hint"><i class="bi bi-tag"></i><p class="mb-0">No aliases</p></div>
+                    <div class="empty-hint"><i class="bi bi-tag"></i><p class="mb-0">没有别名</p></div>
                 </template>
                 <table class="tbl" x-show="aliases.length">
                     <thead><tr><th>Name</th><th>IP / CIDR</th><th>Comment</th><th style="text-align:right">Actions</th></tr></thead>
@@ -136,8 +136,8 @@
                                 <td class="mono" style="font-size:12px" x-text="a.cidr"></td>
                                 <td class="text-faint" style="font-size:12px" x-text="a.comment || ''"></td>
                                 <td style="text-align:right;white-space:nowrap">
-                                    <button class="btn-x sm" @click="open(a)" :disabled="busy" title="Edit alias"><i class="bi bi-pencil"></i></button>
-                                    <button class="btn-x sm danger" @click="remove(a)" :disabled="busy" title="Delete alias"><i class="bi bi-trash"></i></button>
+                                    <button class="btn-x sm" @click="open(a)" :disabled="busy" title="编辑别名"><i class="bi bi-pencil"></i></button>
+                                    <button class="btn-x sm danger" @click="remove(a)" :disabled="busy" title="删除别名"><i class="bi bi-trash"></i></button>
                                 </td>
                             </tr>
                         </template>
@@ -173,17 +173,17 @@
     <div x-show="tab === 'ipsets'" x-data="fwIpsets()" x-cloak>
         <div class="card-x mt-3">
             <div class="cx-head">
-                <i class="bi bi-hdd-network" style="color:var(--accent)"></i><span class="cx-title">IP Sets</span>
-                <span class="text-faint ms-2" style="font-size:12px">Groups of addresses; use <code>+name</code> as a rule's source or destination.</span>
+                <i class="bi bi-hdd-network" style="color:var(--accent)"></i><span class="cx-title">IP 集</span>
+                <span class="text-faint ms-2" style="font-size:12px">地址组；请使用 <code>+name</code> 作为规则的源或目标。</span>
                 <button class="icon-btn ms-auto" style="width:28px;height:28px;font-size:13px" @click="load()" :disabled="loading" title="Refresh">
                     <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i>
                 </button>
-                <button class="btn-x sm primary" @click="open(null)" :disabled="busy"><i class="bi bi-plus-lg"></i> New IP set</button>
+                <button class="btn-x sm primary" @click="open(null)" :disabled="busy"><i class="bi bi-plus-lg"></i> 新建 IP 集</button>
             </div>
             <div class="cx-body tight">
                 {{ load_state('ipsets') }}
                 <template x-if="!loading && !error && !ipsets.length">
-                    <div class="empty-hint"><i class="bi bi-hdd-network"></i><p class="mb-0">No IP sets</p></div>
+                    <div class="empty-hint"><i class="bi bi-hdd-network"></i><p class="mb-0">没有 IP 集</p></div>
                 </template>
                 <table class="tbl" x-show="ipsets.length">
                     <thead><tr><th>Name</th><th>Entries</th><th>Comment</th><th style="text-align:right">Actions</th></tr></thead>
@@ -194,9 +194,9 @@
                                 <td class="mono text-faint" style="font-size:12px" x-text="(s.entries || []).length"></td>
                                 <td class="text-faint" style="font-size:12px" x-text="s.comment || ''"></td>
                                 <td style="text-align:right;white-space:nowrap">
-                                    <button class="btn-x sm" @click="selected = s.name" title="Show entries"><i class="bi bi-list-ul"></i> Entries</button>
-                                    <button class="btn-x sm" @click="open(s)" :disabled="busy" title="Rename / edit comment"><i class="bi bi-pencil"></i></button>
-                                    <button class="btn-x sm danger" @click="remove(s)" :disabled="busy" title="Delete IP set"><i class="bi bi-trash"></i></button>
+                                    <button class="btn-x sm" @click="selected = s.name" title="显示条目"><i class="bi bi-list-ul"></i> Entries</button>
+                                    <button class="btn-x sm" @click="open(s)" :disabled="busy" title="重命名 / 编辑备注"><i class="bi bi-pencil"></i></button>
+                                    <button class="btn-x sm danger" @click="remove(s)" :disabled="busy" title="删除 IP 集"><i class="bi bi-trash"></i></button>
                                 </td>
                             </tr>
                         </template>
@@ -213,18 +213,18 @@
                 </div>
                 <div class="cx-body tight">
                     <div class="d-flex flex-wrap gap-2 align-items-end px-3 pt-3">
-                        <div class="field mb-2"><label>IP / CIDR / alias</label>
+                        <div class="field mb-2"><label>IP / CIDR / 别名</label>
                             <input type="text" class="inp mono" style="min-width:200px" x-model="entry.cidr" placeholder="10.0.0.0/24" @keydown.enter="addEntry()"></div>
                         <div class="field mb-2"><label>Comment</label>
                             <input type="text" class="inp" style="min-width:220px" x-model="entry.comment" @keydown.enter="addEntry()"></div>
                         <label class="d-flex align-items-center gap-2 mb-3" style="cursor:pointer;font-size:13px"
-                               title="Exclude this address from the set">
+                               title="从集合中排除此地址">
                             <input type="checkbox" x-model="entry.nomatch"> nomatch
                         </label>
                         <button class="btn-x sm primary mb-3" @click="addEntry()" :disabled="busy || !entry.cidr.trim()"><i class="bi bi-plus-lg"></i> Add</button>
                     </div>
                     <template x-if="!current.entries.length">
-                        <div class="empty-hint"><i class="bi bi-list-ul"></i><p class="mb-0">No entries</p></div>
+                        <div class="empty-hint"><i class="bi bi-list-ul"></i><p class="mb-0">没有条目</p></div>
                     </template>
                     <table class="tbl" x-show="current.entries.length">
                         <thead><tr><th>IP / CIDR</th><th>nomatch</th><th>Comment</th><th style="text-align:right">Actions</th></tr></thead>
@@ -235,8 +235,8 @@
                                     <td><span class="tag" x-show="Number(e.nomatch)">nomatch</span></td>
                                     <td class="text-faint" style="font-size:12px" x-text="e.comment || ''"></td>
                                     <td style="text-align:right;white-space:nowrap">
-                                        <button class="btn-x sm" @click="openEntry(e)" :disabled="busy" title="Edit entry"><i class="bi bi-pencil"></i></button>
-                                        <button class="btn-x sm danger" @click="removeEntry(e)" :disabled="busy" title="Remove entry"><i class="bi bi-trash"></i></button>
+                                        <button class="btn-x sm" @click="openEntry(e)" :disabled="busy" title="编辑条目"><i class="bi bi-pencil"></i></button>
+                                        <button class="btn-x sm danger" @click="removeEntry(e)" :disabled="busy" title="移除条目"><i class="bi bi-trash"></i></button>
                                     </td>
                                 </tr>
                             </template>
@@ -275,7 +275,7 @@
                     <div class="modal-body">
                         <div class="field"><label>Comment</label><input type="text" class="inp" x-model="entryEdit.comment"></div>
                         <label class="d-flex align-items-center gap-2" style="cursor:pointer">
-                            <input type="checkbox" x-model="entryEdit.nomatch"> nomatch (exclude this address)
+                            <input type="checkbox" x-model="entryEdit.nomatch"> nomatch（排除此地址）
                         </label>
                         <div class="text-danger small mt-2" x-show="formError" x-text="formError"></div>
                     </div>
@@ -304,5 +304,5 @@ function register() {
 }
 if (window.Alpine) register();
 else document.addEventListener('alpine:init', register);
-</script>
+</script>script
 {% endblock %}

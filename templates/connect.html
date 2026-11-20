@@ -8,8 +8,8 @@
     {% if existing_clusters %}
     <div class="card-x mb-4">
         <div class="cx-head d-flex justify-content-between align-items-center">
-            <span class="cx-title"><i class="bi bi-diagram-2" style="color:var(--accent)"></i> Configured Clusters</span>
-            <span class="text-faint" style="font-size:12px">{{ existing_clusters|length }} cluster(s)</span>
+            <span class="cx-title"><i class="bi bi-diagram-2" style="color:var(--accent)"></i> 已配置的集群</span>
+            <span class="text-faint" style="font-size:12px">{{ existing_clusters|length }} 个集群</span>
         </div>
         <div class="cx-body">
             <div class="row g-3">
@@ -30,7 +30,7 @@
                                         {% if cluster.id != current_cluster.id %}
                                         <li><a class="dropdown-item" href="#"
                                                @click.prevent="switchCluster('{{ cluster.id }}')">
-                                            <i class="bi bi-arrow-right-circle"></i> Switch to
+                                            <i class="bi bi-arrow-right-circle"></i> 切换到
                                         </a></li>
                                         {% endif %}
                                         <li><a class="dropdown-item" href="#"
@@ -46,7 +46,7 @@
                             </div>
                             <div class="text-faint mono" style="font-size:11px" class="mb-2">ID: {{ cluster.id }}</div>
                             <div class="d-flex justify-content-between align-items-center mt-2">
-                                <span class="text-faint" style="font-size:12px"><i class="bi bi-hdd-network"></i> {{ cluster.nodes|length }} node(s)</span>
+                                <span class="text-faint" style="font-size:12px"><i class="bi bi-hdd-network"></i> {{ cluster.nodes|length }} 个节点</span>
                                 <!-- Per-cluster status island -->
                                 <div x-data="{
                                         status: 'checking',
@@ -84,62 +84,62 @@
             {% if not existing_clusters %}
             <div class="callout info mb-4">
                 <i class="bi bi-info-circle"></i>
-                <div><div class="t">Welcome!</div><div class="b">No Proxmox configuration was found. Please enter your Proxmox cluster details to get started.</div></div>
+                <div><div class="t">欢迎！</div><div class="b">未找到 Proxmox 配置。请填写你的 Proxmox 集群信息以开始使用。</div></div>
             </div>
             {% endif %}
 
             <form method="POST" action="{{ url_for('connect') }}" id="connectForm">
                 <!-- Cluster Information -->
                 <div class="mb-4">
-                    <div class="sub-h" style="margin-top:0"><i class="bi bi-diagram-2"></i> Cluster Information</div>
+                    <div class="sub-h" style="margin-top:0"><i class="bi bi-diagram-2"></i> 集群信息</div>
 
                     <div class="field">
-                        <label for="cluster_name">Cluster Name</label>
+                        <label for="cluster_name">集群名称</label>
                         <input type="text" class="inp" id="cluster_name" name="cluster_name"
                                value="My Proxmox Cluster" required
                                @input="document.getElementById('cluster_id').value = generateId($event.target.value)">
-                        <div class="hint">A friendly name for your Proxmox cluster</div>
+                        <div class="hint">你的 Proxmox 集群的友好名称</div>
                     </div>
 
                     <div class="field">
-                        <label for="cluster_id">Cluster ID</label>
+                        <label for="cluster_id">集群 ID</label>
                         <input type="text" class="inp" id="cluster_id" name="cluster_id"
                                value="main" required pattern="[a-zA-Z0-9_-]+">
-                        <div class="hint">Unique identifier (letters, numbers, underscores, and dashes only)</div>
+                        <div class="hint">唯一标识符（仅限字母、数字、下划线和连字符）</div>
                     </div>
 
                     <div class="field">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="incremental_vmid" name="incremental_vmid">
                             <label class="form-check-label" for="incremental_vmid">
-                                Incremental VMID (prevent reuse)
+                                递增 VMID（防止复用）
                             </label>
                         </div>
-                        <div class="hint">When enabled, updates the cluster's next-id lower bound after each VM/container creation to prevent VMID reuse. This avoids mixing backups and monitoring data from deleted VMs.</div>
+                        <div class="hint">启用后，每次创建虚拟机/容器都会更新集群的 next-id 下界，以防止 VMID 被复用。这可避免将已删除虚拟机的备份与监控数据混在一起。</div>
                     </div>
                 </div>
 
                 <!-- Node Connection -->
                 <div class="mb-4">
-                    <div class="sub-h"><i class="bi bi-hdd-network"></i> Node Connection</div>
+                    <div class="sub-h"><i class="bi bi-hdd-network"></i> 节点连接</div>
 
                     <div class="field">
-                        <label for="node_host">Proxmox Host</label>
+                        <label for="node_host">Proxmox 宿主机</label>
                         <input type="text" class="inp" id="node_host" name="node_host"
-                               placeholder="192.168.1.100 or pve.example.com" required>
-                        <div class="hint">IP address or hostname of your Proxmox node</div>
+                               placeholder="192.168.1.100 或 pve.example.com" required>
+                        <div class="hint">你的 Proxmox 节点的 IP 地址或主机名</div>
                     </div>
 
                     <div class="field">
                         <label for="node_user">Username</label>
                         <input type="text" class="inp" id="node_user" name="node_user"
                                value="root@pam" required>
-                        <div class="hint">Usually root@pam (for API token, use user@realm format without token suffix)</div>
+                        <div class="hint">通常为 root@pam（使用 API 令牌时填 user@realm 格式，不带令牌后缀）</div>
                     </div>
 
                     <!-- Authentication Type -->
                     <div class="field">
-                        <label>Authentication Method</label>
+                        <label>认证方式</label>
                         <div class="btn-group w-100" role="group">
                             <input type="radio" class="btn-check" name="auth_type" id="auth_password"
                                    value="password" x-model="authType">
@@ -149,7 +149,7 @@
                             <input type="radio" class="btn-check" name="auth_type" id="auth_token"
                                    value="token" x-model="authType">
                             <label class="btn btn-outline-primary" for="auth_token">
-                                <i class="bi bi-shield-lock"></i> API Token
+                                <i class="bi bi-shield-lock"></i> API 令牌
                             </label>
                         </div>
                     </div>
@@ -159,7 +159,7 @@
                         <label for="node_password">Password</label>
                         <input type="password" class="inp" id="node_password" name="node_password"
                                :required="authType === 'password'">
-                        <div class="hint">Root password for Proxmox</div>
+                        <div class="hint">Proxmox 的 root 密码</div>
                     </div>
 
                     <!-- API Token Fields -->
@@ -167,25 +167,25 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="field">
-                                    <label for="token_name">Token Name</label>
+                                    <label for="token_name">令牌名称</label>
                                     <input type="text" class="inp" id="token_name" name="token_name"
                                            placeholder="mytoken" :required="authType === 'token'">
-                                    <div class="hint">Token ID (without user prefix)</div>
+                                    <div class="hint">令牌 ID（不含用户前缀）</div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="field">
-                                    <label for="token_value">Token Secret</label>
+                                    <label for="token_value">令牌密钥</label>
                                     <input type="password" class="inp" id="token_value" name="token_value"
                                            placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
                                            :required="authType === 'token'">
-                                    <div class="hint">Token secret value (UUID format)</div>
+                                    <div class="hint">令牌密钥值（UUID 格式）</div>
                                 </div>
                             </div>
                         </div>
                         <div class="callout info mb-3">
                             <i class="bi bi-info-circle"></i>
-                            <div><div class="t">API Token Format</div><div class="b">Create tokens in Proxmox under Datacenter → Permissions → API Tokens. The token is in format <code>user@realm!tokenid</code> - enter just the token ID here.</div></div>
+                            <div><div class="t">API 令牌格式</div><div class="b">在 Proxmox 的 数据中心 → 权限 → API 令牌 中创建令牌。令牌格式为 <code>user@realm!tokenid</code> - 此处只需填写令牌 ID。</div></div>
                         </div>
                     </div>
 
@@ -193,27 +193,23 @@
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="verify_ssl" name="verify_ssl">
                             <label class="form-check-label" for="verify_ssl">
-                                Verify SSL Certificate
+                                验证 SSL 证书
                             </label>
                         </div>
-                        <div class="hint">Uncheck if using self-signed certificates (common for home labs)</div>
+                        <div class="hint">使用自签名证书时请取消勾选（家庭实验室常见）</div>
                     </div>
 
                     <div class="callout mb-0">
                         <i class="bi bi-info-circle"></i>
-                        <div><div class="t">Note</div><div class="b">Some features (writing custom cloud-init snippets to
-                        node storage) need filesystem access to a node. When ProxUI runs remotely it
-                        reaches nodes over <strong>SSH</strong> (port 22) or the node <strong>Shell/termproxy</strong>
-                        (over the API port). You'll be guided to install ProxUI's SSH key — a one-time
-                        step using root's password — from the Cloud-Init tab when needed. Basic
-                        cloud-init (user, password, SSH keys, IP/DNS) works over the API alone.</div></div>
+                        <div><div class="t">Note</div><div class="b">部分功能（将自定义 cloud-init 片段写入节点存储）需要对节点的文件系统访问。当 ProxUI 远程运行时，它通过以下方式访问节点 <strong>SSH</strong> （端口 22）或该节点 <strong>Shell/termproxy</strong>
+                        （走 API 端口）。需要时会在 Cloud-Init 标签页引导你使用 root 密码安装 ProxUI 的 SSH 密钥——仅需一次。基础的 cloud-init（用户、密码、SSH 密钥、IP/DNS）仅通过 API 即可完成。</div></div>
                     </div>
                 </div>
 
                 <!-- Actions -->
                 <div class="d-grid gap-2">
                     <button type="submit" class="btn-x primary" style="justify-content:center;padding:10px 14px">
-                        <i class="bi bi-plug"></i> Connect to Proxmox
+                        <i class="bi bi-plug"></i> 连接到 Proxmox
                     </button>
                     <button type="button" class="btn-x" style="justify-content:center"
                             @click="testConnection()" :disabled="testing">
@@ -228,15 +224,15 @@
                 <div class="callout ok" x-show="testSuccess === true">
                     <i class="bi bi-check-circle"></i>
                     <div>
-                        <div class="t">Connection successful!</div>
-                        <div class="b">Connected to <span x-text="testNode"></span> running Proxmox VE <span x-text="testVersion"></span>
-                        <template x-if="testWarning"><div class="mt-1"><i class="bi bi-exclamation-triangle"></i> <strong>Warning:</strong> <span x-text="testWarning"></span></div></template>
+                        <div class="t">连接成功！</div>
+                        <div class="b">已连接到 <span x-text="testNode"></span> 运行 Proxmox VE 的 <span x-text="testVersion"></span>
+                        <template x-if="testWarning"><div class="mt-1"><i class="bi bi-exclamation-triangle"></i> <strong>警告：</strong> <span x-text="testWarning"></span></div></template>
                         </div>
                     </div>
                 </div>
                 <div class="callout danger" x-show="testSuccess === false">
                     <i class="bi bi-exclamation-triangle"></i>
-                    <div><div class="t">Connection failed</div><div class="b" x-text="testError"></div></div>
+                    <div><div class="t">连接失败</div><div class="b" x-text="testError"></div></div>
                 </div>
             </div>
         </div>
@@ -244,31 +240,31 @@
 
     <!-- Help Card -->
     <div class="card-x mt-4">
-        <div class="cx-head"><i class="bi bi-question-circle" style="color:var(--accent)"></i><span class="cx-title">Need Help?</span></div>
+        <div class="cx-head"><i class="bi bi-question-circle" style="color:var(--accent)"></i><span class="cx-title">需要帮助？</span></div>
         <div class="cx-body">
-            <div class="sub-h" style="margin-top:0">Common Issues</div>
+            <div class="sub-h" style="margin-top:0">常见问题</div>
             <ul class="mb-3">
-                <li><strong>Connection refused:</strong> Check if Proxmox web interface is accessible</li>
-                <li><strong>SSL errors:</strong> Uncheck "Verify SSL Certificate" for self-signed certs</li>
-                <li><strong>Authentication failed:</strong> Verify username/password or token credentials</li>
-                <li><strong>Network timeout:</strong> Ensure firewall allows port 8006</li>
-                <li><strong>No data with API token:</strong> Ensure "Privilege Separation" is unchecked when creating the token, or assign PVEAuditor role to the token</li>
+                <li><strong>连接被拒绝：</strong> 检查 Proxmox Web 界面是否可访问</li>
+                <li><strong>SSL 错误：</strong> 使用自签名证书时请取消勾选“验证 SSL 证书”</li>
+                <li><strong>认证失败：</strong> 验证用户名/密码或令牌凭据</li>
+                <li><strong>网络超时：</strong> 确保防火墙放行 8006 端口</li>
+                <li><strong>使用 API 令牌时无数据：</strong> 创建令牌时请确保取消勾选“特权分离”，或为该令牌分配 PVEAuditor 角色</li>
             </ul>
 
-            <div class="sub-h">Default Settings</div>
+            <div class="sub-h">默认设置</div>
             <ul class="mb-3">
-                <li><strong>Web Interface:</strong> https://your-ip:8006</li>
-                <li><strong>Username:</strong> root@pam</li>
-                <li><strong>Port:</strong> 8006 (HTTPS)</li>
+                <li><strong>Web 界面：</strong> https://your-ip:8006</li>
+                <li><strong>用户名：</strong> root@pam</li>
+                <li><strong>端口：</strong> 8006（HTTPS）</li>
             </ul>
 
-            <div class="sub-h">API Token Setup</div>
+            <div class="sub-h">API 令牌设置</div>
             <ul class="mb-0">
-                <li>Go to Datacenter → Permissions → API Tokens</li>
-                <li>Click "Add" and select a user (e.g., root@pam)</li>
-                <li>Enter a token ID (e.g., "proxui")</li>
-                <li><strong>Uncheck "Privilege Separation"</strong> for full user permissions</li>
-                <li>Copy the token secret (shown only once!)</li>
+                <li>前往 数据中心 → 权限 → API 令牌</li>
+                <li>点击“添加”并选择一个用户（例如 root@pam）</li>
+                <li>输入令牌 ID（例如“proxui”）</li>
+                <li><strong>取消勾选“特权分离”</strong> 以获得完整用户权限</li>
+                <li>复制令牌密钥（仅显示一次！）</li>
             </ul>
         </div>
     </div>
@@ -280,34 +276,34 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editClusterModalLabel">
-                        <i class="bi bi-pencil" style="color:var(--accent)"></i> Edit Cluster
+                        <i class="bi bi-pencil" style="color:var(--accent)"></i> 编辑集群
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <!-- Cluster Information -->
                     <div class="mb-4">
-                        <div class="sub-h" style="margin-top:0"><i class="bi bi-diagram-2"></i> Cluster Information</div>
+                        <div class="sub-h" style="margin-top:0"><i class="bi bi-diagram-2"></i> 集群信息</div>
                         <div class="field">
-                            <label>Cluster Name</label>
+                            <label>集群名称</label>
                             <input type="text" class="inp" x-model="editName" required>
                         </div>
                         <div class="field">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" x-model="editIncrementalVmid">
                                 <label class="form-check-label">
-                                    Incremental VMID (prevent reuse)
+                                    递增 VMID（防止复用）
                                 </label>
                             </div>
-                            <div class="hint">When enabled, updates the cluster's next-id lower bound after each VM/container creation to prevent VMID reuse.</div>
+                            <div class="hint">启用后，每次创建虚拟机/容器都会更新集群的 next-id 下界，以防止 VMID 被复用。</div>
                         </div>
                     </div>
 
                     <!-- Node Connection -->
                     <div class="mb-4">
-                        <div class="sub-h"><i class="bi bi-hdd-network"></i> Node Connection</div>
+                        <div class="sub-h"><i class="bi bi-hdd-network"></i> 节点连接</div>
                         <div class="field">
-                            <label>Proxmox Host</label>
+                            <label>Proxmox 宿主机</label>
                             <input type="text" class="inp" x-model="editHost" required>
                         </div>
                         <div class="field">
@@ -317,7 +313,7 @@
 
                         <!-- Auth Type -->
                         <div class="field">
-                            <label>Authentication Method</label>
+                            <label>认证方式</label>
                             <div class="btn-group w-100" role="group">
                                 <input type="radio" class="btn-check" name="edit_auth_type"
                                        id="edit_auth_password" value="password" x-model="editAuthType">
@@ -327,7 +323,7 @@
                                 <input type="radio" class="btn-check" name="edit_auth_type"
                                        id="edit_auth_token" value="token" x-model="editAuthType">
                                 <label class="btn btn-outline-primary" for="edit_auth_token">
-                                    <i class="bi bi-shield-lock"></i> API Token
+                                    <i class="bi bi-shield-lock"></i> API 令牌
                                 </label>
                             </div>
                         </div>
@@ -336,8 +332,8 @@
                         <div class="field" x-show="editAuthType === 'password'">
                             <label>Password</label>
                             <input type="password" class="inp" x-model="editPassword"
-                                   placeholder="Leave empty to keep existing">
-                            <div class="hint">Leave empty to keep existing password</div>
+                                   placeholder="留空则保留现有值">
+                            <div class="hint">留空则保留现有密码</div>
                         </div>
 
                         <!-- API Token Fields -->
@@ -345,18 +341,18 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="field">
-                                        <label>Token Name</label>
+                                        <label>令牌名称</label>
                                         <input type="text" class="inp" x-model="editTokenName"
                                                placeholder="mytoken">
-                                        <div class="hint">Token ID (without user prefix)</div>
+                                        <div class="hint">令牌 ID（不含用户前缀）</div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="field">
-                                        <label>Token Secret</label>
+                                        <label>令牌密钥</label>
                                         <input type="password" class="inp" x-model="editTokenValue"
-                                               placeholder="Leave empty to keep existing">
-                                        <div class="hint">Leave empty to keep existing token</div>
+                                               placeholder="留空则保留现有值">
+                                        <div class="hint">留空则保留现有令牌</div>
                                     </div>
                                 </div>
                             </div>
@@ -365,7 +361,7 @@
                         <div class="field mb-0">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" x-model="editVerifySsl">
-                                <label class="form-check-label">Verify SSL Certificate</label>
+                                <label class="form-check-label">验证 SSL 证书</label>
                             </div>
                         </div>
                     </div>
@@ -375,7 +371,7 @@
                     <button type="button" class="btn-x primary" @click="saveEdit()" :disabled="saving">
                         <i class="bi bi-check-lg" x-show="!saving"></i>
                         <span class="spinner-border spinner-border-sm" x-show="saving"></span>
-                        Save Changes
+                        保存更改
                     </button>
                 </div>
             </div>
@@ -390,5 +386,5 @@
     import { connectPage } from "{{ url_for('static', filename='js/connect.js') }}";
     function register() { window.Alpine.data('connectPage', connectPage); }
     if (window.Alpine) register(); else document.addEventListener('alpine:init', register);
-</script>
+</script>script
 {% endblock %}

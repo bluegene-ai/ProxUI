@@ -4,8 +4,8 @@
 
 {% block content %}
 <div class="mb-4">
-    <div class="sec-title">Create VM or Container</div>
-    <div class="sec-sub">Configure a new virtual machine or LXC container on the cluster</div>
+    <div class="sec-title">创建虚拟机或容器</div>
+    <div class="sec-sub">在集群中配置新的虚拟机或 LXC 容器</div>
 </div>
 
 <div class="row g-3" x-data="createVmForm()">
@@ -19,8 +19,8 @@
                         <label for="type">Type</label>
                         <select class="inp" id="type" name="type" required
                                 x-model="vmType" @change="onTypeChange()">
-                            <option value="qemu">Virtual Machine (KVM)</option>
-                            <option value="lxc">Container (LXC)</option>
+                            <option value="qemu">虚拟机（KVM）</option>
+                            <option value="lxc">容器（LXC）</option>
                         </select>
                     </div>
 
@@ -29,7 +29,7 @@
                         <label for="node">Node</label>
                         <select class="inp" id="node" name="node" required
                                 x-model="node" @change="onNodeChange()">
-                            <option value="">Select node...</option>
+                            <option value="">选择节点...</option>
                             {% for node in nodes %}
                             <option value="{{ node }}">{{ node }}</option>
                             {% endfor %}
@@ -38,11 +38,11 @@
 
                     <!-- Creation Method -->
                     <div class="field">
-                        <label for="creation_method">Creation Method</label>
+                        <label for="creation_method">创建方式</label>
                         <select class="inp" id="creation_method" name="creation_method"
                                 x-model="creationMethod" @change="onMethodChange()">
-                            <option value="blank">Create Blank VM/Container</option>
-                            <option value="template">Use Template</option>
+                            <option value="blank">创建空白虚拟机/容器</option>
+                            <option value="template">使用模板</option>
                         </select>
                     </div>
 
@@ -50,7 +50,7 @@
                     <div class="field" x-show="creationMethod === 'template'">
                         <label for="template">Template</label>
                         <select class="inp" id="template" name="template" x-model="selectedTemplate">
-                            <option value="">Select template...</option>
+                            <option value="">选择模板...</option>
                             <template x-for="t in templates" :key="t.value">
                                 <option :value="t.value" x-text="t.label"></option>
                             </template>
@@ -59,7 +59,7 @@
 
                     <!-- Basic Settings -->
                     <div class="field">
-                        <label for="vmid">VM ID</label>
+                        <label for="vmid">虚拟机 ID</label>
                         <input type="number" class="inp" id="vmid" name="vmid"
                                min="100" max="999999" required placeholder="e.g., 100"
                                x-model="vmid"
@@ -71,14 +71,14 @@
                     <div class="field">
                         <label for="name">Name</label>
                         <input type="text" class="inp" id="name" name="name"
-                               required placeholder="e.g., my-server">
+                               required placeholder="例如 my-server">
                     </div>
 
                     <!-- Hardware Resources -->
                     <div class="row">
                         <div class="col-md-4">
                             <div class="field">
-                                <label for="cores">CPU Cores</label>
+                                <label for="cores">CPU 核心数</label>
                                 <input type="number" class="inp" id="cores" name="cores"
                                        min="1" max="128" value="2" required>
                             </div>
@@ -86,7 +86,7 @@
 
                         <div class="col-md-4">
                             <div class="field">
-                                <label for="memory">Memory (MB)</label>
+                                <label for="memory">内存（MB）</label>
                                 <input type="number" class="inp" id="memory" name="memory"
                                        min="512" max="524288" value="2048" step="512" required>
                             </div>
@@ -94,7 +94,7 @@
 
                         <div class="col-md-4" x-show="vmType === 'qemu'">
                             <div class="field">
-                                <label for="sockets">CPU Sockets</label>
+                                <label for="sockets">CPU 插槽数</label>
                                 <input type="number" class="inp" id="sockets" name="sockets"
                                        min="1" max="4" value="1" :required="vmType === 'qemu'">
                             </div>
@@ -106,7 +106,7 @@
                         <label for="storage">Storage</label>
                         <select class="inp" id="storage" name="storage" required
                                 x-model="selectedStorage">
-                            <option value="">Select storage...</option>
+                            <option value="">选择存储...</option>
                             <template x-for="s in storages" :key="s.value">
                                 <option :value="s.value" x-text="s.label"></option>
                             </template>
@@ -114,16 +114,16 @@
                     </div>
 
                     <div class="field">
-                        <label for="disk_size">Disk Size (GB)</label>
+                        <label for="disk_size">磁盘容量（GB）</label>
                         <input type="number" class="inp" id="disk_size" name="disk_size"
                                min="1" max="2048" value="20" required>
                     </div>
 
                     <!-- Network -->
                     <div class="field">
-                        <label for="bridge">Network Bridge</label>
+                        <label for="bridge">网络网桥</label>
                         <select class="inp" id="bridge" name="bridge" x-model="selectedBridge">
-                            <option value="">Select network bridge...</option>
+                            <option value="">选择网络网桥...</option>
                             <template x-for="b in bridges" :key="b.value">
                                 <option :value="b.value" x-text="b.label"></option>
                             </template>
@@ -132,35 +132,33 @@
 
                     <!-- VM-specific: ISO -->
                     <div class="field" x-show="vmType === 'qemu'">
-                        <label for="iso">ISO Image (Optional)</label>
+                        <label for="iso">ISO 镜像（可选）</label>
                         <select class="inp" id="iso" name="iso" x-model="selectedIso">
-                            <option value="">No ISO (blank VM)</option>
+                            <option value="">不使用 ISO（空白虚拟机）</option>
                             <template x-for="iso in isos" :key="iso.value">
                                 <option :value="iso.value" x-text="iso.label"></option>
                             </template>
                         </select>
-                        <div class="hint">Select an ISO image to attach to the VM for OS installation</div>
+                        <div class="hint">选择用于安装操作系统的 ISO 镜像并挂载到虚拟机</div>
                     </div>
 
                     <!-- VM-specific: firmware (clones inherit the template's) -->
                     <div class="field" x-show="vmType === 'qemu' && creationMethod !== 'template'">
                         <label for="bios">BIOS</label>
                         <select class="inp" id="bios" name="bios" x-model="bios">
-                            <option value="seabios">SeaBIOS (legacy BIOS)</option>
-                            <option value="ovmf">OVMF (UEFI)</option>
+                            <option value="seabios">SeaBIOS（传统 BIOS）</option>
+                            <option value="ovmf">OVMF（UEFI）</option>
                         </select>
                         <div class="form-check mt-2" x-show="bios === 'ovmf'">
                             <input class="form-check-input" type="checkbox" id="secure_boot" name="secure_boot" value="1">
-                            <label class="form-check-label" for="secure_boot">Pre-enroll Secure Boot keys</label>
+                            <label class="form-check-label" for="secure_boot">预置 Secure Boot 密钥</label>
                         </div>
                         <div class="hint">
-                            OVMF adds a small EFI vars disk on the selected storage. Needed for Windows 11 and
-                            UEFI-only installers; Secure Boot keys enable Secure Boot on first boot.
+                            OVMF 会在所选存储上添加一个小型 EFI 变量磁盘。Windows 11 与仅支持 UEFI 的安装器需要它；预置 Secure Boot 密钥可在首次启动时启用安全启动。
                         </div>
                         <div class="hint" x-show="bios === 'ovmf'">
-                            <i class="bi bi-info-circle"></i> UEFI VMs are created with the <strong>q35</strong>
-                            machine type (PCIe chipset) instead of the Proxmox default i440fx — needed for
-                            Secure Boot and reliable cloud-init. You can change it later on the Edit page.
+                            <i class="bi bi-info-circle"></i> UEFI 虚拟机使用以下机型创建： <strong>q35</strong>
+                            机型（PCIe 芯片组），而非 Proxmox 默认的 i440fx——这是启用安全启动并获得可靠 cloud-init 支持所必需的。之后可在编辑页修改。
                         </div>
                     </div>
 
@@ -168,19 +166,18 @@
                     <div class="field" x-show="vmType === 'qemu'">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="agent" name="agent" value="1">
-                            <label class="form-check-label" for="agent">Enable QEMU guest agent</label>
+                            <label class="form-check-label" for="agent">启用 QEMU 客户机代理</label>
                         </div>
                         <div class="hint">
-                            Leave off unless <code>qemu-guest-agent</code> is installed in the guest — enabling it
-                            without the agent running makes detail pages slow to load.
+                            除非需要，否则保持关闭 <code>qemu-guest-agent</code> 已安装在客户机中——若代理未运行仍启用，详情页加载会变慢。
                         </div>
                     </div>
 
                     <!-- Container-specific: OS Template -->
                     <div class="field" x-show="vmType === 'lxc'">
-                        <label for="ostemplate">OS Template</label>
+                        <label for="ostemplate">系统模板</label>
                         <select class="inp" id="ostemplate" name="ostemplate" x-model="selectedOsTemplate">
-                            <option value="">Select OS template...</option>
+                            <option value="">选择系统模板...</option>
                             <template x-for="t in osTemplates" :key="t.value">
                                 <option :value="t.value" x-text="t.label"></option>
                             </template>
@@ -203,13 +200,13 @@
             <div class="cx-body">
                 <div class="summary-row"><span class="k">Type</span><span class="v" x-text="vmType === 'qemu' ? 'VM (KVM)' : 'Container (LXC)'"></span></div>
                 <div class="summary-row"><span class="k">Node</span><span class="v" x-text="node || '—'"></span></div>
-                <div class="summary-row"><span class="k">VM ID</span><span class="v mono" x-text="vmid || '—'"></span></div>
+                <div class="summary-row"><span class="k">虚拟机 ID</span><span class="v mono" x-text="vmid || '—'"></span></div>
                 <div class="summary-row"><span class="k">Storage</span><span class="v" x-text="selectedStorage || '—'"></span></div>
                 <div class="summary-row" x-show="vmType === 'qemu'"><span class="k">Bridge</span><span class="v" x-text="selectedBridge || '—'"></span></div>
                 <div class="summary-row" x-show="vmType === 'qemu' && creationMethod !== 'template'"><span class="k">ISO</span><span class="v" x-text="selectedIso || 'None'"></span></div>
                 <div class="summary-row" x-show="vmType === 'qemu' && creationMethod !== 'template'"><span class="k">BIOS</span><span class="v" x-text="bios === 'ovmf' ? 'OVMF (UEFI)' : 'SeaBIOS'"></span></div>
                 <div class="summary-row" x-show="vmType === 'qemu' && creationMethod !== 'template'"><span class="k">Machine</span><span class="v" x-text="bios === 'ovmf' ? 'q35' : 'i440fx'"></span></div>
-                <div class="summary-row" x-show="vmType === 'lxc'"><span class="k">OS Template</span><span class="v" x-text="selectedOsTemplate || '—'"></span></div>
+                <div class="summary-row" x-show="vmType === 'lxc'"><span class="k">系统模板</span><span class="v" x-text="selectedOsTemplate || '—'"></span></div>
             </div>
         </div>
     </div>
@@ -221,5 +218,5 @@
     import { createVmForm } from "{{ url_for('static', filename='js/create-vm.js') }}";
     function register() { window.Alpine.data('createVmForm', createVmForm); }
     if (window.Alpine) register(); else document.addEventListener('alpine:init', register);
-</script>
+</script>script
 {% endblock %}

@@ -11,7 +11,7 @@
                 <span class="d"></span><span x-text="enabled ? 'Enabled' : 'Disabled'"></span>
             </span>
         </template>
-        <button class="icon-btn ms-auto" style="width:28px;height:28px;font-size:13px" @click="load()" :disabled="loading" title="Refresh firewall">
+        <button class="icon-btn ms-auto" style="width:28px;height:28px;font-size:13px" @click="load()" :disabled="loading" title="刷新防火墙">
             <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i>
         </button>
         <button class="btn-x sm" @click="askToggle()" :disabled="busy || !loaded" x-show="scope !== 'group'">
@@ -19,7 +19,7 @@
             <span x-text="enabled ? 'Disable' : 'Enable'"></span>
         </button>
         <button class="btn-x sm primary" @click="openRule(null)" :disabled="busy || !loaded">
-            <i class="bi bi-plus-lg"></i> Add rule
+            <i class="bi bi-plus-lg"></i> 添加规则
         </button>
     </div>
     <div class="cx-body tight">
@@ -29,26 +29,25 @@
 
         <template x-if="loaded && scope !== 'cluster' && clusterEnabled === false">
             <div class="alert alert-warning py-2 small m-3 mb-0">
-                <i class="bi bi-exclamation-triangle"></i> <strong>Datacenter firewall is off.</strong>
-                Rules here are not applied until the firewall is enabled at datacenter level
-                (<a href="{{ url_for('firewall') }}">Firewall page</a>).
+                <i class="bi bi-exclamation-triangle"></i> <strong>数据中心防火墙已关闭。</strong>
+                在数据中心级别启用防火墙之前，此处的规则不会生效（<a href="{{ url_for('firewall') }}">防火墙页面</a>).
             </div>
         </template>
         <template x-if="loaded && scope === 'guest' && enabled && !nics.some(n => n.firewall)">
             <div class="alert alert-warning py-2 small m-3 mb-0">
-                <i class="bi bi-exclamation-triangle"></i> <strong>No network interface has the firewall flag.</strong>
-                Guest rules only apply to NICs with <code>firewall=1</code>; turn it on per interface in the
-                <a href="{{ url_for('vm_edit', node=node, vmid=vmid) if fw_scope == 'guest' else '#' }}#network">Network section of the edit page</a>.
+                <i class="bi bi-exclamation-triangle"></i> <strong>没有接口开启防火墙标志。</strong>
+                客户机规则仅适用于带以下标志的网卡： <code>firewall=1</code>；请在以下位置为各接口单独开启
+                <a href="{{ url_for('vm_edit', node=node, vmid=vmid) if fw_scope == 'guest' else '#' }}#network">编辑页中的网络部分</a>.
             </div>
         </template>
         <template x-if="loaded && scope === 'guest' && nics.length">
             <div class="d-flex flex-wrap align-items-center gap-3 px-3 pt-3">
-                <span class="text-faint" style="font-size:12px">Firewall on interface:</span>
+                <span class="text-faint" style="font-size:12px">接口上的防火墙：</span>
                 <template x-for="n in nics" :key="n.key">
                     <span class="d-inline-flex align-items-center gap-1" style="font-size:12px">
                         <i class="bi" :class="(n.pending ? !n.firewall : n.firewall) ? 'bi-check-circle-fill text-success' : 'bi-x-circle text-muted'"></i>
                         <span class="mono" x-text="n.key"></span>
-                        <span class="tag" x-show="n.pending" title="Applies after the guest restarts">pending</span>
+                        <span class="tag" x-show="n.pending" title="客户机重启后生效">pending</span>
                     </span>
                 </template>
                 {% if fw_scope == 'guest' %}
@@ -77,10 +76,10 @@
         </template>
 
         <template x-if="loading && !loaded">
-            <div class="text-center p-4"><div class="spinner-border spinner-border-sm" role="status"></div> Loading firewall…</div>
+            <div class="text-center p-4"><div class="spinner-border spinner-border-sm" role="status"></div> 正在加载防火墙…</div>
         </template>
         <template x-if="loaded && rules.length === 0">
-            <div class="empty-hint"><i class="bi bi-shield"></i><p class="mb-0">No rules</p></div>
+            <div class="empty-hint"><i class="bi bi-shield"></i><p class="mb-0">没有规则</p></div>
         </template>
         <div style="overflow-x:auto" x-show="rules.length > 0">
             <table class="tbl">
@@ -90,7 +89,7 @@
                         <th>On</th>
                         <th>Dir</th>
                         <th>Action</th>
-                        <th>Macro / Proto</th>
+                        <th>宏 / 协议</th>
                         <th>Source</th>
                         <th>Dest</th>
                         <th>Port</th>
@@ -114,10 +113,10 @@
                             <td class="mono text-faint" style="font-size:12px" x-text="r.iface || '—'"></td>
                             <td class="text-faint" style="font-size:12px" x-text="r.comment || ''"></td>
                             <td style="text-align:right;white-space:nowrap">
-                                <button class="btn-x sm" @click="move(r, 'up')" :disabled="busy || r.pos === 0" title="Move up"><i class="bi bi-arrow-up"></i></button>
-                                <button class="btn-x sm" @click="move(r, 'down')" :disabled="busy || r.pos === rules.length - 1" title="Move down"><i class="bi bi-arrow-down"></i></button>
-                                <button class="btn-x sm" @click="openRule(r)" :disabled="busy" title="Edit rule"><i class="bi bi-pencil"></i></button>
-                                <button class="btn-x sm danger" @click="askDelete(r)" :disabled="busy" title="Delete rule"><i class="bi bi-trash"></i></button>
+                                <button class="btn-x sm" @click="move(r, 'up')" :disabled="busy || r.pos === 0" title="上移"><i class="bi bi-arrow-up"></i></button>
+                                <button class="btn-x sm" @click="move(r, 'down')" :disabled="busy || r.pos === rules.length - 1" title="下移"><i class="bi bi-arrow-down"></i></button>
+                                <button class="btn-x sm" @click="openRule(r)" :disabled="busy" title="编辑规则"><i class="bi bi-pencil"></i></button>
+                                <button class="btn-x sm danger" @click="askDelete(r)" :disabled="busy" title="删除规则"><i class="bi bi-trash"></i></button>
                             </td>
                         </tr>
                     </template>
@@ -157,7 +156,7 @@
                             </template>
                             <template x-if="form.type === 'group'">
                                 <select class="inp" x-model="form.action">
-                                    <option value="">— choose —</option>
+                                    <option value="">— 请选择 —</option>
                                     <template x-for="g in groups" :key="g"><option :value="g" x-text="g" :selected="form.action === g"></option></template>
                                 </select>
                             </template>
@@ -165,7 +164,7 @@
                         <div class="col-6 col-md-3 field mb-0" x-show="form.type !== 'group'">
                             <label>Macro</label>
                             <select class="inp" x-model="form.macro">
-                                <option value="">— none —</option>
+                                <option value="">— 无 —</option>
                                 <template x-for="m in macros" :key="m.name"><option :value="m.name" x-text="m.name" :title="m.descr" :selected="form.macro === m.name"></option></template>
                             </select>
                         </div>
@@ -181,7 +180,7 @@
                                     <input type="text" class="inp mono" x-model="form.proto" list="fwProtoList" placeholder="tcp / udp / icmp">
                                 </div>
                                 <div class="col-6 col-md-3 field mb-0" x-show="!form.macro && /^icmp|ipv6-icmp/.test(form.proto)">
-                                    <label>ICMP type</label>
+                                    <label>ICMP 类型</label>
                                     <input type="text" class="inp mono" x-model="form['icmp-type']" placeholder="echo-request">
                                 </div>
                                 <div class="col-6 col-md-3 field mb-0">
@@ -193,17 +192,17 @@
                                     <input type="text" class="inp mono" x-model="form.dest" :list="'fwAddr-' + scope" placeholder="any">
                                 </div>
                                 <div class="col-6 col-md-3 field mb-0" x-show="!form.macro">
-                                    <label>Source port</label>
+                                    <label>源端口</label>
                                     <input type="text" class="inp mono" x-model="form.sport" placeholder="any">
                                 </div>
                                 <div class="col-6 col-md-3 field mb-0" x-show="!form.macro">
-                                    <label>Dest. port</label>
+                                    <label>目标端口</label>
                                     <input type="text" class="inp mono" x-model="form.dport" placeholder="22, 80:90">
                                 </div>
                                 <div class="col-6 col-md-3 field mb-0">
-                                    <label>Log level</label>
+                                    <label>日志级别</label>
                                     <select class="inp" x-model="form.log">
-                                        <option value="">— default (nolog) —</option>
+                                        <option value="">— 默认（nolog）—</option>
                                         <template x-for="l in logLevels" :key="l"><option :value="l" x-text="l" :selected="form.log === l"></option></template>
                                     </select>
                                 </div>
@@ -216,7 +215,7 @@
                         </div>
                         <div class="col-12">
                             <label class="d-flex align-items-center gap-2" style="cursor:pointer">
-                                <input type="checkbox" x-model="form.enable"> Enable rule
+                                <input type="checkbox" x-model="form.enable"> 启用规则
                             </label>
                         </div>
                     </div>

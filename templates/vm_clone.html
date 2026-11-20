@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 
-{% block title %}Clone VM {{ config.name or vmid }} - Proxmox Manager{% endblock %}
+{% block title %}克隆虚拟机 {{ config.name or vmid }} - Proxmox Manager{% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
     <div>
-        <div class="sec-title"><i class="bi bi-files"></i> Clone VM {{ config.name or vmid }}</div>
+        <div class="sec-title"><i class="bi bi-files"></i> 克隆虚拟机 {{ config.name or vmid }}</div>
     </div>
     <div class="d-flex align-items-center gap-2">
         <span class="pill {{ 'run' if vm.status == 'running' else 'stop' if vm.status == 'stopped' else 'maint' }}">
             <span class="d"></span>{{ vm.status }}
         </span>
         <a href="{{ url_for('vm_detail', node=node, vmid=vmid) }}" class="btn-x">
-            <i class="bi bi-arrow-left"></i> Back to VM
+            <i class="bi bi-arrow-left"></i> 返回虚拟机
         </a>
     </div>
 </div>
@@ -21,11 +21,11 @@
 <div class="row g-3 justify-content-center">
     <div class="col-12 col-xl-8">
         <div class="card-x">
-            <div class="cx-head"><i class="bi bi-files" style="color:var(--accent)"></i><span class="cx-title">Clone Configuration</span></div>
+            <div class="cx-head"><i class="bi bi-files" style="color:var(--accent)"></i><span class="cx-title">克隆配置</span></div>
             <div class="cx-body">
                 <!-- Source VM Info -->
                 <div class="mb-4">
-                    <div class="sub-h" style="margin-top:0"><i class="bi bi-pc-display"></i> Source VM</div>
+                    <div class="sub-h" style="margin-top:0"><i class="bi bi-pc-display"></i> 源虚拟机</div>
                     <div class="kv"><span class="k">ID</span><span class="v">{{ vmid }}</span></div>
                     <div class="kv"><span class="k">Name</span><span class="v">{{ config.name or 'Unnamed' }}</span></div>
                     <div class="kv"><span class="k">Node</span><span class="v">{{ node }}</span></div>
@@ -40,26 +40,26 @@
                             Unknown
                         {% endif %}
                     </span></div>
-                    <div class="kv"><span class="k">CPU</span><span class="v">{{ config.cores or 1 }} cores</span></div>
+                    <div class="kv"><span class="k">CPU</span><span class="v">{{ config.cores or 1 }} 个核心</span></div>
                 </div>
 
                 <form @submit.prevent="submit()">
                     <!-- Clone Options -->
                     <div class="mb-4">
-                        <div class="sub-h" style="margin-top:0"><i class="bi bi-gear"></i> Clone Settings</div>
+                        <div class="sub-h" style="margin-top:0"><i class="bi bi-gear"></i> 克隆设置</div>
 
                         <div class="field">
-                            <label for="clone_name">New VM Name <span style="color:var(--danger)">*</span></label>
+                            <label for="clone_name">新虚拟机名称 <span style="color:var(--danger)">*</span></label>
                             <input type="text" class="inp" id="clone_name" name="clone_name"
                                    x-model="cloneName"
-                                   placeholder="Enter name for the cloned VM" required>
+                                   placeholder="输入克隆虚拟机的名称" required>
                         </div>
 
                         <div class="field">
-                            <label for="clone_vmid">New VM ID <span style="color:var(--danger)">*</span></label>
+                            <label for="clone_vmid">新虚拟机 ID <span style="color:var(--danger)">*</span></label>
                             <input type="number" class="inp" id="clone_vmid" name="clone_vmid"
                                    min="100" max="999999999"
-                                   placeholder="Auto-generate"
+                                   placeholder="自动生成"
                                    x-model="cloneVmid"
                                    :class="vmidInputCls"
                                    @input="onVmidInput()"
@@ -71,7 +71,7 @@
                         </div>
 
                         <div class="field">
-                            <label for="target_node">Target Node</label>
+                            <label for="target_node">目标节点</label>
                             <select class="inp" id="target_node" name="target_node"
                                     x-model="targetNode" @change="loadStorages()">
                                 {% for available_node in available_nodes %}
@@ -80,46 +80,46 @@
                                 </option>
                                 {% endfor %}
                             </select>
-                            <div class="hint">Node where the cloned VM will be created</div>
+                            <div class="hint">克隆虚拟机将创建在此节点</div>
                         </div>
                     </div>
 
                     <!-- Storage Options -->
                     <div class="mb-4">
-                        <div class="sub-h" style="margin-top:0"><i class="bi bi-hdd"></i> Storage Configuration</div>
+                        <div class="sub-h" style="margin-top:0"><i class="bi bi-hdd"></i> 存储配置</div>
 
                         <div class="form-check mb-2">
                             <input class="form-check-input" type="radio" name="clone_type" id="clone_full"
                                    value="full" x-model="cloneType">
                             <label class="form-check-label" for="clone_full">
-                                <strong>Full Clone</strong>
+                                <strong>完整克隆</strong>
                             </label>
-                            <div class="hint">Creates a complete independent copy of the VM (recommended)</div>
+                            <div class="hint">创建虚拟机的完整独立副本（推荐）</div>
                         </div>
 
                         <div class="field">
-                            <label for="target_storage">Target Storage</label>
+                            <label for="target_storage">目标存储</label>
                             <select class="inp" id="target_storage" name="target_storage"
                                     x-model="targetStorage">
-                                <option value="">Same as source (default)</option>
+                                <option value="">与源相同（默认）</option>
                                 <template x-for="s in storages" :key="s.storage">
                                     <option :value="s.storage"
                                             x-text="s.storage + ' (' + s.type + ')' + (s.available_gb !== undefined ? ' - ' + s.available_gb + ' GB free' : '')">
                                     </option>
                                 </template>
                             </select>
-                            <div class="hint">Storage where cloned disks will be placed</div>
+                            <div class="hint">克隆磁盘将存放的存储</div>
                         </div>
                     </div>
 
                     <!-- Advanced Options -->
                     <div class="mb-4">
-                        <div class="sub-h" style="margin-top:0"><i class="bi bi-sliders"></i> Advanced Options</div>
+                        <div class="sub-h" style="margin-top:0"><i class="bi bi-sliders"></i> 高级选项</div>
 
                         <div class="field">
                             <label for="clone_description">Description</label>
                             <textarea class="inp" id="clone_description" name="clone_description"
-                                      rows="3" placeholder="Optional description for the cloned VM"
+                                      rows="3" placeholder="克隆虚拟机的可选描述"
                                       x-model="description"></textarea>
                         </div>
 
@@ -127,12 +127,11 @@
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="clone_agent"
                                        x-model="agentEnabled">
-                                <label class="form-check-label" for="clone_agent">Enable QEMU guest agent</label>
+                                <label class="form-check-label" for="clone_agent">启用 QEMU 客户机代理</label>
                             </div>
                             <div class="hint">
-                                Applied after the clone finishes. Leave off unless <code>qemu-guest-agent</code>
-                                is installed in the guest — enabling it without the agent running makes detail
-                                pages slow to load.
+                                克隆完成后应用。除非需要，否则保持关闭 <code>qemu-guest-agent</code>
+                                已安装在客户机中——若代理未运行仍启用，详情页加载会变慢。
                             </div>
                         </div>
                     </div>
@@ -144,7 +143,7 @@
                         </button>
                         <button type="submit" class="btn-x primary" :disabled="submitting">
                             <span x-show="submitting" class="spinner-border spinner-border-sm" role="status"></span>
-                            <i class="bi bi-files" x-show="!submitting"></i> Clone VM
+                            <i class="bi bi-files" x-show="!submitting"></i> 克隆虚拟机
                         </button>
                     </div>
                 </form>
@@ -157,10 +156,10 @@
             <div class="cx-head"><i class="bi bi-clipboard-check" style="color:var(--accent)"></i><span class="cx-title">Summary</span></div>
             <div class="cx-body">
                 <div class="summary-row"><span class="k">Name</span><span class="v" x-text="cloneName || '—'"></span></div>
-                <div class="summary-row"><span class="k">VM ID</span><span class="v mono" x-text="cloneVmid || '—'"></span></div>
-                <div class="summary-row"><span class="k">Target node</span><span class="v" x-text="targetNode"></span></div>
+                <div class="summary-row"><span class="k">虚拟机 ID</span><span class="v mono" x-text="cloneVmid || '—'"></span></div>
+                <div class="summary-row"><span class="k">目标节点</span><span class="v" x-text="targetNode"></span></div>
                 <div class="summary-row"><span class="k">Storage</span><span class="v" x-text="targetStorage || 'Same as source'"></span></div>
-                <div class="summary-row"><span class="k">Clone type</span><span class="v" x-text="cloneType === 'full' ? 'Full clone' : cloneType"></span></div>
+                <div class="summary-row"><span class="k">克隆类型</span><span class="v" x-text="cloneType === 'full' ? 'Full clone' : cloneType"></span></div>
             </div>
         </div>
     </div>
@@ -173,7 +172,7 @@
      x-cloak>
     <div class="card-x p-4 text-center">
         <div class="spinner-border text-primary mb-2" role="status"></div>
-        <div>Cloning VM...</div>
+        <div>正在克隆虚拟机...</div>
     </div>
 </div>
 </div>{# end x-data="vmClone" #}
@@ -195,7 +194,7 @@
       agentEnabled: false,
       storages: [],
       vmidState: 'empty',
-      vmidFeedbackMsg: 'Leave empty to auto-generate next available ID',
+      vmidFeedbackMsg: '留空则自动生成下一个可用 ID',
       submitting: false,
       _vmidTimer: null,
 
@@ -250,11 +249,11 @@
       async checkVmid(val) {
         if (!val || +val < 100) {
           this.vmidState = 'empty';
-          this.vmidFeedbackMsg = 'Leave empty to auto-generate next available ID';
+          this.vmidFeedbackMsg = '留空则自动生成下一个可用 ID';
           return;
         }
         this.vmidState = 'checking';
-        this.vmidFeedbackMsg = 'Checking...';
+        this.vmidFeedbackMsg = '检查中...';
         try {
           const data = await ProxUtils.apiJson(`/api/cluster/vmid/${val}/check`);
           if (data.error) {
@@ -262,14 +261,14 @@
             this.vmidFeedbackMsg = data.error;
           } else if (data.available) {
             this.vmidState = 'valid';
-            this.vmidFeedbackMsg = 'VMID is available';
+            this.vmidFeedbackMsg = 'VMID 可用';
           } else {
             this.vmidState = 'invalid';
             this.vmidFeedbackMsg = data.reason + (data.name ? ` (${data.name} on ${data.node})` : '');
           }
         } catch {
           this.vmidState = 'empty';
-          this.vmidFeedbackMsg = 'Leave empty to auto-generate next available ID';
+          this.vmidFeedbackMsg = '留空则自动生成下一个可用 ID';
         }
       },
 
@@ -284,8 +283,8 @@
       },
 
       async submit() {
-        if (!this.cloneName) { ProxUtils.notify('Please enter a name for the cloned VM', 'warning'); return; }
-        if (!this.cloneVmid) { ProxUtils.notify('Please enter a VM ID', 'warning'); return; }
+        if (!this.cloneName) { ProxUtils.notify('请输入克隆虚拟机的名称', 'warning'); return; }
+        if (!this.cloneVmid) { ProxUtils.notify('请输入虚拟机 ID', 'warning'); return; }
         this.submitting = true;
         try {
           const result = await ProxUtils.apiJson(`/api/vm/${this.node}/${this.vmid}/clone`, {
@@ -302,13 +301,13 @@
             }),
           });
           if (result.success) {
-            ProxUtils.notify(`VM cloned successfully! New VM ID: ${this.cloneVmid}`, 'success');
+            ProxUtils.notify(`虚拟机克隆成功！新虚拟机 ID：${this.cloneVmid}`, 'success');
             setTimeout(() => { window.location.href = `/vm/${this.targetNode}/${this.cloneVmid}`; }, 2000);
           } else {
-            ProxUtils.notify(result.error || 'Failed to clone VM', 'error');
+            ProxUtils.notify(result.error || '克隆虚拟机失败', 'error');
           }
         } catch (e) {
-          ProxUtils.notify('Network error while cloning VM: ' + e.message, 'error');
+          ProxUtils.notify('克隆虚拟机时网络出错：' + e.message, 'error');
         } finally {
           this.submitting = false;
         }
@@ -321,5 +320,5 @@
   }
   if (window.Alpine) register();
   else document.addEventListener('alpine:init', register);
-</script>
+</script>script
 {% endblock %}

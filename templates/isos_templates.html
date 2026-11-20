@@ -6,20 +6,20 @@
 <div x-data="isosManager()">
 
   <div class="mb-3">
-    <div class="sec-title">ISOs &amp; Templates</div>
-    <div class="sec-sub">Manage ISO images, VM templates, and container templates across all cluster nodes.</div>
+    <div class="sec-title">ISO 与模板</div>
+    <div class="sec-sub">管理所有集群节点上的 ISO 镜像、虚拟机模板与容器模板。</div>
   </div>
 
   <!-- Loading state -->
   <div x-show="loading" class="text-center py-5">
     <div class="spinner-border text-primary" role="status"></div>
-    <div class="mt-2 text-muted">Loading nodes...</div>
+    <div class="mt-2 text-muted">正在加载节点...</div>
   </div>
 
   <!-- No nodes available -->
   <div x-show="!loading && nodes.length === 0" class="callout warn">
     <i class="bi bi-exclamation-triangle"></i>
-    <div><div class="b">No online nodes available.</div></div>
+    <div><div class="b">无在线节点。</div></div>
   </div>
 
   <!-- Node Tabs -->
@@ -48,19 +48,19 @@
            :aria-labelledby="'node-tab-' + node.name">
         <div class="row g-3">
 
-          <!-- ISO Images -->
+          <!-- ISO 镜像s -->
           <div class="col-12">
             <div class="card-x">
               <div class="cx-head">
-                <i class="bi bi-disc" style="color:var(--accent)"></i><span class="cx-title">ISO Images</span>
+                <i class="bi bi-disc" style="color:var(--accent)"></i><span class="cx-title">ISO 镜像</span>
                 <button class="btn-x sm primary ms-auto" @click="openDownload(node.name)">
-                  <i class="bi bi-download"></i> Download from URL
+                  <i class="bi bi-download"></i> 从 URL 下载
                 </button>
               </div>
               <div class="cx-body">
                 <div x-show="perNode[node.name] && perNode[node.name].loadingIsos" class="text-center py-3">
                   <div class="spinner-border spinner-border-sm" role="status"></div>
-                  Loading ISO images...
+                  正在加载 ISO 镜像...
                 </div>
                 <div x-show="perNode[node.name] && perNode[node.name].isoError"
                      class="callout danger">
@@ -69,7 +69,7 @@
                 </div>
                 <div x-show="perNode[node.name] && !perNode[node.name].loadingIsos && !perNode[node.name].isoError && perNode[node.name].isos.length === 0"
                      class="empty-hint">
-                  No ISO images found.
+                  未找到 ISO 镜像。
                 </div>
                 <div x-show="perNode[node.name] && !perNode[node.name].loadingIsos && perNode[node.name].isos.length > 0"
                      class="tbl-scroll">
@@ -88,7 +88,7 @@
                             <div class="act-row">
                               <button class="act-btn stopc"
                                       @click="deleteIso(node.name, iso.volid)"
-                                      title="Delete ISO">
+                                      title="删除 ISO">
                                 <i class="bi bi-trash"></i>
                               </button>
                             </div>
@@ -106,15 +106,15 @@
           <div class="col-12">
             <div class="card-x">
               <div class="cx-head">
-                <i class="bi bi-pc-display" style="color:var(--accent)"></i><span class="cx-title">VM Templates</span>
+                <i class="bi bi-pc-display" style="color:var(--accent)"></i><span class="cx-title">虚拟机模板</span>
                 <button class="btn-x sm primary ms-auto" @click="openCloud(node.name)">
-                  <i class="bi bi-cloud-download"></i> Create Cloud Template
+                  <i class="bi bi-cloud-download"></i> 创建云模板
                 </button>
               </div>
               <div class="cx-body">
                 <div x-show="perNode[node.name] && perNode[node.name].loadingTemplates" class="text-center py-3">
                   <div class="spinner-border spinner-border-sm" role="status"></div>
-                  Loading VM templates...
+                  正在加载虚拟机模板...
                 </div>
                 <div x-show="perNode[node.name] && perNode[node.name].templateError"
                      class="callout danger">
@@ -123,7 +123,7 @@
                 </div>
                 <div x-show="perNode[node.name] && !perNode[node.name].loadingTemplates && !perNode[node.name].templateError && perNode[node.name].vmTemplates.length === 0"
                      class="empty-hint">
-                  No VM templates found.
+                  未找到虚拟机模板。
                 </div>
                 <div x-show="perNode[node.name] && !perNode[node.name].loadingTemplates && perNode[node.name].vmTemplates.length > 0"
                      class="tbl-scroll">
@@ -147,7 +147,7 @@
                               </a>
                               <button class="act-btn stopc"
                                       @click="deleteVmTemplate(node.name, vm.vmid, vm.name || 'Unnamed')"
-                                      title="Delete Template">
+                                      title="删除模板">
                                 <i class="bi bi-trash"></i>
                               </button>
                             </div>
@@ -165,19 +165,19 @@
           <div class="col-12">
             <div class="card-x">
               <div class="cx-head">
-                <i class="bi bi-box" style="color:var(--accent)"></i><span class="cx-title">Container Templates</span>
+                <i class="bi bi-box" style="color:var(--accent)"></i><span class="cx-title">容器模板</span>
                 <button class="btn-x sm primary ms-auto" @click="openLxcImport(node.name)">
-                  <i class="bi bi-download"></i> Import Template
+                  <i class="bi bi-download"></i> 导入模板
                 </button>
               </div>
               <div class="cx-body">
                 <div x-show="perNode[node.name] && perNode[node.name].loadingTemplates" class="text-center py-3">
                   <div class="spinner-border spinner-border-sm" role="status"></div>
-                  Loading container templates...
+                  正在加载容器模板...
                 </div>
                 <div x-show="perNode[node.name] && !perNode[node.name].loadingTemplates && !perNode[node.name].templateError && perNode[node.name].lxcTemplates.length === 0"
                      class="empty-hint">
-                  No container templates found.
+                  未找到容器模板。
                 </div>
                 <div x-show="perNode[node.name] && !perNode[node.name].loadingTemplates && perNode[node.name].lxcTemplates.length > 0"
                      class="tbl-scroll">
@@ -196,12 +196,12 @@
                             <div class="act-row">
                               <button class="act-btn go"
                                       @click="openCreateCt(node.name, t.volid)"
-                                      title="Create Container">
+                                      title="创建容器">
                                 <i class="bi bi-plus-circle"></i>
                               </button>
                               <button class="act-btn stopc"
                                       @click="deleteLxcTemplate(node.name, t.volid)"
-                                      title="Delete Template">
+                                      title="删除模板">
                                 <i class="bi bi-trash"></i>
                               </button>
                             </div>
@@ -226,7 +226,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title"><i class="bi bi-download"></i> Download ISO from URL</h5>
+          <h5 class="modal-title"><i class="bi bi-download"></i> 从 URL 下载 ISO</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
@@ -235,26 +235,26 @@
             <input type="url" class="inp" x-model="dl.url"
                    @change="dlAutofillFilename()"
                    placeholder="https://example.com/image.iso">
-            <div class="hint">Enter the direct URL to download the ISO image</div>
+            <div class="hint">输入用于下载 ISO 镜像的直接 URL</div>
           </div>
           <div class="field">
             <label>Filename</label>
             <input type="text" class="inp" x-model="dl.filename"
-                   placeholder="Auto-detect from URL">
-            <div class="hint">Leave empty to auto-detect from URL</div>
+                   placeholder="从 URL 自动检测">
+            <div class="hint">留空则从 URL 自动检测</div>
           </div>
           <div class="field">
             <label>Storage <span class="text-danger">*</span></label>
             <div x-show="dl.loadingStorages" class="text-muted">
-              <span class="spinner-border spinner-border-sm"></span> Loading storages...
+              <span class="spinner-border spinner-border-sm"></span> 正在加载存储...
             </div>
             <select class="inp" x-model="dl.storage" x-show="!dl.loadingStorages">
-              <option value="">Select storage...</option>
+              <option value="">选择存储...</option>
               <template x-for="s in dl.storages" :key="s.storage">
                 <option :value="s.storage" x-text="storageLabel(s)"></option>
               </template>
             </select>
-            <div class="hint">Select storage that supports ISO content</div>
+            <div class="hint">选择支持 ISO 内容的存储</div>
           </div>
 
           <!-- Progress feedback -->
@@ -262,18 +262,18 @@
             <template x-if="dl.showProgress && !dl.manualUrl">
               <div class="callout info">
                 <i class="bi bi-download"></i>
-                <div><div class="b">Download started. Check the Jobs panel for progress.</div></div>
+                <div><div class="b">下载已开始。可在“作业”面板查看进度。</div></div>
               </div>
             </template>
             <template x-if="dl.showProgress && dl.manualUrl">
               <div class="callout warn">
                 <i class="bi bi-exclamation-triangle"></i>
                 <div>
-                  <div class="t">Manual Download Required</div>
-                  <div class="b">This URL requires manual download due to redirects or authentication.</div>
+                  <div class="t">需手动下载</div>
+                  <div class="b">由于重定向或认证限制，此 URL 需手动下载。</div>
                   <div class="d-flex gap-2 mt-2">
                     <button type="button" class="btn-x sm" @click="copyToClipboard(dl.manualUrl)">
-                      <i class="bi bi-clipboard"></i> Copy URL
+                      <i class="bi bi-clipboard"></i> 复制 URL
                     </button>
                   </div>
                 </div>
@@ -299,18 +299,18 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title"><i class="bi bi-cloud-download"></i> Create Cloud VM Template</h5>
+          <h5 class="modal-title"><i class="bi bi-cloud-download"></i> 创建云虚拟机模板</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
 
           <!-- Cloud Image Selection -->
           <div class="mb-4">
-            <div class="sub-h" style="margin-top:0"><i class="bi bi-image"></i> Cloud Image</div>
+            <div class="sub-h" style="margin-top:0"><i class="bi bi-image"></i> 云镜像</div>
             <div class="field">
-              <label>Select Image <span class="text-danger">*</span></label>
+              <label>选择镜像 <span class="text-danger">*</span></label>
               <select class="inp" x-model="cloud.image" @change="onCloudImageChange()">
-                <option value="">Select a cloud image...</option>
+                <option value="">选择云镜像...</option>
                 <template x-for="group in cloudImageGroups" :key="group.label">
                   <optgroup :label="group.label">
                     <template x-for="img in group.images" :key="img.id">
@@ -332,25 +332,25 @@
 
           <!-- VM Configuration -->
           <div class="mb-4">
-            <div class="sub-h"><i class="bi bi-gear"></i> VM Configuration</div>
+            <div class="sub-h"><i class="bi bi-gear"></i> 虚拟机配置</div>
             <div class="row">
               <div class="col-md-6">
                 <div class="field">
-                  <label>Template Name</label>
-                  <input type="text" class="inp" x-model="cloud.name" placeholder="Auto-generated from image">
+                  <label>模板名称</label>
+                  <input type="text" class="inp" x-model="cloud.name" placeholder="根据镜像自动生成">
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="field">
-                  <label>VM ID</label>
+                  <label>虚拟机 ID</label>
                   <input type="number" class="inp" x-model.number="cloud.vmid"
                          @input.debounce.300ms="checkVmid('cloud')"
                          :class="cloud.vmidStatus.valid === true ? 'is-valid' : cloud.vmidStatus.valid === false ? 'is-invalid' : ''"
-                         placeholder="Auto (next available)">
+                         placeholder="自动（下一个可用）">
                   <div class="hint"
                        :class="cloud.vmidStatus.valid === true ? 'text-success' : cloud.vmidStatus.valid === false ? 'text-danger' : 'text-muted'">
                     <template x-if="cloud.vmidStatus.checking">
-                      <span><i class="bi bi-arrow-clockwise spin"></i> Checking...</span>
+                      <span><i class="bi bi-arrow-clockwise spin"></i> 检查中...</span>
                     </template>
                     <template x-if="!cloud.vmidStatus.checking && cloud.vmidStatus.msg">
                       <span x-text="cloud.vmidStatus.msg"></span>
@@ -362,19 +362,19 @@
             <div class="row">
               <div class="col-md-4">
                 <div class="field">
-                  <label>CPU Cores</label>
+                  <label>CPU 核心数</label>
                   <input type="number" class="inp" x-model.number="cloud.cores" min="1" max="128">
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="field">
-                  <label>Memory (MB)</label>
+                  <label>内存（MB）</label>
                   <input type="number" class="inp" x-model.number="cloud.memory" min="512" step="512">
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="field">
-                  <label>Disk Size</label>
+                  <label>磁盘容量</label>
                   <input type="text" class="inp" x-model="cloud.diskSize" placeholder="10G">
                 </div>
               </div>
@@ -384,7 +384,7 @@
                 <div class="field">
                   <label>Storage <span class="text-danger">*</span></label>
                   <select class="inp" x-model="cloud.storage">
-                    <option value="">Select storage...</option>
+                    <option value="">选择存储...</option>
                     <template x-for="s in cloud.storages" :key="s.storage">
                       <option :value="s.storage" x-text="storageLabel(s)"></option>
                     </template>
@@ -393,7 +393,7 @@
               </div>
               <div class="col-md-6">
                 <div class="field">
-                  <label>Network Bridge</label>
+                  <label>网络网桥</label>
                   <select class="inp" x-model="cloud.bridge">
                     <template x-for="net in cloud.bridges" :key="net.iface">
                       <option :value="net.iface" x-text="bridgeLabel(net)"></option>
@@ -407,16 +407,14 @@
                 <div class="field">
                   <label>BIOS</label>
                   <select class="inp" x-model="cloud.bios">
-                    <option value="seabios" :disabled="!cloudFirmwareSupported('seabios')">SeaBIOS (legacy BIOS)</option>
-                    <option value="ovmf" :disabled="!cloudFirmwareSupported('ovmf')">OVMF (UEFI)</option>
+                    <option value="seabios" :disabled="!cloudFirmwareSupported('seabios')">SeaBIOS（传统 BIOS）</option>
+                    <option value="ovmf" :disabled="!cloudFirmwareSupported('ovmf')">OVMF（UEFI）</option>
                   </select>
                   <div class="hint" x-show="cloudSelectedImage && !cloudFirmwareSupported('ovmf')">
-                    This image has no EFI system partition and boots with SeaBIOS only.
+                    此镜像没有 EFI 系统分区，只能以 SeaBIOS 启动。
                   </div>
                   <div class="hint" x-show="cloud.bios === 'ovmf'">
-                    <i class="bi bi-info-circle"></i> UEFI templates use the <strong>q35</strong> machine type
-                    (PCIe chipset) instead of the Proxmox default i440fx — needed for Secure Boot and for
-                    the guest to see the cloud-init drive. Clones inherit it.
+                    <i class="bi bi-info-circle"></i> UEFI 模板使用 <strong>q35</strong> 机型（PCIe 芯片组），而非 Proxmox 默认的 i440fx——这是启用安全启动并让客户机识别 cloud-init 驱动器所必需的。克隆会继承该设置。
                   </div>
                 </div>
               </div>
@@ -425,7 +423,7 @@
                   <label>&nbsp;</label>
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="cloudSecureBoot" x-model="cloud.secureBoot">
-                    <label class="form-check-label" for="cloudSecureBoot">Pre-enroll Secure Boot keys</label>
+                    <label class="form-check-label" for="cloudSecureBoot">预置 Secure Boot 密钥</label>
                   </div>
                 </div>
               </div>
@@ -434,13 +432,13 @@
 
           <!-- Cloud-Init -->
           <div class="mb-4">
-            <div class="sub-h"><i class="bi bi-cloud"></i> Cloud-Init Configuration</div>
+            <div class="sub-h"><i class="bi bi-cloud"></i> Cloud-Init 配置</div>
             <div class="row">
               <div class="col-md-6">
                 <div class="field">
-                  <label>Default User</label>
-                  <input type="text" class="inp" x-model="cloud.ciUser" placeholder="e.g., ubuntu, debian">
-                  <div class="hint">Leave empty to use image default</div>
+                  <label>默认用户</label>
+                  <input type="text" class="inp" x-model="cloud.ciUser" placeholder="例如 ubuntu、debian">
+                  <div class="hint">留空则使用镜像默认值</div>
                 </div>
               </div>
               <div class="col-md-6">
@@ -451,22 +449,22 @@
               </div>
             </div>
             <div class="field">
-              <label>SSH Public Keys</label>
+              <label>SSH 公钥</label>
               <textarea class="inp" x-model="cloud.ciSshKeys" rows="3"
                         placeholder="ssh-rsa AAAA... or ssh-ed25519 AAAA..."></textarea>
-              <div class="hint">One key per line. Recommended over password authentication.</div>
+              <div class="hint">每行一个密钥。相比密码认证更为推荐。</div>
             </div>
             <div class="field">
-              <label>IP Configuration</label>
+              <label>IP 配置</label>
               <input type="text" class="inp" x-model="cloud.ciIpConfig">
-              <div class="hint">Use ip=dhcp for DHCP or ip=x.x.x.x/24,gw=x.x.x.x for static</div>
+              <div class="hint">DHCP 使用 ip=dhcp，静态地址使用 ip=x.x.x.x/24,gw=x.x.x.x</div>
             </div>
           </div>
 
           <!-- Progress -->
           <div x-show="cloud.showProgress" class="callout info">
             <span class="spinner-border spinner-border-sm"></span>
-            <div><div class="b">Starting background job...</div></div>
+            <div><div class="b">正在启动后台作业...</div></div>
           </div>
 
           <!-- Result -->
@@ -475,12 +473,12 @@
               <div class="callout info">
                 <i class="bi bi-check-circle"></i>
                 <div>
-                  <div class="t">Job started successfully!</div>
+                  <div class="t">作业已成功启动！</div>
                   <div class="b">
-                    Template creation is running in the background.<br>
-                    <strong>Job ID:</strong> <span x-text="cloud.result.job_id"></span><br>
-                    <strong>VMID:</strong> <span x-text="cloud.result.vmid"></span><br>
-                    <small class="text-muted">Track progress via the Jobs icon in the top bar.</small>
+                    模板创建正在后台运行。<br>
+                    <strong>作业 ID：</strong> <span x-text="cloud.result.job_id"></span><br>
+                    <strong>VMID：</strong> <span x-text="cloud.result.vmid"></span><br>
+                    <small class="text-muted">可通过顶栏的作业图标查看进度。</small>
                   </div>
                 </div>
               </div>
@@ -512,7 +510,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title"><i class="bi bi-download"></i> Import Container Template</h5>
+          <h5 class="modal-title"><i class="bi bi-download"></i> 导入容器模板</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
@@ -523,7 +521,7 @@
               <button class="nav-link" :class="lxc.sourceTab === 'proxmox' && 'active'"
                       @click="lxc.sourceTab = 'proxmox'"
                       data-bs-toggle="tab" data-bs-target="#proxmox-source" type="button" role="tab">
-                <i class="bi bi-server"></i> Proxmox Templates
+                <i class="bi bi-server"></i> Proxmox 模板
               </button>
             </li>
             <li class="nav-item" role="presentation">
@@ -537,7 +535,7 @@
               <button class="nav-link" :class="lxc.sourceTab === 'oci' && 'active'"
                       @click="lxc.sourceTab = 'oci'"
                       data-bs-toggle="tab" data-bs-target="#oci-source" type="button" role="tab">
-                <i class="bi bi-box-seam"></i> OCI Registry
+                <i class="bi bi-box-seam"></i> OCI 仓库
               </button>
             </li>
           </ul>
@@ -549,17 +547,17 @@
               <div class="field">
                 <label>Storage <span class="text-danger">*</span></label>
                 <select class="inp" x-model="lxc.lxcStorage">
-                  <option value="">Select storage...</option>
+                  <option value="">选择存储...</option>
                   <template x-for="s in lxc.storages" :key="s.storage">
                     <option :value="s.storage" x-text="storageLabel(s)"></option>
                   </template>
                 </select>
-                <div class="hint">Select storage that supports container templates</div>
+                <div class="hint">选择支持容器模板的存储</div>
               </div>
               <div class="field">
                 <label>Category</label>
                 <select class="inp" x-model="lxc.filterSection">
-                  <option value="">All Categories</option>
+                  <option value="">全部分类</option>
                   <template x-for="sec in lxcSections" :key="sec.value">
                     <option :value="sec.value" x-text="sec.label"></option>
                   </template>
@@ -568,7 +566,7 @@
               <div class="field">
                 <label>Template <span class="text-danger">*</span></label>
                 <select class="inp" x-model="lxc.selectedTemplate" @change="onLxcTemplateChange()">
-                  <option value="">Select template...</option>
+                  <option value="">选择模板...</option>
                   <template x-for="group in lxcTemplateGroups" :key="group.label">
                     <optgroup :label="group.label">
                       <template x-for="t in group.templates" :key="t.template">
@@ -598,23 +596,23 @@
               <div class="field">
                 <label>Storage <span class="text-danger">*</span></label>
                 <select class="inp" x-model="lxc.lxcUrlStorage">
-                  <option value="">Select storage...</option>
+                  <option value="">选择存储...</option>
                   <template x-for="s in lxc.storages" :key="s.storage">
                     <option :value="s.storage" x-text="storageLabel(s)"></option>
                   </template>
                 </select>
               </div>
               <div class="field">
-                <label>Template URL <span class="text-danger">*</span></label>
+                <label>模板 URL <span class="text-danger">*</span></label>
                 <input type="url" class="inp" x-model="lxc.lxcUrl"
                        @change="lxcUrlAutofill()"
                        placeholder="https://example.com/template.tar.xz">
-                <div class="hint">Direct URL to a container template (.tar.xz, .tar.gz, or .tar.zst)</div>
+                <div class="hint">容器模板的直接下载 URL（.tar.xz、.tar.gz 或 .tar.zst）</div>
               </div>
               <div class="field">
                 <label>Filename</label>
-                <input type="text" class="inp" x-model="lxc.lxcUrlFilename" placeholder="Auto-detect from URL">
-                <div class="hint">Leave empty to auto-detect from URL</div>
+                <input type="text" class="inp" x-model="lxc.lxcUrlFilename" placeholder="从 URL 自动检测">
+                <div class="hint">留空则从 URL 自动检测</div>
               </div>
             </div>
 
@@ -623,21 +621,21 @@
               <div class="field">
                 <label>Storage <span class="text-danger">*</span></label>
                 <select class="inp" x-model="lxc.lxcOciStorage">
-                  <option value="">Select storage...</option>
+                  <option value="">选择存储...</option>
                   <template x-for="s in lxc.storages" :key="s.storage">
                     <option :value="s.storage" x-text="storageLabel(s)"></option>
                   </template>
                 </select>
               </div>
               <div class="field">
-                <label>OCI Image <span class="text-danger">*</span></label>
+                <label>OCI 镜像 <span class="text-danger">*</span></label>
                 <input type="text" class="inp" x-model="lxc.lxcOciImage"
                        placeholder="docker.io/library/alpine:latest">
-                <div class="hint">OCI image reference (e.g., docker.io/library/alpine:latest)</div>
+                <div class="hint">OCI 镜像引用（例如 docker.io/library/alpine:latest）</div>
               </div>
               <div class="callout info">
                 <i class="bi bi-info-circle"></i>
-                <div><div class="t">Note</div><div class="b">OCI registry support requires Proxmox VE 8.0+. The image will be converted to an LXC template.</div></div>
+                <div><div class="t">Note</div><div class="b">OCI 仓库支持需要 Proxmox VE 8.0+。镜像将被转换为 LXC 模板。</div></div>
               </div>
             </div>
 
@@ -655,13 +653,13 @@
               <div class="callout info">
                 <i class="bi bi-check-circle"></i>
                 <div>
-                  <div class="t">Download started!</div>
+                  <div class="t">下载已开始！</div>
                   <div class="b">
                     <span x-text="lxc.result.message"></span>
                     <template x-if="lxc.result.job_id">
-                      <div><strong>Job ID:</strong> <span x-text="lxc.result.job_id"></span></div>
+                      <div><strong>作业 ID：</strong> <span x-text="lxc.result.job_id"></span></div>
                     </template>
-                    <small class="text-muted">Track progress via the Jobs icon in the top bar.</small>
+                    <small class="text-muted">可通过顶栏的作业图标查看进度。</small>
                   </div>
                 </div>
               </div>
@@ -670,13 +668,13 @@
               <div class="callout warn">
                 <i class="bi bi-exclamation-triangle"></i>
                 <div>
-                  <div class="t">Manual download required</div>
+                  <div class="t">需手动下载</div>
                   <div class="b">
                     <span x-text="lxc.result.error"></span><br>
-                    <strong>Run this command on the Proxmox node:</strong>
+                    <strong>在 Proxmox 节点上执行以下命令：</strong>
                     <code class="d-block p-2 bg-dark text-light rounded mt-1" x-text="lxc.result.manual_command"></code>
                     <button class="btn-x sm mt-2" @click="copyToClipboard(lxc.result.manual_command)">
-                      <i class="bi bi-clipboard"></i> Copy Command
+                      <i class="bi bi-clipboard"></i> 复制命令
                     </button>
                   </div>
                 </div>
@@ -709,7 +707,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title"><i class="bi bi-plus-circle"></i> Create Container</h5>
+          <h5 class="modal-title"><i class="bi bi-plus-circle"></i> 创建容器</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
@@ -717,28 +715,28 @@
           <!-- Template info -->
           <div class="callout info mb-3">
             <i class="bi bi-box"></i>
-            <div><div class="b">Template: <strong x-text="ct.templateInfo"></strong></div></div>
+            <div><div class="b">模板： <strong x-text="ct.templateInfo"></strong></div></div>
           </div>
 
           <!-- Basic Settings -->
           <div class="row">
             <div class="col-md-6">
               <div class="field">
-                <label>Container ID</label>
+                <label>容器 ID</label>
                 <input type="number" class="inp" x-model.number="ct.vmid"
                        @input.debounce.300ms="checkVmid('ct')"
                        :class="ct.vmidStatus.valid === true ? 'is-valid' : ct.vmidStatus.valid === false ? 'is-invalid' : ''"
-                       placeholder="Auto (next available)">
+                       placeholder="自动（下一个可用）">
                 <div class="hint"
                      :class="ct.vmidStatus.valid === true ? 'text-success' : ct.vmidStatus.valid === false ? 'text-danger' : 'text-muted'">
                   <template x-if="ct.vmidStatus.checking">
-                    <span><i class="bi bi-arrow-clockwise spin"></i> Checking...</span>
+                    <span><i class="bi bi-arrow-clockwise spin"></i> 检查中...</span>
                   </template>
                   <template x-if="!ct.vmidStatus.checking && ct.vmidStatus.msg">
                     <span x-text="ct.vmidStatus.msg"></span>
                   </template>
                   <template x-if="!ct.vmidStatus.checking && !ct.vmidStatus.msg">
-                    <span>Leave empty for next available ID</span>
+                    <span>留空则使用下一个可用 ID</span>
                   </template>
                 </div>
               </div>
@@ -756,19 +754,19 @@
           <div class="row">
             <div class="col-md-4">
               <div class="field">
-                <label>CPU Cores</label>
+                <label>CPU 核心数</label>
                 <input type="number" class="inp" x-model.number="ct.cores" min="1" max="128">
               </div>
             </div>
             <div class="col-md-4">
               <div class="field">
-                <label>Memory (MB)</label>
+                <label>内存（MB）</label>
                 <input type="number" class="inp" x-model.number="ct.memory" min="16" step="128">
               </div>
             </div>
             <div class="col-md-4">
               <div class="field">
-                <label>Swap (MB)</label>
+                <label>交换分区（MB）</label>
                 <input type="number" class="inp" x-model.number="ct.swap" min="0" step="128">
               </div>
             </div>
@@ -778,9 +776,9 @@
           <div class="row">
             <div class="col-md-6">
               <div class="field">
-                <label>Root Disk Storage <span class="text-danger">*</span></label>
+                <label>根磁盘存储 <span class="text-danger">*</span></label>
                 <select class="inp" x-model="ct.storage">
-                  <option value="">Select storage...</option>
+                  <option value="">选择存储...</option>
                   <template x-for="s in ct.storages" :key="s.storage">
                     <option :value="s.storage" x-text="storageLabel(s)"></option>
                   </template>
@@ -789,7 +787,7 @@
             </div>
             <div class="col-md-6">
               <div class="field">
-                <label>Root Disk Size (GB)</label>
+                <label>根磁盘容量（GB）</label>
                 <input type="number" class="inp" x-model.number="ct.diskSize" min="1">
               </div>
             </div>
@@ -799,7 +797,7 @@
           <div class="row">
             <div class="col-md-6">
               <div class="field">
-                <label>Network Bridge</label>
+                <label>网络网桥</label>
                 <select class="inp" x-model="ct.bridge">
                   <template x-for="net in ct.bridges" :key="net.iface">
                     <option :value="net.iface" x-text="bridgeLabel(net)"></option>
@@ -809,10 +807,10 @@
             </div>
             <div class="col-md-6">
               <div class="field">
-                <label>IP Configuration</label>
+                <label>IP 配置</label>
                 <select class="inp" x-model="ct.ipConfig">
                   <option value="dhcp">DHCP</option>
-                  <option value="static">Static IP</option>
+                  <option value="static">静态 IP</option>
                 </select>
               </div>
             </div>
@@ -822,7 +820,7 @@
           <div class="row" x-show="ct.ipConfig === 'static'">
             <div class="col-md-6">
               <div class="field">
-                <label>IP Address (CIDR)</label>
+                <label>IP 地址（CIDR）</label>
                 <input type="text" class="inp" x-model="ct.ip" placeholder="192.168.1.100/24">
               </div>
             </div>
@@ -838,13 +836,13 @@
           <div class="row">
             <div class="col-md-6">
               <div class="field">
-                <label>Root Password</label>
-                <input type="password" class="inp" x-model="ct.password" placeholder="Leave empty for no password">
+                <label>root 密码</label>
+                <input type="password" class="inp" x-model="ct.password" placeholder="留空表示不设密码">
               </div>
             </div>
             <div class="col-md-6">
               <div class="field">
-                <label>SSH Public Key</label>
+                <label>SSH 公钥</label>
                 <textarea class="inp" x-model="ct.sshKeys" rows="2"
                           placeholder="ssh-rsa AAAA... or ssh-ed25519 AAAA..."></textarea>
               </div>
@@ -856,13 +854,13 @@
             <div class="col-md-6">
               <div class="form-check">
                 <input type="checkbox" class="form-check-input" x-model="ct.start" id="ctStart">
-                <label class="form-check-label" for="ctStart">Start after created</label>
+                <label class="form-check-label" for="ctStart">创建后启动</label>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-check">
                 <input type="checkbox" class="form-check-input" x-model="ct.unprivileged" id="ctUnprivileged">
-                <label class="form-check-label" for="ctUnprivileged">Unprivileged container</label>
+                <label class="form-check-label" for="ctUnprivileged">非特权容器</label>
               </div>
             </div>
           </div>
@@ -870,7 +868,7 @@
           <!-- Progress -->
           <div x-show="ct.showProgress" class="callout info">
             <span class="spinner-border spinner-border-sm"></span>
-            <div><div class="b">Creating container...</div></div>
+            <div><div class="b">正在创建容器...</div></div>
           </div>
 
           <!-- Result -->
@@ -879,11 +877,11 @@
               <div class="callout ok">
                 <i class="bi bi-check-circle"></i>
                 <div>
-                  <div class="t">Container created successfully!</div>
+                  <div class="t">容器创建成功！</div>
                   <div class="b">
-                    Container ID: <strong x-text="ct.result.vmid"></strong><br>
+                    容器 ID： <strong x-text="ct.result.vmid"></strong><br>
                     <a :href="'/vm/' + ct.node + '/' + ct.result.vmid" class="btn-x sm primary mt-2">
-                      <i class="bi bi-box"></i> Go to Container
+                      <i class="bi bi-box"></i> 前往容器
                     </a>
                   </div>
                 </div>
@@ -919,5 +917,5 @@
   function register() { window.Alpine.data('isosManager', isosManager); }
   if (window.Alpine) register();
   else document.addEventListener('alpine:init', register);
-</script>
+</script>script
 {% endblock %}

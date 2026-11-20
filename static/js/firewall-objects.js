@@ -40,7 +40,7 @@ function base() {
         return true;
       } catch (e) {
         if (inDialog) this.formError = e.message;
-        else U.notify('Firewall: ' + e.message, 'error');
+        else U.notify('防火墙：' + e.message, 'error');
         return false;
       } finally {
         this.busy = false;
@@ -75,7 +75,7 @@ export function fwGroups() {
     async save() {
       const f = this.form;
       if (!NAME_RE.test(f.group) || f.group.length > 18) {
-        this.formError = 'Name: 2-18 characters, letter first, then letters, digits, - or _';
+        this.formError = '名称：2–18 个字符，以字母开头，其后可含字母、数字、- 或 _';
         return;
       }
       const ok = await this.write(() => f.orig
@@ -88,8 +88,8 @@ export function fwGroups() {
       }
     },
     remove(g) {
-      this.ask('Delete security group',
-        `Delete security group '${g.group}'? Proxmox refuses while the group still has rules or is used by a rule.`,
+      this.ask('删除安全组',
+        `删除安全组“${g.group}”？只要该组仍有规则或被规则引用，Proxmox 就会拒绝执行。`,
         () => this.write(() => U.apiJson(`${API}/groups/${enc(g.group)}`, { method: 'DELETE' })));
     },
     init() { this.load(); },
@@ -111,8 +111,8 @@ export function fwAliases() {
     },
     async save() {
       const f = this.form;
-      if (!NAME_RE.test(f.name)) { this.formError = 'Name: letter first, then letters, digits, - or _'; return; }
-      if (!f.cidr.trim()) { this.formError = 'An IP address or CIDR is required'; return; }
+      if (!NAME_RE.test(f.name)) { this.formError = '名称：以字母开头，其后可含字母、数字、- 或 _'; return; }
+      if (!f.cidr.trim()) { this.formError = '需要填写 IP 地址或 CIDR'; return; }
       const body = { name: f.name, cidr: f.cidr.trim(), comment: f.comment };
       const ok = await this.write(() => f.orig
         ? U.apiJson(`${API}/aliases/${enc(f.orig)}`, json('PUT', { ...body, digest: f.digest }))
@@ -121,7 +121,7 @@ export function fwAliases() {
       if (ok) this.modal('editModal').hide();
     },
     remove(a) {
-      this.ask('Delete alias', `Delete alias '${a.name}' (${a.cidr})? Proxmox refuses while a rule or IP set uses it.`,
+      this.ask('删除别名', `删除别名“${a.name}”（${a.cidr}）？只要仍有规则或 IP 集使用它，Proxmox 就会拒绝执行。`,
         () => this.write(() => U.apiJson(`${API}/aliases/${enc(a.name)}?digest=${enc(a.digest || '')}`, { method: 'DELETE' })));
     },
     init() { this.load(); },
@@ -149,7 +149,7 @@ export function fwIpsets() {
     },
     async save() {
       const f = this.form;
-      if (!NAME_RE.test(f.name)) { this.formError = 'Name: letter first, then letters, digits, - or _'; return; }
+      if (!NAME_RE.test(f.name)) { this.formError = '名称：以字母开头，其后可含字母、数字、- 或 _'; return; }
       const ok = await this.write(() => f.orig
         ? U.apiJson(`${API}/ipsets/${enc(f.orig)}`, json('PUT', { name: f.name, comment: f.comment }))
         : U.apiJson(`${API}/ipsets`, json('POST', { name: f.name, comment: f.comment })),
@@ -161,7 +161,7 @@ export function fwIpsets() {
     },
     remove(s) {
       const n = (s.entries || []).length;
-      this.ask('Delete IP set',
+      this.ask('删除 IP 集',
         `Delete IP set '${s.name}'${n ? ` and its ${n} entr${n === 1 ? 'y' : 'ies'}` : ''}? Proxmox refuses while a rule uses it.`,
         () => this.write(() => U.apiJson(`${API}/ipsets/${enc(s.name)}`, { method: 'DELETE' })));
     },
@@ -186,7 +186,7 @@ export function fwIpsets() {
       if (ok) this.modal('entryModal').hide();
     },
     removeEntry(e) {
-      this.ask('Remove entry', `Remove ${e.cidr} from IP set '${this.selected}'?`,
+      this.ask('移除条目', `从 IP 集“${this.selected}”中移除 ${e.cidr}？`,
         () => this.write(() => U.apiJson(
           `${API}/ipsets/${enc(this.selected)}/entries/${e.cidr}?digest=${enc(e.digest || '')}`, { method: 'DELETE' })));
     },

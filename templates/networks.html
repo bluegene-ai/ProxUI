@@ -5,21 +5,21 @@
 {% block content %}
 <div class="mb-3">
     <div class="sec-title">Networks</div>
-    <div class="sec-sub">Bridges, bonds and VLANs across the cluster</div>
+    <div class="sec-sub">集群内的网桥、Bond 与 VLAN</div>
 </div>
 
 <div x-data="networksApp({{ nodes|tojson|forceescape }})">
 
     <!-- ==================== TOOLBAR ==================== -->
     <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
-        <input type="text" class="inp" style="max-width:240px" placeholder="Search interfaces…" x-model="search">
+        <input type="text" class="inp" style="max-width:240px" placeholder="搜索接口…" x-model="search">
         <select class="inp" style="max-width:160px" x-model="typeFilter">
-            <option value="">All types</option>
+            <option value="">全部类型</option>
             <template x-for="t in types" :key="t"><option :value="t" x-text="t"></option></template>
         </select>
         <span class="sec-sub ms-1"><span x-text="totalInterfaces"></span> interfaces</span>
         <span class="pill maint" x-show="pendingNodes.length">
-            <span class="d"></span><span x-text="pendingNodes.length"></span> node(s) with pending changes
+            <span class="d"></span><span x-text="pendingNodes.length"></span> 个有待生效变更的节点
         </span>
         <button class="btn-x sm ms-auto" @click="reload()" :disabled="loading">
             <i class="bi bi-arrow-clockwise" :class="loading && 'spin'"></i> Refresh
@@ -32,16 +32,16 @@
             <div class="cx-head flex-wrap gap-2">
                 <span class="nc-dot" :class="n.online ? 'online' : 'offline'" style="width:9px;height:9px"></span>
                 <span class="cx-title" x-text="n.node"></span>
-                <span class="pill maint" x-show="n.pending"><span class="d"></span>Pending changes</span>
+                <span class="pill maint" x-show="n.pending"><span class="d"></span>待生效变更</span>
                 <div class="ms-auto d-flex gap-2">
                     <button class="btn-x sm" @click="review(n)" :disabled="busy === n.node || !n.online" x-show="n.pending">
-                        <i class="bi bi-file-diff"></i> Review &amp; apply
+                        <i class="bi bi-file-diff"></i> 检查并应用
                     </button>
                     <button class="btn-x sm danger" @click="revert(n)" :disabled="busy === n.node || !n.online" x-show="n.pending">
                         <i class="bi bi-arrow-counterclockwise"></i> Revert
                     </button>
                     <button class="btn-x sm primary" @click="newInterface(n)" :disabled="!n.online">
-                        <i class="bi bi-plus-lg"></i> Add interface
+                        <i class="bi bi-plus-lg"></i> 添加接口
                     </button>
                 </div>
             </div>
@@ -50,9 +50,9 @@
                 <div class="cx-body tight">
                     <div class="alert alert-warning mb-0" style="font-size:12px">
                         <i class="bi bi-exclamation-triangle me-1"></i>
-                        This node has interface changes written but not applied. They live in
-                        <span class="mono">/etc/network/interfaces.new</span> and take effect only once applied.
-                        <a href="#" @click.prevent="review(n)" class="alert-link">Review the diff</a> before you apply it.
+                        此节点已写入接口变更但尚未应用。变更保存在
+                        <span class="mono">/etc/network/interfaces.new</span> 并在应用后才生效。
+                        <a href="#" @click.prevent="review(n)" class="alert-link">查看差异</a> 然后再应用。
                     </div>
                 </div>
             </template>
@@ -71,14 +71,14 @@
                     <table class="tbl">
                         <thead><tr>
                             <th>Interface</th><th>Type</th><th>Active</th><th>Autostart</th>
-                            <th>CIDR</th><th>Gateway</th><th>Ports / Slaves</th><th>Comment</th><th></th>
+                            <th>CIDR</th><th>Gateway</th><th>端口 / 从属接口</th><th>Comment</th><th></th>
                         </tr></thead>
                         <tbody>
                             <template x-for="i in visible(n)" :key="i.iface">
                                 <tr>
                                     <td>
                                         <span class="nm mono" x-text="i.iface"></span>
-                                        <span class="pill info ms-1" x-show="i.iface === n.management" title="Carries the address ProxUI connects to this node on">
+                                        <span class="pill info ms-1" x-show="i.iface === n.management" title="填写 ProxUI 连接此节点所用的地址">
                                             <span class="d"></span>Management
                                         </span>
                                     </td>
@@ -112,7 +112,7 @@
                     </table>
                     <template x-if="visible(n).length === 0">
                         <div class="empty-hint"><i class="bi bi-inbox" style="font-size:26px"></i>
-                            <div class="mt-2">No interfaces match the filter.</div></div>
+                            <div class="mt-2">没有接口符合筛选条件。</div></div>
                     </template>
                 </div>
             </template>
@@ -121,7 +121,7 @@
 
     <template x-if="nodes.length === 0">
         <div class="empty-hint"><i class="bi bi-inbox" style="font-size:26px"></i>
-            <div class="mt-2">No nodes in this cluster.</div></div>
+            <div class="mt-2">此集群中没有节点。</div></div>
     </template>
 
     <!-- ==================== PENDING CHANGE REVIEW ==================== -->
@@ -150,27 +150,23 @@
 
                     <div class="alert alert-secondary mb-0" style="font-size:12px" x-show="!diffLines.length">
                         <i class="bi bi-info-circle me-1"></i>
-                        This node has changes pending, but Proxmox returned no diff for them.
-                        Check <span class="mono">/etc/network/interfaces.new</span> on the node
-                        before applying.
+                        此节点有待生效变更，但 Proxmox 未返回差异。请检查 <span class="mono">/etc/network/interfaces.new</span> 在节点上检查后再应用。
                     </div>
 
                     <div class="alert alert-warning mb-0 mt-3" style="font-size:12px">
                         <i class="bi bi-exclamation-triangle me-1"></i>
-                        Applying reloads networking on the node. A bad address, bridge port or
-                        gateway can cut off access to the node itself — make sure you have
-                        console access before continuing.
+                        应用操作会重载节点网络。错误的地址、网桥端口或网关可能导致节点本身失联——继续前请确认你具备控制台访问权限。
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn-x sm" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn-x sm danger" @click="revert(diffNode)"
                             :disabled="!diffNode || busy === diffNode.node">
-                        <i class="bi bi-arrow-counterclockwise"></i> Discard changes
+                        <i class="bi bi-arrow-counterclockwise"></i> 放弃更改
                     </button>
                     <button type="button" class="btn-x sm primary" @click="apply(diffNode)"
                             :disabled="!diffNode || busy === diffNode.node">
-                        <i class="bi bi-check2-circle"></i> Apply on node
+                        <i class="bi bi-check2-circle"></i> 在节点上应用
                     </button>
                 </div>
             </div>
@@ -194,7 +190,7 @@
                             <div class="field">
                                 <label>Type</label>
                                 <select class="inp" x-model="form.type" @change="onTypeChange()">
-                                    <option value="bridge">Linux Bridge</option>
+                                    <option value="bridge">Linux 网桥</option>
                                     <option value="bond">Linux Bond</option>
                                     <option value="vlan">Linux VLAN</option>
                                 </select>
@@ -205,10 +201,10 @@
                                 <label>Name</label>
                                 <input type="text" class="inp mono" x-model="form.iface" @input="nameTouched = true"
                                        :placeholder="form.type === 'bridge' ? 'vmbr1' : (form.type === 'bond' ? 'bond0' : 'eno1.100')">
-                                <div class="hint" x-show="form.type === 'bridge'">Bridges are conventionally named <span class="mono">vmbrN</span>.</div>
-                                <div class="hint" x-show="form.type === 'vlan' && !nameTouched">Filled in from the raw device and tag. Type here for a custom name.</div>
+                                <div class="hint" x-show="form.type === 'bridge'">网桥的惯例命名为 <span class="mono">vmbrN</span>.</div>
+                                <div class="hint" x-show="form.type === 'vlan' && !nameTouched">已根据原始设备与标签自动填充。如需自定义名称请在此输入。</div>
                                 <div class="hint" style="color:var(--warn)" x-show="nameExists()">
-                                    <i class="bi bi-exclamation-triangle"></i> This node already has an interface with that name.
+                                    <i class="bi bi-exclamation-triangle"></i> 此节点已存在同名接口。
                                 </div>
                             </div>
                         </div>
@@ -219,7 +215,7 @@
                                 <div class="row g-3">
                                     <div class="col-12 col-md-6">
                                         <div class="field">
-                                            <label>Bridge ports</label>
+                                            <label>网桥端口</label>
                                             <input type="text" class="inp mono" x-model="form.bridge_ports" placeholder="eno1">
                                             <div class="nic-pick">
                                                 <template x-for="c in candidates('bridge_ports')" :key="c">
@@ -231,23 +227,23 @@
                                                     </button>
                                                 </template>
                                                 <span class="none" x-show="candidates('bridge_ports').length === 0">
-                                                    No candidate interfaces detected on this node.
+                                                    此节点上未检测到可用接口。
                                                 </span>
                                             </div>
-                                            <div class="hint">Click a detected interface to add or remove it, or type names directly. Leave empty for an internal-only bridge.</div>
+                                            <div class="hint">点击已检测到的接口以添加或移除，也可直接输入名称。若仅需内部网桥，请留空。</div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="field">
-                                            <label>VLAN aware</label>
+                                            <label>VLAN 感知</label>
                                             <label class="d-flex align-items-center gap-2" style="font-size:12.5px">
-                                                <input type="checkbox" x-model="form.bridge_vlan_aware"> Enable 802.1Q VLAN filtering
+                                                <input type="checkbox" x-model="form.bridge_vlan_aware"> 启用 802.1Q VLAN 过滤
                                             </label>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6" x-show="form.bridge_vlan_aware">
                                         <div class="field">
-                                            <label>Allowed VLAN IDs</label>
+                                            <label>允许的 VLAN ID</label>
                                             <input type="text" class="inp mono" x-model="form.bridge_vids" placeholder="2 4 100-200">
                                         </div>
                                     </div>
@@ -273,10 +269,10 @@
                                                     </button>
                                                 </template>
                                                 <span class="none" x-show="candidates('slaves').length === 0">
-                                                    No candidate interfaces detected on this node.
+                                                    此节点上未检测到可用接口。
                                                 </span>
                                             </div>
-                                            <div class="hint">Click a detected interface to add or remove it, or type names directly.</div>
+                                            <div class="hint">点击已检测到的接口以添加或移除，也可直接输入名称。</div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
@@ -294,12 +290,12 @@
                                             <datalist id="nic-primary">
                                                 <template x-for="c in primaryCandidates()" :key="c"><option :value="c"></option></template>
                                             </datalist>
-                                            <div class="hint">One of this bond's own slaves.</div>
+                                            <div class="hint">必须是该 Bond 自身的从属接口之一。</div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6" x-show="['balance-xor', '802.3ad'].includes(form.bond_mode)">
                                         <div class="field">
-                                            <label>Hash policy</label>
+                                            <label>哈希策略</label>
                                             <select class="inp" x-model="form.bond_xmit_hash_policy">
                                                 <option value="">Default</option>
                                                 <option value="layer2">layer2</option>
@@ -318,21 +314,21 @@
                                 <div class="row g-3">
                                     <div class="col-12 col-md-6">
                                         <div class="field">
-                                            <label>Raw device</label>
+                                            <label>原始设备</label>
                                             <input type="text" class="inp mono" list="nic-raw-device" x-model="form['vlan-raw-device']"
                                                    @input="syncVlanName()" placeholder="eno1">
                                             <datalist id="nic-raw-device">
                                                 <template x-for="c in candidates('vlan-raw-device')" :key="c"><option :value="c"></option></template>
                                             </datalist>
-                                            <div class="hint">Pick a detected interface or type a name.</div>
+                                            <div class="hint">选择一个已检测到的接口，或直接输入名称。</div>
                                         </div>
                                     </div>
                                     <div class="col-12 col-md-6">
                                         <div class="field">
-                                            <label>VLAN tag</label>
+                                            <label>VLAN 标签</label>
                                             <input type="number" class="inp" x-model="form['vlan-id']"
                                                    @input="syncVlanName()" placeholder="100">
-                                            <div class="hint">Only needed for a custom interface name (ifupdown2).</div>
+                                            <div class="hint">仅在自定义接口名称时需要（ifupdown2）。</div>
                                         </div>
                                     </div>
                                 </div>
@@ -345,12 +341,12 @@
                             <div class="field">
                                 <label>IPv4 / CIDR</label>
                                 <input type="text" class="inp mono" x-model="form.cidr" placeholder="192.168.1.10/24">
-                                <div class="hint">Leave empty for an unaddressed interface.</div>
+                                <div class="hint">留空表示该接口不配置地址。</div>
                             </div>
                         </div>
                         <div class="col-12 col-md-6">
                             <div class="field">
-                                <label>IPv4 gateway</label>
+                                <label>IPv4 网关</label>
                                 <input type="text" class="inp mono" x-model="form.gateway" placeholder="192.168.1.1">
                             </div>
                         </div>
@@ -362,7 +358,7 @@
                         </div>
                         <div class="col-12 col-md-6">
                             <div class="field">
-                                <label>IPv6 gateway</label>
+                                <label>IPv6 网关</label>
                                 <input type="text" class="inp mono" x-model="form.gateway6">
                             </div>
                         </div>
@@ -376,7 +372,7 @@
                             <div class="field">
                                 <label>Autostart</label>
                                 <label class="d-flex align-items-center gap-2" style="font-size:12.5px">
-                                    <input type="checkbox" x-model="form.autostart"> Start on boot
+                                    <input type="checkbox" x-model="form.autostart"> 开机自启
                                 </label>
                             </div>
                         </div>
@@ -390,8 +386,7 @@
 
                     <div class="alert alert-warning mt-3 mb-0" style="font-size:12px">
                         <i class="bi bi-info-circle me-1"></i>
-                        Changes are written to the pending configuration. Use <strong>Apply</strong> on the node
-                        to activate them.
+                        更改会写入待生效配置。请使用 <strong>Apply</strong> 在节点上执行以激活。
                     </div>
                     <div class="alert alert-danger mt-3 mb-0" style="font-size:12px" x-show="formError" x-text="formError"></div>
                 </div>
@@ -414,5 +409,5 @@
   function register() { window.Alpine.data('networksApp', networksApp); }
   if (window.Alpine) register();
   else document.addEventListener('alpine:init', register);
-</script>
+</script>script
 {% endblock %}
