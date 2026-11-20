@@ -168,6 +168,12 @@ def main():
     if os.path.exists(specials_js_path):
         specials_js = json.load(open(specials_js_path, encoding="utf-8"))
 
+    # Structural bits that are neither text nodes nor attributes: the sidebar
+    # nav label array (a Jinja `{% set %}` literal) and the <html lang> value.
+    base_path = os.path.join(ROOT, "i18n", "dict", "special_base.json")
+    if os.path.exists(base_path):
+        specials.update(json.load(open(base_path, encoding="utf-8")))
+
     print(f"dictionary entries: {len(d)}  specials: {len(specials)}  "
           f"specials_js: {len(specials_js)}")
     if dup:

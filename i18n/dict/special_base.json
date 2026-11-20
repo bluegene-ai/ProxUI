@@ -1,0 +1,16 @@
+{
+ "<html lang=\"en\">": "<html lang=\"zh-CN\">",
+ "('index', 'bi-speedometer2', 'Dashboard')": "('index', 'bi-speedometer2', '概览')",
+ "('vms', 'bi-pc-display', 'VMs & Containers')": "('vms', 'bi-pc-display', '虚拟机与容器')",
+ "('create_vm', 'bi-plus-circle', 'Create')": "('create_vm', 'bi-plus-circle', '新建')",
+ "('tasks', 'bi-list-task', 'Tasks')": "('tasks', 'bi-list-task', '任务')",
+ "('storages', 'bi-hdd', 'Storage')": "('storages', 'bi-hdd', '存储')",
+ "('networks', 'bi-diagram-3', 'Networks')": "('networks', 'bi-diagram-3', '网络')",
+ "('isos_templates', 'bi-disc', 'ISOs & Templates')": "('isos_templates', 'bi-disc', 'ISO 与模板')",
+ "('cluster', 'bi-diagram-2', 'Cluster')": "('cluster', 'bi-diagram-2', '集群')",
+ "('maintenance', 'bi-wrench', 'Maintenance')": "('maintenance', 'bi-wrench', '维护')",
+ "('firewall', 'bi-shield-lock', 'Firewall')": "('firewall', 'bi-shield-lock', '防火墙')",
+ "('backups', 'bi-archive', 'Backups')": "('backups', 'bi-archive', '备份')",
+ "current_cluster.name if current_cluster else 'No cluster'": "current_cluster.name if current_cluster else '未连接集群'",
+ "<title>{% block title %}Proxmox Manager{% endblock %}</title>": "<title>{% block title %}Proxmox 管理器{% endblock %}</title>"
+}
